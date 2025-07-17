@@ -3,28 +3,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Zerodha Login</title>
 </head>
-<body>
+<body style="background-color:#2e2e2e; color:white; font-family:sans-serif; display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh;">
   <h1>Zerodha Login</h1>
-  <button onclick="login()">Login to Zerodha</button>
-  <script>
-    function login() {
-      fetch("https://alfa-ai-backend-6j6d.onrender.com/api/zerodha/login", { method: "POST" })
-        .then(response => response.json())
-        .then(data => {
-          if (data && data.login_url) {
-            window.location.href = data.login_url;
-          } else {
-            alert("Login failed.");
-          }
-        })
-        .catch(error => {
-          alert("Login triggered. Check backend.");
-          console.error(error);
-        });
-    }
-  </script>
+  <button onclick="window.location.href='https://kite.zerodha.com/connect/login?api_key=1rjhyd0xb6gkomut&redirect_uri=https://alfa-ai-backend-6j6d.onrender.com/api/zerodha/access_token'">
+    Login to Zerodha
+  </button>
 </body>
 </html>
