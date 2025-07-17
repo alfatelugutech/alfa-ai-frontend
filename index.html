@@ -1,35 +1,14 @@
-
 <!DOCTYPE html>
-<html>
-<head>
-  <title>Zerodha Login</title>
-</head>
-<body style="background-color: #333; color: white; font-family: Arial; padding: 20px;">
-  <h1>Zerodha Login</h1>
-  <button onclick="triggerLogin()">Login to Zerodha</button>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zerodha Login</title>
+  </head>
+  <body>
+    <h1>Zerodha Login</h1>
+    <button onclick="loginToZerodha()">Login to Zerodha</button>
 
-  <script>
-    function triggerLogin() {
-      alert('Login triggered. Check backend.');
-      fetch('https://alfa-ai-backend-6j6d.onrender.com/api/zerodha/login', {
-        method: 'POST'
-      })
-      .then(response => {
-        if (!response.ok) throw new Error("Network response was not ok");
-        return response.json();
-      })
-      .then(data => {
-        if (data.login_url) {
-          window.location.href = data.login_url;
-        } else {
-          alert("Login URL not received.");
-        }
-      })
-      .catch(error => {
-        console.error("Login error:", error);
-        alert("Login failed.");
-      });
-    }
-  </script>
-</body>
+    <script type="module" src="/src/main.js"></script>
+  </body>
 </html>
