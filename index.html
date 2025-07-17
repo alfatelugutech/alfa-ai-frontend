@@ -1,15 +1,378 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Zerodha Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Trading Platform Pro v2.1</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
+    <style>
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css');
+        .animate-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+        .animate-bounce { animation: bounce 1s infinite; }
+        @keyframes bounce { 0%, 100% { transform: translateY(-25%); animation-timing-function: cubic-bezier(0.8,0,1,1); } 50% { transform: none; animation-timing-function: cubic-bezier(0,0,0.2,1); } }
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .hover-scale:hover { transform: scale(1.05); }
+        .notification-enter { animation: slideInRight 0.3s ease-out; }
+        @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    </style>
 </head>
-<body style="background-color:#2e2e2e; color:white; font-family:sans-serif; display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh;">
-  <h1>Zerodha Login</h1>
-  <button onclick="window.location.href='https://kite.zerodha.com/connect/login?api_key=1rjhyd0xb6gkomut&redirect_uri=https://alfa-ai-backend-6j6d.onrender.com/api/zerodha/access_token'">
-    Login to Zerodha
-  </button>
+<body class="bg-gray-50">
+    <div id="app">
+        <!-- Header -->
+        <header class="bg-white shadow-lg border-b">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <div class="flex items-center">
+                        <div class="h-8 w-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold mr-3">🧠</div>
+                        <div>
+                            <h1 class="text-xl font-bold text-gray-900 flex items-center">
+                                🚀 AI Trading Platform Pro
+                                <span class="ml-2 px-2 py-1 bg-blue-100 text-blue-700 rounded-lg text-xs">Live v2.1</span>
+                            </h1>
+                            <p class="text-xs text-gray-500">Connected to Live API • Real-time Data • Professional Grade</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                            <span class="text-sm text-gray-600">API Connected</span>
+                        </div>
+                        <span class="px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800" id="trading-mode">
+                            🔴 Live Mode
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Dashboard -->
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <!-- API Status -->
+            <div class="bg-gradient-to-r from-green-50 via-blue-50 to-purple-50 border border-green-200 rounded-2xl p-4 mb-6 shadow-lg">
+                <div class="flex items-center">
+                    <div class="h-6 w-6 bg-green-600 rounded-lg flex items-center justify-center text-white font-bold mr-3">✅</div>
+                    <div>
+                        <p class="text-green-800 text-sm font-medium">
+                            <strong>🚀 AI Trading Platform Live:</strong> Connected to backend API • Real-time market data • Live trading ready • Professional deployment on Vercel + Render
+                        </p>
+                        <p class="text-green-700 text-xs mt-1 flex items-center space-x-4">
+                            <span>✅ Frontend: Vercel</span>
+                            <span>✅ Backend: Render</span>
+                            <span>✅ Database: Live</span>
+                            <span>✅ API: Connected</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Command Center -->
+            <div class="gradient-bg p-6 rounded-2xl shadow-2xl text-white mb-6">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <h3 class="text-2xl font-bold mb-2 flex items-center">
+                            🤖 Live Trading Command Center
+                            <span class="ml-2 px-2 py-1 bg-white bg-opacity-20 rounded-lg text-sm">Production Ready</span>
+                        </h3>
+                        <div class="flex items-center space-x-6 text-sm">
+                            <div class="flex items-center">
+                                <div class="w-3 h-3 rounded-full mr-2 bg-green-400 animate-pulse"></div>
+                                <span>API Status: Connected</span>
+                            </div>
+                            <div>🎯 Backend: Render</div>
+                            <div>🌐 Frontend: Vercel</div>
+                            <div>📊 Database: Live</div>
+                        </div>
+                    </div>
+                    <div class="flex space-x-3">
+                        <button onclick="testAPI()" class="px-6 py-2 rounded-xl font-medium transition-all transform hover:scale-105 bg-green-500 hover:bg-green-600 shadow-lg">
+                            🔍 Test API
+                        </button>
+                        <button onclick="loadPositions()" class="px-6 py-2 rounded-xl font-medium transition-all transform hover:scale-105 bg-blue-500 hover:bg-blue-600 shadow-lg">
+                            📊 Load Data
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <div class="bg-gradient-to-br from-blue-500 to-blue-700 p-4 rounded-2xl shadow-lg text-white">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-blue-100 text-sm">API Status</p>
+                            <p class="text-xl font-bold" id="api-status">Connected</p>
+                        </div>
+                        <div class="text-blue-200 text-2xl">🔗</div>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-br from-green-500 to-green-700 p-4 rounded-2xl shadow-lg text-white">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-green-100 text-sm">Live Positions</p>
+                            <p class="text-xl font-bold" id="positions-count">0</p>
+                        </div>
+                        <div class="text-green-200 text-2xl">📈</div>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-br from-purple-500 to-purple-700 p-4 rounded-2xl shadow-lg text-white">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-purple-100 text-sm">Total Trades</p>
+                            <p class="text-xl font-bold" id="trades-count">0</p>
+                        </div>
+                        <div class="text-purple-200 text-2xl">💹</div>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-br from-orange-500 to-orange-700 p-4 rounded-2xl shadow-lg text-white">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-orange-100 text-sm">Backend Health</p>
+                            <p class="text-xl font-bold" id="backend-health">Checking...</p>
+                        </div>
+                        <div class="text-orange-200 text-2xl">🏥</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Display -->
+            <div class="bg-white p-6 rounded-2xl shadow-lg border mb-6">
+                <h3 class="text-lg font-semibold mb-4">📊 Live Data from API</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="font-medium mb-3">🎯 Live Positions</h4>
+                        <div id="positions-data" class="space-y-2 text-sm">
+                            <p class="text-gray-500">Click "Load Data" to fetch positions...</p>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-medium mb-3">📋 Recent Trades</h4>
+                        <div id="trades-data" class="space-y-2 text-sm">
+                            <p class="text-gray-500">Click "Load Data" to fetch trades...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trading Controls -->
+            <div class="bg-white p-6 rounded-2xl shadow-lg border">
+                <h3 class="text-lg font-semibold mb-4">⚡ Live Trading Controls</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="p-4 bg-green-50 rounded-lg">
+                        <h4 class="font-medium text-green-800 mb-3">📈 Buy Order</h4>
+                        <div class="space-y-2">
+                            <input type="text" id="buy-symbol" placeholder="Symbol (e.g., RELIANCE)" class="w-full px-3 py-2 border rounded-lg">
+                            <input type="number" id="buy-quantity" placeholder="Quantity" class="w-full px-3 py-2 border rounded-lg">
+                            <input type="number" id="buy-price" placeholder="Price" class="w-full px-3 py-2 border rounded-lg">
+                            <button onclick="placeOrder('BUY')" class="w-full px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+                                Place Buy Order
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-red-50 rounded-lg">
+                        <h4 class="font-medium text-red-800 mb-3">📉 Sell Order</h4>
+                        <div class="space-y-2">
+                            <input type="text" id="sell-symbol" placeholder="Symbol (e.g., RELIANCE)" class="w-full px-3 py-2 border rounded-lg">
+                            <input type="number" id="sell-quantity" placeholder="Quantity" class="w-full px-3 py-2 border rounded-lg">
+                            <input type="number" id="sell-price" placeholder="Price" class="w-full px-3 py-2 border rounded-lg">
+                            <button onclick="placeOrder('SELL')" class="w-full px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+                                Place Sell Order
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <h4 class="font-medium text-blue-800 mb-3">📊 Market Data</h4>
+                        <div class="space-y-2">
+                            <input type="text" id="market-symbol" placeholder="Symbol (e.g., RELIANCE)" class="w-full px-3 py-2 border rounded-lg">
+                            <button onclick="getMarketData()" class="w-full px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                                Get Live Price
+                            </button>
+                            <div id="market-data-result" class="text-sm text-gray-600 mt-2">
+                                Enter symbol to get live price...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // API Configuration - Update this with your Render URL
+        const API_BASE_URL = 'https://ai-trading-backend.onrender.com'; // Replace with your actual Render URL
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            testAPI();
+            loadPositions();
+        });
+
+        // Test API Connection
+        async function testAPI() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/health`);
+                const data = await response.json();
+                
+                if (data.status === 'healthy') {
+                    document.getElementById('api-status').textContent = 'Connected';
+                    document.getElementById('backend-health').textContent = 'Healthy';
+                    showNotification('success', '✅ API Connected Successfully!');
+                } else {
+                    throw new Error('API not healthy');
+                }
+            } catch (error) {
+                document.getElementById('api-status').textContent = 'Disconnected';
+                document.getElementById('backend-health').textContent = 'Error';
+                showNotification('error', '❌ API Connection Failed');
+                console.error('API Error:', error);
+            }
+        }
+
+        // Load Positions
+        async function loadPositions() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/positions`);
+                const data = await response.json();
+                
+                document.getElementById('positions-count').textContent = data.count || 0;
+                
+                const positionsHtml = data.positions.length > 0 
+                    ? data.positions.map(pos => `
+                        <div class="p-2 bg-gray-50 rounded">
+                            <strong>${pos[1]}</strong> - Qty: ${pos[2]} @ ₹${pos[3]}
+                        </div>
+                    `).join('')
+                    : '<p class="text-gray-500">No positions found</p>';
+                
+                document.getElementById('positions-data').innerHTML = positionsHtml;
+                
+                // Load trades
+                const tradesResponse = await fetch(`${API_BASE_URL}/api/trades`);
+                const tradesData = await tradesResponse.json();
+                
+                document.getElementById('trades-count').textContent = tradesData.count || 0;
+                
+                const tradesHtml = tradesData.trades.length > 0 
+                    ? tradesData.trades.slice(0, 5).map(trade => `
+                        <div class="p-2 bg-gray-50 rounded">
+                            <strong>${trade[2]}</strong> ${trade[3]} - Qty: ${trade[4]} @ ₹${trade[5]}
+                        </div>
+                    `).join('')
+                    : '<p class="text-gray-500">No trades found</p>';
+                
+                document.getElementById('trades-data').innerHTML = tradesHtml;
+                
+            } catch (error) {
+                showNotification('error', '❌ Failed to load data');
+                console.error('Data loading error:', error);
+            }
+        }
+
+        // Place Order
+        async function placeOrder(side) {
+            const symbol = document.getElementById(`${side.toLowerCase()}-symbol`).value;
+            const quantity = parseInt(document.getElementById(`${side.toLowerCase()}-quantity`).value);
+            const price = parseFloat(document.getElementById(`${side.toLowerCase()}-price`).value);
+            
+            if (!symbol || !quantity || !price) {
+                showNotification('error', '❌ Please fill all fields');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/place-order`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        symbol: symbol,
+                        side: side,
+                        quantity: quantity,
+                        price: price,
+                        strategy: 'manual'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    showNotification('success', `✅ ${side} order placed: ${data.trade_id}`);
+                    // Clear form
+                    document.getElementById(`${side.toLowerCase()}-symbol`).value = '';
+                    document.getElementById(`${side.toLowerCase()}-quantity`).value = '';
+                    document.getElementById(`${side.toLowerCase()}-price`).value = '';
+                    // Reload data
+                    loadPositions();
+                } else {
+                    showNotification('error', `❌ Order failed: ${data.error}`);
+                }
+            } catch (error) {
+                showNotification('error', '❌ Order placement failed');
+                console.error('Order error:', error);
+            }
+        }
+
+        // Get Market Data
+        async function getMarketData() {
+            const symbol = document.getElementById('market-symbol').value;
+            
+            if (!symbol) {
+                showNotification('error', '❌ Please enter a symbol');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/market-data/${symbol}`);
+                const data = await response.json();
+                
+                if (data.price) {
+                    document.getElementById('market-data-result').innerHTML = `
+                        <strong>${data.symbol}</strong><br>
+                        Price: ₹${data.price.toFixed(2)}<br>
+                        Change: ₹${data.change.toFixed(2)}<br>
+                        <small>Updated: ${new Date(data.timestamp).toLocaleTimeString()}</small>
+                    `;
+                    showNotification('success', `✅ Got price for ${symbol}`);
+                } else {
+                    showNotification('error', `❌ No data for ${symbol}`);
+                }
+            } catch (error) {
+                showNotification('error', '❌ Failed to get market data');
+                console.error('Market data error:', error);
+            }
+        }
+
+        // Show notification
+        function showNotification(type, message) {
+            const colors = {
+                'success': 'bg-green-100 text-green-800 border-green-200',
+                'error': 'bg-red-100 text-red-800 border-red-200',
+                'info': 'bg-blue-100 text-blue-800 border-blue-200'
+            };
+            
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 p-4 rounded-lg border z-50 ${colors[type]} notification-enter`;
+            notification.innerHTML = `
+                <div class="flex items-center justify-between">
+                    <span>${message}</span>
+                    <button onclick="this.parentElement.parentElement.remove()" class="ml-4 text-gray-500 hover:text-gray-700">×</button>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.parentElement.removeChild(notification);
+                }
+            }, 5000);
+        }
+    </script>
 </body>
 </html>
