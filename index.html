@@ -1,0 +1,30 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Zerodha Login</title>
+</head>
+<body>
+  <h1>Zerodha Login</h1>
+  <button onclick="login()">Login to Zerodha</button>
+  <script>
+    function login() {
+      fetch("https://alfa-ai-backend-6j6d.onrender.com/api/zerodha/login", { method: "POST" })
+        .then(response => response.json())
+        .then(data => {
+          if (data && data.login_url) {
+            window.location.href = data.login_url;
+          } else {
+            alert("Login failed.");
+          }
+        })
+        .catch(error => {
+          alert("Login triggered. Check backend.");
+          console.error(error);
+        });
+    }
+  </script>
+</body>
+</html>
