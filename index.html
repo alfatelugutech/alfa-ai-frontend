@@ -1,37 +1,35 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>ALFA AI Trading Login</title>
+  <title>Zerodha Login</title>
 </head>
-<body>
-    <h1>Zerodha Login</h1>
-    <button onclick="loginZerodha()">Login to Zerodha</button>
+<body style="background-color: #333; color: white; font-family: Arial; padding: 20px;">
+  <h1>Zerodha Login</h1>
+  <button onclick="triggerLogin()">Login to Zerodha</button>
 
-    <script>
-        function loginZerodha() {
-            fetch('https://alfa-ai-backend-6j6d.onrender.com/api/zerodha/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    api_key: 'your_api_key',
-                    api_secret: 'your_api_secret',
-                    redirect_uri: 'https://your-redirect-url.com'
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                alert('Login triggered. Check backend.');
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Login failed.');
-            });
+  <script>
+    function triggerLogin() {
+      alert('Login triggered. Check backend.');
+      fetch('https://alfa-ai-backend-6j6d.onrender.com/api/zerodha/login', {
+        method: 'POST'
+      })
+      .then(response => {
+        if (!response.ok) throw new Error("Network response was not ok");
+        return response.json();
+      })
+      .then(data => {
+        if (data.login_url) {
+          window.location.href = data.login_url;
+        } else {
+          alert("Login URL not received.");
         }
-    </script>
+      })
+      .catch(error => {
+        console.error("Login error:", error);
+        alert("Login failed.");
+      });
+    }
+  </script>
 </body>
 </html>
