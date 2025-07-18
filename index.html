@@ -3,550 +3,750 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Trading Platform Pro v3.0</title>
+    <title>AI Trading Platform Professional v4.0</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
     <style>
         @import url('https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css');
+        
+        /* Enhanced Desktop Layout */
+        .desktop-container { min-width: 1200px; max-width: 1920px; margin: 0 auto; }
+        .desktop-grid { display: grid; grid-template-columns: 280px 1fr 320px; gap: 20px; min-height: calc(100vh - 80px); }
+        .main-content { min-height: 800px; overflow-y: auto; }
+        .sidebar { position: sticky; top: 20px; height: fit-content; max-height: calc(100vh - 100px); overflow-y: auto; }
+        
+        /* Animations */
         .animate-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
         .animate-bounce { animation: bounce 1s infinite; }
         @keyframes bounce { 0%, 100% { transform: translateY(-25%); animation-timing-function: cubic-bezier(0.8,0,1,1); } 50% { transform: none; animation-timing-function: cubic-bezier(0,0,0.2,1); } }
         .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-        .hover-scale:hover { transform: scale(1.05); }
+        .hover-scale:hover { transform: scale(1.02); transition: transform 0.2s; }
         .notification-enter { animation: slideInRight 0.3s ease-out; }
         @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         .glow-effect { box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
         .live-indicator { animation: livePulse 2s infinite; }
         @keyframes livePulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+        
+        /* Tab System */
+        .tab-button { transition: all 0.3s ease; }
+        .tab-button.active { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        /* Paper Trading Styles */
+        .paper-badge { background: linear-gradient(45deg, #10b981, #059669); }
+        .live-badge { background: linear-gradient(45deg, #dc2626, #b91c1c); }
+        
+        /* Responsive Breakpoints */
+        @media (max-width: 1200px) {
+            .desktop-grid { grid-template-columns: 250px 1fr 280px; gap: 15px; }
+            .desktop-container { min-width: auto; padding: 0 15px; }
+        }
+        
+        @media (max-width: 968px) {
+            .desktop-grid { grid-template-columns: 1fr; gap: 20px; }
+            .sidebar { position: static; height: auto; max-height: none; }
+        }
+        
+        /* Scrollbar Styling */
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     </style>
 </head>
 <body class="bg-gray-50">
-    <div id="app">
-        <!-- Header -->
-        <header class="bg-white shadow-lg border-b">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex items-center justify-between h-16">
-                    <div class="flex items-center">
-                        <div class="h-8 w-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold mr-3">🧠</div>
-                        <div>
-                            <h1 class="text-xl font-bold text-gray-900 flex items-center">
-                                🚀 AI Trading Platform Pro
-                                <span class="ml-2 px-2 py-1 bg-blue-100 text-blue-700 rounded-lg text-xs">Live v3.0</span>
-                            </h1>
-                            <p class="text-xs text-gray-500">Real Market Data • Live Charts • Professional Analytics</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center space-x-4">
-                        <div class="flex items-center space-x-2">
-                            <div class="w-2 h-2 rounded-full bg-green-500 live-indicator"></div>
-                            <span class="text-sm text-gray-600">Live Data</span>
-                            <span class="text-xs text-gray-500" id="current-time"></span>
-                        </div>
-                        
-                        <div class="flex items-center space-x-1">
-                            <div class="h-4 w-4 text-green-600">📶</div>
-                            <span class="text-xs text-gray-600" id="connection-status">API Connected</span>
-                        </div>
-                        
-                        <span class="px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800" id="trading-mode">
-                            🔴 Live Mode
-                        </span>
-                        
-                        <button class="relative p-2 text-gray-600 hover:text-gray-900 transition-all" onclick="toggleNotifications()">
-                            🔔
-                            <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center animate-bounce" id="notification-count">3</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </header>
-
-        <!-- Main Content -->
-        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <!-- Enhanced Status Banner -->
-            <div class="bg-gradient-to-r from-green-50 via-blue-50 to-purple-50 border border-green-200 rounded-2xl p-4 mb-6 shadow-lg glow-effect">
-                <div class="flex items-center">
-                    <div class="h-6 w-6 bg-green-600 rounded-lg flex items-center justify-center text-white font-bold mr-3 live-indicator">🔴</div>
+    <!-- Enhanced Header -->
+    <header class="bg-white shadow-lg border-b sticky top-0 z-40">
+        <div class="desktop-container px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="h-10 w-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center text-white font-bold text-lg">🧠</div>
                     <div>
-                        <p class="text-green-800 text-sm font-medium">
-                            <strong>🚀 Professional AI Trading Platform v3.0:</strong> Real-time market data • Live stock prices • Market indices tracking • Advanced analytics • Professional charts • Real-time notifications.
-                            <span id="trading-mode-text">Trading with live market data from NSE, BSE markets.</span>
-                        </p>
-                        <p class="text-green-700 text-xs mt-1 flex items-center space-x-4">
-                            <span>✅ Backend API v3.0</span>
-                            <span>✅ Real Market Data</span>
-                            <span>✅ Live Stock Prices</span>
-                            <span>✅ Market Indices</span>
-                            <span>✅ Advanced Analytics</span>
-                            <span>✅ Professional Platform</span>
-                        </p>
+                        <h1 class="text-xl font-bold text-gray-900 flex items-center">
+                            🚀 AI Trading Platform Professional
+                            <span class="ml-2 px-2 py-1 bg-blue-100 text-blue-700 rounded-lg text-xs">v4.0</span>
+                        </h1>
+                        <p class="text-xs text-gray-500">Paper Trading • Live Data • Broker Integration • Desktop Optimized</p>
                     </div>
                 </div>
-            </div>
-
-            <!-- Live Market Overview -->
-            <div class="mb-6" id="market-overview">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-lg font-semibold flex items-center">
-                        📊 Live Market Overview
-                        <span class="ml-2 w-2 h-2 bg-green-500 rounded-full live-indicator"></span>
-                        <span class="ml-1 px-2 py-1 bg-green-100 text-green-700 rounded-lg text-xs">API v3.0</span>
-                    </h3>
-                    <div class="text-xs text-gray-600">
-                        Last updated: <span id="market-last-update">Loading...</span>
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="market-overview-container">
-                    <div class="bg-gradient-to-r from-blue-500 to-blue-600 p-4 rounded-xl text-white transform hover-scale transition-all cursor-pointer">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <h4 class="text-sm opacity-90">NIFTY 50</h4>
-                                <p class="text-xl font-bold" id="nifty-price">Loading...</p>
-                                <span class="text-xs" id="nifty-change">Loading...</span>
-                            </div>
-                            <div class="text-blue-200 text-2xl">📈</div>
-                        </div>
-                    </div>
-                    <div class="bg-gradient-to-r from-green-500 to-green-600 p-4 rounded-xl text-white transform hover-scale transition-all cursor-pointer">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <h4 class="text-sm opacity-90">BANK NIFTY</h4>
-                                <p class="text-xl font-bold" id="banknifty-price">Loading...</p>
-                                <span class="text-xs" id="banknifty-change">Loading...</span>
-                            </div>
-                            <div class="text-green-200 text-2xl">🏦</div>
-                        </div>
-                    </div>
-                    <div class="bg-gradient-to-r from-purple-500 to-purple-600 p-4 rounded-xl text-white transform hover-scale transition-all cursor-pointer">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <h4 class="text-sm opacity-90">SENSEX</h4>
-                                <p class="text-xl font-bold" id="sensex-price">Loading...</p>
-                                <span class="text-xs" id="sensex-change">Loading...</span>
-                            </div>
-                            <div class="text-purple-200 text-2xl">📊</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- AI Command Center -->
-            <div class="gradient-bg p-6 rounded-2xl shadow-2xl text-white mb-6">
-                <div class="flex items-center justify-between mb-4">
-                    <div>
-                        <h3 class="text-2xl font-bold mb-2 flex items-center">
-                            🤖 Live Trading Command Center
-                            <span class="ml-2 px-2 py-1 bg-white bg-opacity-20 rounded-lg text-sm">Professional v3.0</span>
-                        </h3>
-                        <div class="flex items-center space-x-6 text-sm">
-                            <div class="flex items-center">
-                                <div class="w-3 h-3 rounded-full mr-2 bg-green-400 live-indicator"></div>
-                                <span>Live Market Data</span>
-                            </div>
-                            <div>🎯 Real-time Prices</div>
-                            <div>📊 Backend API v3.0</div>
-                            <div>💰 Professional Analytics</div>
-                            <div>🔥 Live Updates</div>
-                        </div>
-                    </div>
-                    <div class="flex space-x-3">
-                        <button onclick="refreshAllData()" class="px-4 py-2 rounded-xl font-medium transition-all bg-yellow-500 hover:bg-yellow-600">
-                            🔄 Refresh All
+                
+                <!-- Account Type Switcher -->
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-2">
+                        <button id="paper-mode-btn" onclick="switchAccountType('paper')" 
+                                class="px-4 py-2 rounded-lg text-sm font-medium transition-all paper-badge text-white">
+                            📝 Paper Trading
                         </button>
-                        <button onclick="testAPI()" class="px-6 py-2 rounded-xl font-medium transition-all transform hover:scale-105 bg-green-500 hover:bg-green-600 shadow-lg">
-                            🔍 Test API
+                        <button id="live-mode-btn" onclick="switchAccountType('live')" 
+                                class="px-4 py-2 rounded-lg text-sm font-medium transition-all bg-gray-200 text-gray-700 hover:bg-gray-300">
+                            🔴 Live Trading
                         </button>
                     </div>
-                </div>
-            </div>
-
-            <!-- Enhanced Portfolio Stats -->
-            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
-                <div class="bg-gradient-to-br from-blue-500 to-blue-700 p-4 rounded-2xl shadow-lg text-white transform hover-scale transition-all cursor-pointer">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-blue-100 text-sm">API Status</p>
-                            <p class="text-xl font-bold" id="api-status">Checking...</p>
-                        </div>
-                        <div class="text-blue-200 text-2xl">🔗</div>
+                    
+                    <div class="flex items-center space-x-2">
+                        <div class="w-2 h-2 rounded-full bg-green-500 live-indicator"></div>
+                        <span class="text-sm text-gray-600">Live Data</span>
+                        <span class="text-xs text-gray-500" id="current-time"></span>
                     </div>
-                    <span class="text-blue-100 text-xs">v3.0</span>
-                </div>
-
-                <div class="bg-gradient-to-br from-green-500 to-green-700 p-4 rounded-2xl shadow-lg text-white transform hover-scale transition-all cursor-pointer">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-green-100 text-sm">Live Positions</p>
-                            <p class="text-xl font-bold" id="positions-count">0</p>
-                        </div>
-                        <div class="text-green-200 text-2xl">📈</div>
-                    </div>
-                    <span class="text-green-100 text-xs">Real-time</span>
-                </div>
-
-                <div class="bg-gradient-to-br from-purple-500 to-purple-700 p-4 rounded-2xl shadow-lg text-white transform hover-scale transition-all cursor-pointer">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-purple-100 text-sm">Total Trades</p>
-                            <p class="text-xl font-bold" id="trades-count">0</p>
-                        </div>
-                        <div class="text-purple-200 text-2xl">💹</div>
-                    </div>
-                    <span class="text-purple-100 text-xs">Live tracking</span>
-                </div>
-
-                <div class="bg-gradient-to-br from-orange-500 to-orange-700 p-4 rounded-2xl shadow-lg text-white transform hover-scale transition-all cursor-pointer">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-orange-100 text-sm">Market Status</p>
-                            <p class="text-xl font-bold" id="market-status">Loading...</p>
-                        </div>
-                        <div class="text-orange-200 text-2xl">🕐</div>
-                    </div>
-                    <span class="text-orange-100 text-xs" id="market-time">Live</span>
-                </div>
-
-                <div class="bg-gradient-to-br from-teal-500 to-teal-700 p-4 rounded-2xl shadow-lg text-white transform hover-scale transition-all cursor-pointer">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-teal-100 text-sm">Top Gainers</p>
-                            <p class="text-xl font-bold" id="gainers-count">0</p>
-                        </div>
-                        <div class="text-teal-200 text-2xl">📊</div>
-                    </div>
-                    <span class="text-teal-100 text-xs">Live scan</span>
-                </div>
-
-                <div class="bg-gradient-to-br from-pink-500 to-pink-700 p-4 rounded-2xl shadow-lg text-white transform hover-scale transition-all cursor-pointer">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-pink-100 text-sm">Data Source</p>
-                            <p class="text-xl font-bold">API v3.0</p>
-                        </div>
-                        <div class="text-pink-200 text-2xl">🌐</div>
-                    </div>
-                    <span class="text-pink-100 text-xs">Real-time</span>
-                </div>
-            </div>
-
-            <!-- Advanced Stock Search with Real Data -->
-            <div class="bg-white p-6 rounded-2xl shadow-lg border mb-6">
-                <div class="flex items-center justify-between mb-6">
-                    <h3 class="text-lg font-semibold flex items-center">
-                        🔍 Advanced Stock Search
-                        <span class="ml-2 px-2 py-1 bg-green-100 text-green-700 rounded-lg text-xs">Live API Data</span>
-                    </h3>
-                    <button onclick="loadTopGainers()" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all">
-                        📈 Top Gainers
+                    
+                    <button class="relative p-2 text-gray-600 hover:text-gray-900 transition-all" onclick="toggleNotifications()">
+                        🔔
+                        <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center animate-bounce" id="notification-count">0</span>
                     </button>
                 </div>
-
-                <div class="relative mb-6">
-                    <div class="absolute left-3 top-3 text-gray-400">🔍</div>
-                    <input
-                        type="text"
-                        id="stock-search-input"
-                        onkeyup="searchStocksReal()"
-                        placeholder="Search stocks by symbol or company name (e.g., RELIANCE, TCS, HDFC)"
-                        class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    />
-                </div>
-
-                <div id="stock-search-results" class="space-y-3 hidden">
-                    <h4 class="font-medium text-gray-900">Search Results</h4>
-                    <div id="search-results-container"></div>
-                </div>
-
-                <div class="mt-8">
-                    <h4 class="font-medium text-gray-900 mb-4">📊 Market Leaders</h4>
-                    <div class="grid grid-cols-2 md:grid-cols-6 gap-3" id="popular-stocks">
-                        <div class="text-center p-3 bg-gray-100 rounded-lg animate-pulse">Loading...</div>
-                    </div>
-                </div>
             </div>
+        </div>
+    </header>
 
-            <!-- Top Gainers Section -->
-            <div class="bg-white p-6 rounded-2xl shadow-lg border mb-6" id="top-gainers-section" style="display: none;">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-lg font-semibold flex items-center">
-                        📈 Top Gainers
-                        <span class="ml-2 w-2 h-2 bg-green-500 rounded-full live-indicator"></span>
-                        <span class="ml-1 px-2 py-1 bg-green-100 text-green-700 rounded-lg text-xs">Live Data</span>
-                    </h3>
-                    <button onclick="hideTopGainers()" class="text-gray-500 hover:text-gray-700">✕</button>
-                </div>
-                <div id="top-gainers-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <!-- Top gainers will be populated here -->
-                </div>
-            </div>
-
-            <!-- Live Data Display -->
-            <div class="bg-white p-6 rounded-2xl shadow-lg border mb-6">
-                <h3 class="text-lg font-semibold mb-4 flex items-center">
-                    📊 Live Trading Data
-                    <span class="ml-2 w-2 h-2 bg-green-500 rounded-full live-indicator"></span>
-                </h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <h4 class="font-medium mb-3">🎯 Live Positions</h4>
-                        <div id="positions-data" class="space-y-2 text-sm">
-                            <p class="text-gray-500">Loading positions...</p>
-                        </div>
-                    </div>
-                    <div>
-                        <h4 class="font-medium mb-3">📋 Recent Trades</h4>
-                        <div id="trades-data" class="space-y-2 text-sm">
-                            <p class="text-gray-500">Loading trades...</p>
-                        </div>
+    <!-- Main Layout -->
+    <div class="desktop-container py-6">
+        <div class="desktop-grid">
+            <!-- Left Sidebar - Navigation & Watchlist -->
+            <aside class="sidebar space-y-6">
+                <!-- Navigation Tabs -->
+                <div class="bg-white rounded-2xl shadow-lg p-4">
+                    <h3 class="font-semibold mb-4 text-gray-900">📊 Dashboard</h3>
+                    <div class="space-y-2">
+                        <button onclick="switchTab('overview')" class="tab-button w-full text-left px-3 py-2 rounded-lg text-sm active">
+                            📈 Market Overview
+                        </button>
+                        <button onclick="switchTab('trading')" class="tab-button w-full text-left px-3 py-2 rounded-lg text-sm">
+                            ⚡ Trading Panel
+                        </button>
+                        <button onclick="switchTab('portfolio')" class="tab-button w-full text-left px-3 py-2 rounded-lg text-sm">
+                            💼 Portfolio
+                        </button>
+                        <button onclick="switchTab('settings')" class="tab-button w-full text-left px-3 py-2 rounded-lg text-sm">
+                            ⚙️ Settings
+                        </button>
                     </div>
                 </div>
-            </div>
 
-            <!-- Enhanced Trading Controls -->
-            <div class="bg-white p-6 rounded-2xl shadow-lg border">
-                <h3 class="text-lg font-semibold mb-4">⚡ Professional Trading Controls</h3>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="p-4 bg-green-50 rounded-lg">
-                        <h4 class="font-medium text-green-800 mb-3 flex items-center">
-                            📈 Buy Order
-                            <span class="ml-2 w-2 h-2 bg-green-500 rounded-full live-indicator"></span>
-                        </h4>
-                        <div class="space-y-2">
-                            <input type="text" id="buy-symbol" placeholder="Symbol (e.g., RELIANCE)" class="w-full px-3 py-2 border rounded-lg">
-                            <input type="number" id="buy-quantity" placeholder="Quantity" class="w-full px-3 py-2 border rounded-lg">
-                            <input type="number" id="buy-price" placeholder="Price" class="w-full px-3 py-2 border rounded-lg">
-                            <button onclick="placeOrder('BUY')" class="w-full px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
-                                Place Buy Order
-                            </button>
-                        </div>
+                <!-- Paper Trading Account -->
+                <div class="bg-white rounded-2xl shadow-lg p-4" id="paper-account-card">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="font-semibold text-gray-900">💰 Paper Account</h3>
+                        <button onclick="resetPaperAccount()" class="text-xs text-blue-600 hover:text-blue-800">Reset</button>
                     </div>
-
-                    <div class="p-4 bg-red-50 rounded-lg">
-                        <h4 class="font-medium text-red-800 mb-3 flex items-center">
-                            📉 Sell Order
-                            <span class="ml-2 w-2 h-2 bg-red-500 rounded-full live-indicator"></span>
-                        </h4>
-                        <div class="space-y-2">
-                            <input type="text" id="sell-symbol" placeholder="Symbol (e.g., RELIANCE)" class="w-full px-3 py-2 border rounded-lg">
-                            <input type="number" id="sell-quantity" placeholder="Quantity" class="w-full px-3 py-2 border rounded-lg">
-                            <input type="number" id="sell-price" placeholder="Price" class="w-full px-3 py-2 border rounded-lg">
-                            <button onclick="placeOrder('SELL')" class="w-full px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
-                                Place Sell Order
-                            </button>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Available:</span>
+                            <span class="font-medium" id="paper-balance">₹10,00,000</span>
                         </div>
-                    </div>
-
-                    <div class="p-4 bg-blue-50 rounded-lg">
-                        <h4 class="font-medium text-blue-800 mb-3 flex items-center">
-                            📊 Live Market Data
-                            <span class="ml-2 w-2 h-2 bg-blue-500 rounded-full live-indicator"></span>
-                        </h4>
-                        <div class="space-y-2">
-                            <input type="text" id="market-symbol" placeholder="Symbol (e.g., RELIANCE)" class="w-full px-3 py-2 border rounded-lg">
-                            <button onclick="getRealTimePrice()" class="w-full px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                                Get Live Price
-                            </button>
-                            <div id="market-data-result" class="text-sm text-gray-600 mt-2 p-3 bg-gray-50 rounded">
-                                Enter symbol to get live price from API...
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Invested:</span>
+                            <span class="font-medium" id="paper-invested">₹0</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">P&L:</span>
+                            <span class="font-medium" id="paper-pnl">₹0</span>
+                        </div>
+                        <div class="border-t pt-2 mt-2">
+                            <div class="flex justify-between">
+                                <span class="text-gray-800 font-medium">Total Value:</span>
+                                <span class="font-bold" id="paper-total">₹10,00,000</span>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </main>
 
-        <!-- Notifications Panel -->
-        <div id="notifications-panel" class="fixed top-20 right-4 w-80 bg-white rounded-lg shadow-xl border z-50 max-h-96 overflow-y-auto hidden">
-            <div class="p-3 border-b">
-                <h3 class="font-semibold">🔔 Live Notifications</h3>
-            </div>
-            <div class="divide-y" id="notifications-container">
-                <div class="p-3 hover:bg-gray-50 border-l-4 border-green-500">
-                    <div class="flex items-start justify-between">
-                        <div class="flex-1">
-                            <p class="text-sm">✅ Platform v3.0 loaded successfully!</p>
-                            <p class="text-xs text-gray-500 mt-1">All systems operational</p>
+                <!-- Quick Stats -->
+                <div class="bg-white rounded-2xl shadow-lg p-4">
+                    <h3 class="font-semibold mb-4 text-gray-900">📊 Quick Stats</h3>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="text-center p-3 bg-blue-50 rounded-lg">
+                            <div class="text-lg font-bold text-blue-600" id="positions-count">0</div>
+                            <div class="text-xs text-blue-600">Positions</div>
                         </div>
-                        <button onclick="closeNotification(this)" class="text-gray-400 hover:text-gray-600">×</button>
+                        <div class="text-center p-3 bg-green-50 rounded-lg">
+                            <div class="text-lg font-bold text-green-600" id="trades-count">0</div>
+                            <div class="text-xs text-green-600">Trades</div>
+                        </div>
+                        <div class="text-center p-3 bg-purple-50 rounded-lg">
+                            <div class="text-lg font-bold text-purple-600" id="market-status">Open</div>
+                            <div class="text-xs text-purple-600">Market</div>
+                        </div>
+                        <div class="text-center p-3 bg-orange-50 rounded-lg">
+                            <div class="text-lg font-bold text-orange-600" id="api-status">Connected</div>
+                            <div class="text-xs text-orange-600">API</div>
+                        </div>
                     </div>
                 </div>
-                <div class="p-3 hover:bg-gray-50 border-l-4 border-blue-500">
-                    <div class="flex items-start justify-between">
-                        <div class="flex-1">
-                            <p class="text-sm">📊 Backend API v3.0 integration active</p>
-                            <p class="text-xs text-gray-500 mt-1">Real market data available</p>
+            </aside>
+
+            <!-- Main Content Area -->
+            <main class="main-content custom-scrollbar">
+                <!-- Market Overview Tab -->
+                <div id="tab-overview" class="tab-content active space-y-6">
+                    <!-- Market Indices -->
+                    <div class="bg-white rounded-2xl shadow-lg p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-lg font-semibold flex items-center">
+                                📊 Live Market Indices
+                                <span class="ml-2 w-2 h-2 bg-green-500 rounded-full live-indicator"></span>
+                            </h3>
+                            <div class="text-xs text-gray-600">
+                                Last updated: <span id="market-last-update">Loading...</span>
+                            </div>
                         </div>
-                        <button onclick="closeNotification(this)" class="text-gray-400 hover:text-gray-600">×</button>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="bg-gradient-to-r from-blue-500 to-blue-600 p-4 rounded-xl text-white hover-scale cursor-pointer">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h4 class="text-sm opacity-90">NIFTY 50</h4>
+                                        <p class="text-xl font-bold" id="nifty-price">Loading...</p>
+                                        <span class="text-xs" id="nifty-change">Loading...</span>
+                                    </div>
+                                    <div class="text-blue-200 text-2xl">📈</div>
+                                </div>
+                            </div>
+                            <div class="bg-gradient-to-r from-green-500 to-green-600 p-4 rounded-xl text-white hover-scale cursor-pointer">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h4 class="text-sm opacity-90">BANK NIFTY</h4>
+                                        <p class="text-xl font-bold" id="banknifty-price">Loading...</p>
+                                        <span class="text-xs" id="banknifty-change">Loading...</span>
+                                    </div>
+                                    <div class="text-green-200 text-2xl">🏦</div>
+                                </div>
+                            </div>
+                            <div class="bg-gradient-to-r from-purple-500 to-purple-600 p-4 rounded-xl text-white hover-scale cursor-pointer">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h4 class="text-sm opacity-90">SENSEX</h4>
+                                        <p class="text-xl font-bold" id="sensex-price">Loading...</p>
+                                        <span class="text-xs" id="sensex-change">Loading...</span>
+                                    </div>
+                                    <div class="text-purple-200 text-2xl">📊</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stock Search -->
+                    <div class="bg-white rounded-2xl shadow-lg p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold">🔍 Stock Search</h3>
+                            <button onclick="loadTopGainers()" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all text-sm">
+                                📈 Top Gainers
+                            </button>
+                        </div>
+                        
+                        <div class="relative mb-4">
+                            <div class="absolute left-3 top-3 text-gray-400">🔍</div>
+                            <input
+                                type="text"
+                                id="stock-search-input"
+                                onkeyup="searchStocksReal()"
+                                placeholder="Search stocks (e.g., RELIANCE, TCS, HDFC)"
+                                class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            />
+                        </div>
+
+                        <div id="stock-search-results" class="space-y-3 hidden">
+                            <h4 class="font-medium text-gray-900">Search Results</h4>
+                            <div id="search-results-container"></div>
+                        </div>
+
+                        <!-- Popular Stocks -->
+                        <div class="mt-6">
+                            <h4 class="font-medium text-gray-900 mb-4">📊 Market Leaders</h4>
+                            <div class="grid grid-cols-3 md:grid-cols-6 gap-3" id="popular-stocks">
+                                <div class="text-center p-3 bg-gray-100 rounded-lg animate-pulse">Loading...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Top Gainers Section -->
+                    <div class="bg-white rounded-2xl shadow-lg p-6" id="top-gainers-section" style="display: none;">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold flex items-center">
+                                📈 Top Gainers Today
+                                <span class="ml-2 w-2 h-2 bg-green-500 rounded-full live-indicator"></span>
+                            </h3>
+                            <button onclick="hideTopGainers()" class="text-gray-500 hover:text-gray-700">✕</button>
+                        </div>
+                        <div id="top-gainers-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
                     </div>
                 </div>
-                <div class="p-3 hover:bg-gray-50 border-l-4 border-purple-500">
-                    <div class="flex items-start justify-between">
-                        <div class="flex-1">
-                            <p class="text-sm">🚀 Professional trading platform ready</p>
-                            <p class="text-xs text-gray-500 mt-1">All features functional</p>
+
+                <!-- Trading Panel Tab -->
+                <div id="tab-trading" class="tab-content space-y-6">
+                    <!-- Account Type Banner -->
+                    <div class="p-4 rounded-xl" id="account-type-banner">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-3 h-3 rounded-full live-indicator" id="account-indicator"></div>
+                                <div>
+                                    <h3 class="font-semibold" id="account-type-title">📝 Paper Trading Mode</h3>
+                                    <p class="text-sm opacity-90" id="account-type-desc">Virtual trading with ₹10,00,000 paper money</p>
+                                </div>
+                            </div>
+                            <button onclick="toggleAccountType()" class="px-4 py-2 bg-white bg-opacity-20 rounded-lg text-sm font-medium hover:bg-opacity-30 transition-all">
+                                Switch Mode
+                            </button>
                         </div>
-                        <button onclick="closeNotification(this)" class="text-gray-400 hover:text-gray-600">×</button>
+                    </div>
+
+                    <!-- Trading Controls -->
+                    <div class="bg-white rounded-2xl shadow-lg p-6">
+                        <h3 class="text-lg font-semibold mb-6">⚡ Trade Execution</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <!-- Buy Order -->
+                            <div class="p-4 bg-green-50 rounded-xl">
+                                <h4 class="font-medium text-green-800 mb-4 flex items-center">
+                                    📈 Buy Order
+                                    <span class="ml-2 w-2 h-2 bg-green-500 rounded-full live-indicator"></span>
+                                </h4>
+                                <div class="space-y-3">
+                                    <input type="text" id="buy-symbol" placeholder="Symbol (e.g., RELIANCE)" class="w-full px-3 py-2 border rounded-lg text-sm">
+                                    <input type="number" id="buy-quantity" placeholder="Quantity" class="w-full px-3 py-2 border rounded-lg text-sm">
+                                    <input type="number" id="buy-price" placeholder="Price" step="0.01" class="w-full px-3 py-2 border rounded-lg text-sm">
+                                    <button onclick="placeOrder('BUY')" class="w-full px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium">
+                                        Place Buy Order
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Sell Order -->
+                            <div class="p-4 bg-red-50 rounded-xl">
+                                <h4 class="font-medium text-red-800 mb-4 flex items-center">
+                                    📉 Sell Order
+                                    <span class="ml-2 w-2 h-2 bg-red-500 rounded-full live-indicator"></span>
+                                </h4>
+                                <div class="space-y-3">
+                                    <input type="text" id="sell-symbol" placeholder="Symbol (e.g., RELIANCE)" class="w-full px-3 py-2 border rounded-lg text-sm">
+                                    <input type="number" id="sell-quantity" placeholder="Quantity" class="w-full px-3 py-2 border rounded-lg text-sm">
+                                    <input type="number" id="sell-price" placeholder="Price" step="0.01" class="w-full px-3 py-2 border rounded-lg text-sm">
+                                    <button onclick="placeOrder('SELL')" class="w-full px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm font-medium">
+                                        Place Sell Order
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Live Price Check -->
+                            <div class="p-4 bg-blue-50 rounded-xl">
+                                <h4 class="font-medium text-blue-800 mb-4 flex items-center">
+                                    📊 Live Price Check
+                                    <span class="ml-2 w-2 h-2 bg-blue-500 rounded-full live-indicator"></span>
+                                </h4>
+                                <div class="space-y-3">
+                                    <input type="text" id="market-symbol" placeholder="Symbol (e.g., RELIANCE)" class="w-full px-3 py-2 border rounded-lg text-sm">
+                                    <button onclick="getRealTimePrice()" class="w-full px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium">
+                                        Get Live Price
+                                    </button>
+                                    <div id="market-data-result" class="text-sm text-gray-600 p-3 bg-gray-50 rounded">
+                                        Enter symbol to get live price...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
+
+                <!-- Portfolio Tab -->
+                <div id="tab-portfolio" class="tab-content space-y-6">
+                    <!-- Portfolio Summary -->
+                    <div class="bg-white rounded-2xl shadow-lg p-6">
+                        <h3 class="text-lg font-semibold mb-6">💼 Portfolio Overview</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="font-medium mb-4">🎯 Current Positions</h4>
+                                <div id="positions-data" class="space-y-3 text-sm custom-scrollbar max-h-64 overflow-y-auto">
+                                    <p class="text-gray-500">Loading positions...</p>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="font-medium mb-4">📋 Recent Trades</h4>
+                                <div id="trades-data" class="space-y-3 text-sm custom-scrollbar max-h-64 overflow-y-auto">
+                                    <p class="text-gray-500">Loading trades...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings Tab -->
+                <div id="tab-settings" class="tab-content space-y-6">
+                    <!-- Broker Settings -->
+                    <div class="bg-white rounded-2xl shadow-lg p-6">
+                        <h3 class="text-lg font-semibold mb-6">🔗 Broker API Settings</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Zerodha Settings -->
+                            <div class="p-4 border rounded-xl">
+                                <h4 class="font-medium mb-4 flex items-center">
+                                    🟢 Zerodha Kite API
+                                    <span class="ml-2 px-2 py-1 bg-green-100 text-green-700 rounded text-xs">Recommended</span>
+                                </h4>
+                                <div class="space-y-3">
+                                    <input type="text" id="zerodha-api-key" placeholder="API Key" class="w-full px-3 py-2 border rounded-lg text-sm">
+                                    <input type="password" id="zerodha-secret" placeholder="Secret Key" class="w-full px-3 py-2 border rounded-lg text-sm">
+                                    <input type="text" id="zerodha-token" placeholder="Access Token" class="w-full px-3 py-2 border rounded-lg text-sm">
+                                    <button onclick="saveBrokerSettings('zerodha')" class="w-full px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm">
+                                        Save Zerodha Settings
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- mStock Settings -->
+                            <div class="p-4 border rounded-xl">
+                                <h4 class="font-medium mb-4 flex items-center">
+                                    🔵 mStock API
+                                    <span class="ml-2 px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs">Enterprise</span>
+                                </h4>
+                                <div class="space-y-3">
+                                    <input type="text" id="mstock-api-key" placeholder="API Key" class="w-full px-3 py-2 border rounded-lg text-sm">
+                                    <input type="password" id="mstock-secret" placeholder="Secret Key" class="w-full px-3 py-2 border rounded-lg text-sm">
+                                    <input type="text" id="mstock-token" placeholder="Access Token" class="w-full px-3 py-2 border rounded-lg text-sm">
+                                    <button onclick="saveBrokerSettings('mstock')" class="w-full px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
+                                        Save mStock Settings
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Auto-save Status -->
+                        <div class="mt-6 p-4 bg-gray-50 rounded-lg">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h5 class="font-medium text-gray-900">🔐 Auto-Save Settings</h5>
+                                    <p class="text-sm text-gray-600">Your API keys are automatically encrypted and saved</p>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                                    <span class="text-sm text-green-700">Secure</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- App Settings -->
+                    <div class="bg-white rounded-2xl shadow-lg p-6">
+                        <h3 class="text-lg font-semibold mb-6">⚙️ Application Settings</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h5 class="font-medium">🔄 Auto-refresh Market Data</h5>
+                                    <p class="text-sm text-gray-600">Update prices every 30 seconds</p>
+                                </div>
+                                <button onclick="toggleAutoRefresh()" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm" id="auto-refresh-btn">
+                                    Enabled
+                                </button>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h5 class="font-medium">🔔 Push Notifications</h5>
+                                    <p class="text-sm text-gray-600">Price alerts and trade confirmations</p>
+                                </div>
+                                <button onclick="toggleNotifications()" class="px-4 py-2 bg-green-600 text-white rounded-lg text-sm">
+                                    Enabled
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Right Sidebar - Watchlist & Notifications -->
+            <aside class="sidebar space-y-6">
+                <!-- Watchlist -->
+                <div class="bg-white rounded-2xl shadow-lg p-4">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-semibold text-gray-900">👁️ Watchlist</h3>
+                        <button onclick="refreshWatchlist()" class="text-xs text-blue-600 hover:text-blue-800">Refresh</button>
+                    </div>
+                    <div class="space-y-2 custom-scrollbar max-h-64 overflow-y-auto" id="watchlist-container">
+                        <div class="text-center text-gray-500 text-sm py-4">Loading watchlist...</div>
+                    </div>
+                    <div class="mt-3 pt-3 border-t">
+                        <div class="flex space-x-2">
+                            <input type="text" id="watchlist-symbol" placeholder="Add symbol" class="flex-1 px-2 py-1 border rounded text-xs">
+                            <button onclick="addToWatchlist()" class="px-3 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700">Add</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Updates -->
+                <div class="bg-white rounded-2xl shadow-lg p-4">
+                    <h3 class="font-semibold mb-4 text-gray-900 flex items-center">
+                        📡 Live Updates
+                        <span class="ml-2 w-2 h-2 bg-green-500 rounded-full live-indicator"></span>
+                    </h3>
+                    <div class="space-y-3 text-xs" id="live-updates">
+                        <div class="p-2 bg-green-50 rounded border-l-2 border-green-500">
+                            <div class="font-medium text-green-800">System Online</div>
+                            <div class="text-green-600">All systems operational</div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- Enhanced Notifications Panel -->
+    <div id="notifications-panel" class="fixed top-20 right-4 w-80 bg-white rounded-lg shadow-xl border z-50 max-h-96 overflow-y-auto hidden">
+        <div class="p-3 border-b">
+            <h3 class="font-semibold">🔔 Notifications</h3>
+        </div>
+        <div class="divide-y" id="notifications-container">
+            <!-- Notifications will be populated here -->
         </div>
     </div>
 
     <script>
-        // API Configuration - Update this to your backend URL
-        const API_BASE_URL = 'https://alfa-ai-backend-tt8m.onrender.com'
+        // Configuration
+        const API_BASE_URL = 'https://alfa-ai-backend-tt8m.onrender.com';
         
         // Global state
-        let activeTab = 'dashboard';
+        let currentAccountType = 'paper';
         let marketDataInterval = null;
+        let autoRefreshEnabled = true;
+        let watchlistInterval = null;
 
-        // Initialize
+        // Initialize application
         document.addEventListener('DOMContentLoaded', function() {
             updateTime();
             setInterval(updateTime, 1000);
             
-            // Load all data
+            // Load initial data
             testAPI();
-            loadPositions();
+            loadPaperAccount();
             loadMarketOverview();
+            loadPositions();
+            loadWatchlist();
             populatePopularStocks();
             
-            // Set up auto-refresh for market data every 30 seconds
-            startMarketDataRefresh();
+            // Start auto-refresh
+            startAutoRefresh();
             
-            // Show welcome notification
+            // Load saved settings
+            loadSavedSettings();
+            
+            // Show welcome message
             setTimeout(() => {
-                showNotification('success', '🚀 Platform v3.0 loaded with backend API connection!');
+                showNotification('success', '🚀 Platform v4.0 loaded - Paper trading ready!');
             }, 2000);
         });
 
+        // Time updates
         function updateTime() {
             document.getElementById('current-time').textContent = new Date().toLocaleTimeString();
         }
 
-        // Start market data auto-refresh
-        function startMarketDataRefresh() {
-            marketDataInterval = setInterval(() => {
-                loadMarketOverview();
-                loadPositions();
-            }, 30000);
+        // Tab system
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+            
+            // Activate button
+            event.target.classList.add('active');
         }
 
-        // Test API Connection
-        async function testAPI() {
-            try {
-                console.log('Testing API connection to:', API_BASE_URL);
-                const response = await fetch(`${API_BASE_URL}/api/health`);
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                }
-                
-                const data = await response.json();
-                console.log('API Health Response:', data);
-                
-                if (data.status === 'healthy') {
-                    document.getElementById('api-status').textContent = 'Connected';
-                    document.getElementById('connection-status').textContent = 'API v3.0';
-                    showNotification('success', `✅ API v${data.version} Connected Successfully!`);
-                } else {
-                    throw new Error('API not healthy');
-                }
-            } catch (error) {
-                console.error('API Connection Error:', error);
-                document.getElementById('api-status').textContent = 'Disconnected';
-                document.getElementById('connection-status').textContent = 'Error';
-                showNotification('error', `❌ API Connection Failed: ${error.message}`);
+        // Account type management
+        function switchAccountType(type) {
+            currentAccountType = type;
+            updateAccountTypeUI();
+            
+            if (type === 'paper') {
+                loadPaperAccount();
+                showNotification('info', '📝 Switched to Paper Trading mode');
+            } else {
+                showNotification('warning', '🔴 Live Trading mode - Real money at risk!');
             }
         }
 
-        // Load Real Market Overview
+        function updateAccountTypeUI() {
+            const paperBtn = document.getElementById('paper-mode-btn');
+            const liveBtn = document.getElementById('live-mode-btn');
+            const banner = document.getElementById('account-type-banner');
+            const title = document.getElementById('account-type-title');
+            const desc = document.getElementById('account-type-desc');
+            const indicator = document.getElementById('account-indicator');
+            
+            if (currentAccountType === 'paper') {
+                paperBtn.className = 'px-4 py-2 rounded-lg text-sm font-medium transition-all paper-badge text-white';
+                liveBtn.className = 'px-4 py-2 rounded-lg text-sm font-medium transition-all bg-gray-200 text-gray-700 hover:bg-gray-300';
+                banner.className = 'p-4 rounded-xl paper-badge text-white';
+                title.textContent = '📝 Paper Trading Mode';
+                desc.textContent = 'Virtual trading with ₹10,00,000 paper money';
+                indicator.className = 'w-3 h-3 rounded-full bg-green-400';
+            } else {
+                paperBtn.className = 'px-4 py-2 rounded-lg text-sm font-medium transition-all bg-gray-200 text-gray-700 hover:bg-gray-300';
+                liveBtn.className = 'px-4 py-2 rounded-lg text-sm font-medium transition-all live-badge text-white';
+                banner.className = 'p-4 rounded-xl live-badge text-white';
+                title.textContent = '🔴 Live Trading Mode';
+                desc.textContent = 'Real money trading - Use with caution';
+                indicator.className = 'w-3 h-3 rounded-full bg-red-400';
+            }
+        }
+
+        // Auto-refresh management
+        function startAutoRefresh() {
+            if (marketDataInterval) clearInterval(marketDataInterval);
+            if (watchlistInterval) clearInterval(watchlistInterval);
+            
+            marketDataInterval = setInterval(() => {
+                if (autoRefreshEnabled) {
+                    loadMarketOverview();
+                    loadPositions();
+                }
+            }, 30000);
+            
+            watchlistInterval = setInterval(() => {
+                if (autoRefreshEnabled) {
+                    loadWatchlist();
+                }
+            }, 45000);
+        }
+
+        function toggleAutoRefresh() {
+            autoRefreshEnabled = !autoRefreshEnabled;
+            const btn = document.getElementById('auto-refresh-btn');
+            
+            if (autoRefreshEnabled) {
+                btn.textContent = 'Enabled';
+                btn.className = 'px-4 py-2 bg-blue-600 text-white rounded-lg text-sm';
+                startAutoRefresh();
+                showNotification('success', '🔄 Auto-refresh enabled');
+            } else {
+                btn.textContent = 'Disabled';
+                btn.className = 'px-4 py-2 bg-gray-600 text-white rounded-lg text-sm';
+                clearInterval(marketDataInterval);
+                clearInterval(watchlistInterval);
+                showNotification('info', '⏸️ Auto-refresh disabled');
+            }
+        }
+
+        // API functions
+        async function testAPI() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/health`);
+                const data = await response.json();
+                
+                if (data.status === 'healthy') {
+                    document.getElementById('api-status').textContent = 'Connected';
+                    showNotification('success', `✅ API v${data.version} Connected`);
+                } else {
+                    throw new Error('API unhealthy');
+                }
+            } catch (error) {
+                document.getElementById('api-status').textContent = 'Error';
+                showNotification('error', '❌ API Connection Failed');
+            }
+        }
+
+        async function loadPaperAccount() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/paper-account`);
+                const data = await response.json();
+                
+                if (data.account) {
+                    document.getElementById('paper-balance').textContent = `₹${data.account.balance.toLocaleString()}`;
+                    document.getElementById('paper-invested').textContent = `₹${data.account.invested.toLocaleString()}`;
+                    document.getElementById('paper-pnl').textContent = `₹${data.account.pnl.toLocaleString()}`;
+                    document.getElementById('paper-total').textContent = `₹${data.account.total_value.toLocaleString()}`;
+                }
+            } catch (error) {
+                console.error('Error loading paper account:', error);
+            }
+        }
+
+        async function resetPaperAccount() {
+            if (confirm('Reset paper account to ₹10,00,000? This will clear all positions and trades.')) {
+                try {
+                    const response = await fetch(`${API_BASE_URL}/api/paper-account/reset`, {
+                        method: 'POST'
+                    });
+                    const data = await response.json();
+                    
+                    if (data.status === 'success') {
+                        loadPaperAccount();
+                        loadPositions();
+                        showNotification('success', '🔄 Paper account reset successfully');
+                    }
+                } catch (error) {
+                    showNotification('error', '❌ Failed to reset account');
+                }
+            }
+        }
+
         async function loadMarketOverview() {
             try {
-                console.log('Loading market overview...');
                 const response = await fetch(`${API_BASE_URL}/api/market-overview`);
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}`);
-                }
-                
                 const data = await response.json();
-                console.log('Market Overview Response:', data);
                 
                 if (data.market_data) {
                     updateMarketDisplay(data.market_data);
                     document.getElementById('market-status').textContent = data.market_status;
-                    document.getElementById('market-time').textContent = data.market_status === 'Open' ? 'Trading' : 'Closed';
                     document.getElementById('market-last-update').textContent = new Date().toLocaleTimeString();
                 }
             } catch (error) {
                 console.error('Error loading market overview:', error);
-                showNotification('warning', '⚠️ Using fallback market data');
-                
-                // Use fallback data
-                const fallbackData = {
-                    NIFTY: { current_price: 19500, change: 125.50, change_percent: 0.64 },
-                    BANKNIFTY: { current_price: 45000, change: 200.30, change_percent: 0.45 },
-                    SENSEX: { current_price: 65000, change: 180.75, change_percent: 0.28 }
-                };
-                updateMarketDisplay(fallbackData);
             }
         }
 
         function updateMarketDisplay(marketData) {
-            // Update NIFTY
             if (marketData.NIFTY) {
                 document.getElementById('nifty-price').textContent = `₹${marketData.NIFTY.current_price.toLocaleString()}`;
-                document.getElementById('nifty-change').textContent = `${marketData.NIFTY.change >= 0 ? '+' : ''}₹${marketData.NIFTY.change} (${marketData.NIFTY.change_percent.toFixed(2)}%)`;
-                document.getElementById('nifty-change').className = `text-xs ${marketData.NIFTY.change >= 0 ? 'text-green-200' : 'text-red-200'}`;
+                document.getElementById('nifty-change').textContent = 
+                    `${marketData.NIFTY.change >= 0 ? '+' : ''}₹${marketData.NIFTY.change} (${marketData.NIFTY.change_percent.toFixed(2)}%)`;
+                document.getElementById('nifty-change').className = 
+                    `text-xs ${marketData.NIFTY.change >= 0 ? 'text-green-200' : 'text-red-200'}`;
             }
             
-            // Update BANK NIFTY
             if (marketData.BANKNIFTY) {
                 document.getElementById('banknifty-price').textContent = `₹${marketData.BANKNIFTY.current_price.toLocaleString()}`;
-                document.getElementById('banknifty-change').textContent = `${marketData.BANKNIFTY.change >= 0 ? '+' : ''}₹${marketData.BANKNIFTY.change} (${marketData.BANKNIFTY.change_percent.toFixed(2)}%)`;
-                document.getElementById('banknifty-change').className = `text-xs ${marketData.BANKNIFTY.change >= 0 ? 'text-green-200' : 'text-red-200'}`;
+                document.getElementById('banknifty-change').textContent = 
+                    `${marketData.BANKNIFTY.change >= 0 ? '+' : ''}₹${marketData.BANKNIFTY.change} (${marketData.BANKNIFTY.change_percent.toFixed(2)}%)`;
+                document.getElementById('banknifty-change').className = 
+                    `text-xs ${marketData.BANKNIFTY.change >= 0 ? 'text-green-200' : 'text-red-200'}`;
             }
             
-            // Update SENSEX
             if (marketData.SENSEX) {
                 document.getElementById('sensex-price').textContent = `₹${marketData.SENSEX.current_price.toLocaleString()}`;
-                document.getElementById('sensex-change').textContent = `${marketData.SENSEX.change >= 0 ? '+' : ''}₹${marketData.SENSEX.change} (${marketData.SENSEX.change_percent.toFixed(2)}%)`;
-                document.getElementById('sensex-change').className = `text-xs ${marketData.SENSEX.change >= 0 ? 'text-green-200' : 'text-red-200'}`;
+                document.getElementById('sensex-change').textContent = 
+                    `${marketData.SENSEX.change >= 0 ? '+' : ''}₹${marketData.SENSEX.change} (${marketData.SENSEX.change_percent.toFixed(2)}%)`;
+                document.getElementById('sensex-change').className = 
+                    `text-xs ${marketData.SENSEX.change >= 0 ? 'text-green-200' : 'text-red-200'}`;
             }
-            
-            document.getElementById('market-last-update').textContent = new Date().toLocaleTimeString();
         }
 
-        // Load Positions
         async function loadPositions() {
             try {
                 const response = await fetch(`${API_BASE_URL}/api/positions`);
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}`);
-                }
-                
                 const data = await response.json();
-                console.log('Positions Response:', data);
                 
                 document.getElementById('positions-count').textContent = data.count || 0;
                 
                 const positionsHtml = data.positions && data.positions.length > 0 
                     ? data.positions.map(pos => `
-                        <div class="p-3 bg-gray-50 rounded-lg">
+                        <div class="p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-all">
                             <div class="flex justify-between items-center">
                                 <div>
-                                    <strong>${pos[1]}</strong> - Qty: ${pos[2]}
+                                    <div class="font-medium">${pos[1]}</div>
+                                    <div class="text-xs text-gray-600">Qty: ${pos[2]} | Avg: ₹${pos[3]}</div>
                                 </div>
                                 <div class="text-right">
-                                    <div>₹${pos[3]}</div>
-                                    <div class="text-xs text-gray-600">${pos[6] || 'Manual'}</div>
+                                    <div class="font-medium ${pos[5] >= 0 ? 'text-green-600' : 'text-red-600'}">
+                                        ${pos[5] >= 0 ? '+' : ''}₹${pos[5]}
+                                    </div>
+                                    <div class="text-xs text-gray-600">${pos[7] || 'Paper'}</div>
                                 </div>
                             </div>
                         </div>
                     `).join('')
-                    : '<p class="text-gray-500">No positions found</p>';
+                    : '<div class="text-center text-gray-500 py-4">No positions</div>';
                 
                 document.getElementById('positions-data').innerHTML = positionsHtml;
                 
@@ -554,37 +754,105 @@
                 const tradesResponse = await fetch(`${API_BASE_URL}/api/trades`);
                 if (tradesResponse.ok) {
                     const tradesData = await tradesResponse.json();
-                    
                     document.getElementById('trades-count').textContent = tradesData.count || 0;
                     
                     const tradesHtml = tradesData.trades && tradesData.trades.length > 0 
                         ? tradesData.trades.slice(0, 5).map(trade => `
-                            <div class="p-3 bg-gray-50 rounded-lg">
+                            <div class="p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-all">
                                 <div class="flex justify-between items-center">
                                     <div>
-                                        <strong>${trade[2]}</strong> ${trade[3]}
+                                        <div class="font-medium">${trade[2]} ${trade[3]}</div>
+                                        <div class="text-xs text-gray-600">Qty: ${trade[4]} | Price: ₹${trade[5]}</div>
                                     </div>
                                     <div class="text-right">
-                                        <div>Qty: ${trade[4]}</div>
-                                        <div class="text-xs text-gray-600">₹${trade[5]}</div>
+                                        <div class="text-xs text-gray-600">${trade[8] || 'Paper'}</div>
+                                        <div class="text-xs text-gray-500">${new Date(trade[9]).toLocaleDateString()}</div>
                                     </div>
                                 </div>
                             </div>
                         `).join('')
-                        : '<p class="text-gray-500">No trades found</p>';
+                        : '<div class="text-center text-gray-500 py-4">No trades</div>';
                     
                     document.getElementById('trades-data').innerHTML = tradesHtml;
                 }
-                
             } catch (error) {
                 console.error('Error loading positions:', error);
-                showNotification('error', '❌ Failed to load trading data');
-                document.getElementById('positions-data').innerHTML = '<p class="text-red-500">Error loading positions</p>';
-                document.getElementById('trades-data').innerHTML = '<p class="text-red-500">Error loading trades</p>';
             }
         }
 
-        // Enhanced Stock Search with Real Data
+        async function loadWatchlist() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/watchlist`);
+                const data = await response.json();
+                
+                const watchlistHtml = data.watchlist && data.watchlist.length > 0
+                    ? data.watchlist.map(stock => `
+                        <div class="p-2 bg-gray-50 rounded-lg hover:bg-gray-100 transition-all cursor-pointer" 
+                             onclick="getRealTimePrice('${stock.symbol}')">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <div class="font-medium text-sm">${stock.symbol}</div>
+                                    <div class="text-xs text-gray-600">₹${stock.current_price}</div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-xs font-medium ${stock.change_percent >= 0 ? 'text-green-600' : 'text-red-600'}">
+                                        ${stock.change_percent >= 0 ? '+' : ''}${stock.change_percent.toFixed(2)}%
+                                    </div>
+                                    <button onclick="removeFromWatchlist('${stock.symbol}'); event.stopPropagation();" 
+                                            class="text-xs text-red-500 hover:text-red-700">×</button>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')
+                    : '<div class="text-center text-gray-500 text-sm py-4">No watchlist items</div>';
+                
+                document.getElementById('watchlist-container').innerHTML = watchlistHtml;
+            } catch (error) {
+                console.error('Error loading watchlist:', error);
+            }
+        }
+
+        async function addToWatchlist() {
+            const symbol = document.getElementById('watchlist-symbol').value.toUpperCase();
+            if (!symbol) return;
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/watchlist`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ symbol })
+                });
+                
+                if (response.ok) {
+                    document.getElementById('watchlist-symbol').value = '';
+                    loadWatchlist();
+                    showNotification('success', `✅ ${symbol} added to watchlist`);
+                }
+            } catch (error) {
+                showNotification('error', '❌ Failed to add to watchlist');
+            }
+        }
+
+        async function removeFromWatchlist(symbol) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/watchlist/${symbol}`, {
+                    method: 'DELETE'
+                });
+                
+                if (response.ok) {
+                    loadWatchlist();
+                    showNotification('info', `🗑️ ${symbol} removed from watchlist`);
+                }
+            } catch (error) {
+                showNotification('error', '❌ Failed to remove from watchlist');
+            }
+        }
+
+        async function refreshWatchlist() {
+            loadWatchlist();
+            showNotification('success', '🔄 Watchlist refreshed');
+        }
+
         async function searchStocksReal() {
             const query = document.getElementById('stock-search-input').value;
             
@@ -595,13 +863,7 @@
             
             try {
                 const response = await fetch(`${API_BASE_URL}/api/stock-search/${encodeURIComponent(query)}`);
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}`);
-                }
-                
                 const data = await response.json();
-                console.log('Stock Search Response:', data);
                 
                 if (data.results && data.results.length > 0) {
                     const resultsContainer = document.getElementById('search-results-container');
@@ -609,20 +871,26 @@
                         <div class="p-4 border rounded-lg hover:bg-gray-50 transition-all">
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <h5 class="font-medium text-lg">${stock.symbol}</h5>
+                                    <h5 class="font-medium">${stock.symbol}</h5>
                                     <p class="text-sm text-gray-600">${stock.name}</p>
                                 </div>
                                 <div class="text-right">
-                                    <p class="text-lg font-bold">₹${stock.price}</p>
-                                    <p class="text-sm font-medium ${stock.change_percent >= 0 ? 'text-green-600' : 'text-red-600'}">
+                                    <p class="font-bold">₹${stock.price}</p>
+                                    <p class="text-sm ${stock.change_percent >= 0 ? 'text-green-600' : 'text-red-600'}">
                                         ${stock.change_percent >= 0 ? '+' : ''}${stock.change_percent.toFixed(2)}%
                                     </p>
                                     <div class="flex space-x-2 mt-2">
-                                        <button onclick="getRealTimePrice('${stock.symbol}')" class="px-3 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700">
-                                            Live Price
+                                        <button onclick="getRealTimePrice('${stock.symbol}')" 
+                                                class="px-2 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700">
+                                            Price
                                         </button>
-                                        <button onclick="fillOrderForm('${stock.symbol}', ${stock.price})" class="px-3 py-1 bg-green-600 text-white rounded text-xs hover:bg-green-700">
+                                        <button onclick="fillOrderForm('${stock.symbol}', ${stock.price})" 
+                                                class="px-2 py-1 bg-green-600 text-white rounded text-xs hover:bg-green-700">
                                             Trade
+                                        </button>
+                                        <button onclick="addToWatchlistSymbol('${stock.symbol}')" 
+                                                class="px-2 py-1 bg-purple-600 text-white rounded text-xs hover:bg-purple-700">
+                                            Watch
                                         </button>
                                     </div>
                                 </div>
@@ -636,120 +904,26 @@
                 }
             } catch (error) {
                 console.error('Error searching stocks:', error);
-                showNotification('warning', '⚠️ Stock search temporarily unavailable');
             }
         }
 
-        // Load Top Gainers
-        async function loadTopGainers() {
+        async function addToWatchlistSymbol(symbol) {
             try {
-                const response = await fetch(`${API_BASE_URL}/api/top-gainers`);
+                const response = await fetch(`${API_BASE_URL}/api/watchlist`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ symbol })
+                });
                 
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}`);
-                }
-                
-                const data = await response.json();
-                console.log('Top Gainers Response:', data);
-                
-                if (data.top_gainers && data.top_gainers.length > 0) {
-                    document.getElementById('gainers-count').textContent = data.top_gainers.length;
-                    
-                    const gainersHtml = data.top_gainers.map(stock => `
-                        <div class="p-4 border rounded-lg hover:bg-gray-50 transition-all">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <h5 class="font-medium">${stock.symbol}</h5>
-                                    <p class="text-lg font-bold">₹${stock.price}</p>
-                                </div>
-                                <div class="text-right">
-                                    <p class="text-lg font-bold text-green-600">+${stock.change_percent.toFixed(2)}%</p>
-                                    <button onclick="fillOrderForm('${stock.symbol}', ${stock.price})" class="px-3 py-1 bg-green-600 text-white rounded text-xs hover:bg-green-700 mt-2">
-                                        Buy
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    `).join('');
-                    
-                    document.getElementById('top-gainers-container').innerHTML = gainersHtml;
-                    document.getElementById('top-gainers-section').style.display = 'block';
-                    showNotification('success', `📈 Found ${data.top_gainers.length} top gainers`);
-                } else {
-                    showNotification('info', '📊 No top gainers found at the moment');
+                if (response.ok) {
+                    loadWatchlist();
+                    showNotification('success', `✅ ${symbol} added to watchlist`);
                 }
             } catch (error) {
-                console.error('Error loading top gainers:', error);
-                showNotification('error', '❌ Failed to load top gainers');
+                showNotification('error', '❌ Failed to add to watchlist');
             }
         }
 
-        function hideTopGainers() {
-            document.getElementById('top-gainers-section').style.display = 'none';
-        }
-
-        // Fill order form with stock data
-        function fillOrderForm(symbol, price) {
-            document.getElementById('buy-symbol').value = symbol;
-            document.getElementById('buy-price').value = price;
-            document.getElementById('buy-quantity').focus();
-            showNotification('info', `📝 Order form filled for ${symbol} at ₹${price}`);
-        }
-
-        // Get Real-Time Price
-        async function getRealTimePrice(symbol = null) {
-            const stockSymbol = symbol || document.getElementById('market-symbol').value;
-            
-            if (!stockSymbol) {
-                showNotification('error', '❌ Please enter a symbol');
-                return;
-            }
-            
-            try {
-                console.log('Getting real-time price for:', stockSymbol);
-                const response = await fetch(`${API_BASE_URL}/api/real-market-data/${encodeURIComponent(stockSymbol)}`);
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                }
-                
-                const data = await response.json();
-                console.log('Market Data Response:', data);
-                
-                if (data.current_price !== undefined) {
-                    const resultHtml = `
-                        <div class="text-left">
-                            <div class="font-bold text-lg">${data.symbol}: ₹${data.current_price}</div>
-                            <div class="text-sm ${data.change >= 0 ? 'text-green-600' : 'text-red-600'}">
-                                ${data.change >= 0 ? '+' : ''}₹${data.change} (${data.change_percent.toFixed(2)}%)
-                            </div>
-                            <div class="text-xs text-gray-500 mt-1">
-                                Previous: ₹${data.previous_close} | Source: ${data.source}
-                            </div>
-                            <div class="text-xs text-gray-400">
-                                Updated: ${new Date(data.timestamp).toLocaleTimeString()}
-                            </div>
-                        </div>
-                    `;
-                    
-                    document.getElementById('market-data-result').innerHTML = resultHtml;
-                    
-                    if (!symbol) {
-                        showNotification('success', `✅ Live price: ${data.symbol} ₹${data.current_price}`);
-                    }
-                } else {
-                    throw new Error('No price data received');
-                }
-            } catch (error) {
-                console.error('Market data error:', error);
-                showNotification('error', `❌ Failed to get price for ${stockSymbol}: ${error.message}`);
-                document.getElementById('market-data-result').innerHTML = `
-                    <div class="text-red-600">Error: ${error.message}</div>
-                `;
-            }
-        }
-
-        // Populate Popular Stocks with Real Data
         async function populatePopularStocks() {
             const popularSymbols = ['RELIANCE', 'TCS', 'HDFCBANK', 'INFY', 'ICICIBANK', 'SBIN'];
             const container = document.getElementById('popular-stocks');
@@ -769,16 +943,16 @@
                     } catch (error) {
                         console.log(`Error loading ${symbol}:`, error);
                     }
-                    // Fallback data
                     return { symbol, price: 1000, change_percent: 0.5 };
                 });
                 
                 const stocks = await Promise.all(stockPromises);
                 
                 container.innerHTML = stocks.map(stock => `
-                    <button onclick="getRealTimePrice('${stock.symbol}')" class="p-3 border rounded-lg text-center hover:bg-blue-50 hover:border-blue-300 transition-all">
-                        <div class="font-medium">${stock.symbol}</div>
-                        <div class="text-sm">₹${stock.price}</div>
+                    <button onclick="getRealTimePrice('${stock.symbol}')" 
+                            class="p-3 border rounded-lg text-center hover:bg-blue-50 hover:border-blue-300 transition-all hover-scale">
+                        <div class="font-medium text-sm">${stock.symbol}</div>
+                        <div class="text-xs">₹${stock.price}</div>
                         <div class="text-xs ${stock.change_percent >= 0 ? 'text-green-600' : 'text-red-600'}">
                             ${stock.change_percent >= 0 ? '+' : ''}${stock.change_percent.toFixed(2)}%
                         </div>
@@ -786,11 +960,59 @@
                 `).join('');
             } catch (error) {
                 console.error('Error loading popular stocks:', error);
-                container.innerHTML = '<div class="text-red-500 text-center p-4">Error loading market leaders</div>';
             }
         }
 
-        // Place Order
+        async function getRealTimePrice(symbol = null) {
+            const stockSymbol = symbol || document.getElementById('market-symbol').value;
+            
+            if (!stockSymbol) {
+                showNotification('error', '❌ Please enter a symbol');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/real-market-data/${encodeURIComponent(stockSymbol)}`);
+                const data = await response.json();
+                
+                if (data.current_price !== undefined) {
+                    const resultHtml = `
+                        <div class="text-left">
+                            <div class="font-bold text-lg">${data.symbol}: ₹${data.current_price}</div>
+                            <div class="text-sm ${data.change >= 0 ? 'text-green-600' : 'text-red-600'}">
+                                ${data.change >= 0 ? '+' : ''}₹${data.change} (${data.change_percent.toFixed(2)}%)
+                            </div>
+                            <div class="text-xs text-gray-500 mt-1">
+                                H: ₹${data.high} | L: ₹${data.low} | Vol: ${data.volume.toLocaleString()}
+                            </div>
+                            <div class="text-xs text-gray-400">
+                                ${data.source} | ${new Date(data.timestamp).toLocaleTimeString()}
+                            </div>
+                        </div>
+                    `;
+                    
+                    document.getElementById('market-data-result').innerHTML = resultHtml;
+                    
+                    if (!symbol) {
+                        showNotification('success', `✅ ${data.symbol} ₹${data.current_price}`);
+                    }
+                } else {
+                    throw new Error('No price data received');
+                }
+            } catch (error) {
+                console.error('Market data error:', error);
+                showNotification('error', `❌ Failed to get price for ${stockSymbol}`);
+            }
+        }
+
+        function fillOrderForm(symbol, price) {
+            document.getElementById('buy-symbol').value = symbol;
+            document.getElementById('buy-price').value = price;
+            document.getElementById('buy-quantity').focus();
+            switchTab('trading');
+            showNotification('info', `📝 Order form filled for ${symbol} at ₹${price}`);
+        }
+
         async function placeOrder(side) {
             const symbol = document.getElementById(`${side.toLowerCase()}-symbol`).value;
             const quantity = parseInt(document.getElementById(`${side.toLowerCase()}-quantity`).value);
@@ -804,58 +1026,136 @@
             try {
                 const response = await fetch(`${API_BASE_URL}/api/place-order`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         symbol: symbol,
                         side: side,
                         quantity: quantity,
                         price: price,
+                        account_type: currentAccountType,
                         strategy: 'manual'
                     })
                 });
                 
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}`);
-                }
-                
                 const data = await response.json();
-                console.log('Order Response:', data);
                 
                 if (data.status === 'success') {
-                    showNotification('success', `✅ ${side} order placed: ${data.trade_id} for ${symbol}`);
+                    showNotification('success', `✅ ${side} order placed: ${data.trade_id}`);
                     // Clear form
                     document.getElementById(`${side.toLowerCase()}-symbol`).value = '';
                     document.getElementById(`${side.toLowerCase()}-quantity`).value = '';
                     document.getElementById(`${side.toLowerCase()}-price`).value = '';
                     // Reload data
                     loadPositions();
+                    if (currentAccountType === 'paper') {
+                        loadPaperAccount();
+                    }
                 } else {
-                    showNotification('error', `❌ Order failed: ${data.error || 'Unknown error'}`);
+                    showNotification('error', `❌ Order failed: ${data.error}`);
                 }
             } catch (error) {
                 console.error('Order error:', error);
-                showNotification('error', `❌ Order placement failed: ${error.message}`);
+                showNotification('error', `❌ Order placement failed`);
             }
         }
 
-        // Refresh All Data
-        function refreshAllData() {
-            testAPI();
-            loadMarketOverview();
-            loadPositions();
-            populatePopularStocks();
-            showNotification('success', '🔄 All data refreshed from API v3.0');
+        async function loadTopGainers() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/top-gainers`);
+                const data = await response.json();
+                
+                if (data.top_gainers && data.top_gainers.length > 0) {
+                    const gainersHtml = data.top_gainers.map(stock => `
+                        <div class="p-4 border rounded-lg hover:bg-gray-50 transition-all">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h5 class="font-medium">${stock.symbol}</h5>
+                                    <p class="text-lg font-bold">₹${stock.price}</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-lg font-bold text-green-600">+${stock.change_percent.toFixed(2)}%</p>
+                                    <button onclick="fillOrderForm('${stock.symbol}', ${stock.price})" 
+                                            class="px-3 py-1 bg-green-600 text-white rounded text-xs hover:bg-green-700 mt-2">
+                                        Buy
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+                    
+                    document.getElementById('top-gainers-container').innerHTML = gainersHtml;
+                    document.getElementById('top-gainers-section').style.display = 'block';
+                    showNotification('success', `📈 Found ${data.top_gainers.length} top gainers`);
+                }
+            } catch (error) {
+                console.error('Error loading top gainers:', error);
+                showNotification('error', '❌ Failed to load top gainers');
+            }
         }
 
-        // Toggle Notifications
+        function hideTopGainers() {
+            document.getElementById('top-gainers-section').style.display = 'none';
+        }
+
+        // Broker settings
+        async function saveBrokerSettings(broker) {
+            const apiKey = document.getElementById(`${broker}-api-key`).value;
+            const secretKey = document.getElementById(`${broker}-secret`).value;
+            const accessToken = document.getElementById(`${broker}-token`).value;
+            
+            if (!apiKey || !secretKey) {
+                showNotification('error', '❌ API Key and Secret Key are required');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/broker-settings`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        broker_name: broker,
+                        api_key: apiKey,
+                        secret_key: secretKey,
+                        access_token: accessToken,
+                        user_id: 'default'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    showNotification('success', `✅ ${broker.toUpperCase()} settings saved securely`);
+                    // Save to localStorage for auto-fill
+                    localStorage.setItem(`${broker}_api_key`, apiKey);
+                    localStorage.setItem(`${broker}_access_token`, accessToken);
+                } else {
+                    showNotification('error', `❌ Failed to save ${broker} settings`);
+                }
+            } catch (error) {
+                console.error('Error saving broker settings:', error);
+                showNotification('error', '❌ Failed to save broker settings');
+            }
+        }
+
+        function loadSavedSettings() {
+            // Load saved API keys (for convenience, not secrets)
+            const zerodhiKey = localStorage.getItem('zerodha_api_key');
+            const zerodhiToken = localStorage.getItem('zerodha_access_token');
+            const mstockKey = localStorage.getItem('mstock_api_key');
+            const mstockToken = localStorage.getItem('mstock_access_token');
+            
+            if (zerodhiKey) document.getElementById('zerodha-api-key').value = zerodhiKey;
+            if (zerodhiToken) document.getElementById('zerodha-token').value = zerodhiToken;
+            if (mstockKey) document.getElementById('mstock-api-key').value = mstockKey;
+            if (mstockToken) document.getElementById('mstock-token').value = mstockToken;
+        }
+
+        // Notification system
         function toggleNotifications() {
             const panel = document.getElementById('notifications-panel');
             panel.classList.toggle('hidden');
         }
 
-        // Show notification
         function showNotification(type, message) {
             const colors = {
                 'success': 'bg-green-100 text-green-800 border-green-200',
@@ -865,15 +1165,36 @@
             };
             
             const notification = document.createElement('div');
-            notification.className = `fixed top-4 right-4 p-4 rounded-lg border z-50 ${colors[type]} notification-enter max-w-sm`;
+            notification.className = `fixed top-4 right-4 p-4 rounded-lg border z-50 ${colors[type]} notification-enter max-w-sm shadow-lg`;
             notification.innerHTML = `
                 <div class="flex items-center justify-between">
-                    <span class="text-sm">${message}</span>
-                    <button onclick="this.parentElement.parentElement.remove()" class="ml-4 text-gray-500 hover:text-gray-700">×</button>
+                    <span class="text-sm font-medium">${message}</span>
+                    <button onclick="this.parentElement.parentElement.remove()" class="ml-4 text-gray-500 hover:text-gray-700 font-bold">×</button>
                 </div>
             `;
             
             document.body.appendChild(notification);
+            
+            // Update notification count
+            const count = document.getElementById('notification-count');
+            count.textContent = parseInt(count.textContent) + 1;
+            
+            // Add to live updates
+            const liveUpdates = document.getElementById('live-updates');
+            const updateDiv = document.createElement('div');
+            updateDiv.className = `p-2 rounded border-l-2 text-xs ${type === 'success' ? 'bg-green-50 border-green-500' : 
+                                                                    type === 'error' ? 'bg-red-50 border-red-500' :
+                                                                    type === 'warning' ? 'bg-yellow-50 border-yellow-500' : 'bg-blue-50 border-blue-500'}`;
+            updateDiv.innerHTML = `
+                <div class="font-medium">${message}</div>
+                <div class="text-gray-500">${new Date().toLocaleTimeString()}</div>
+            `;
+            liveUpdates.insertBefore(updateDiv, liveUpdates.firstChild);
+            
+            // Keep only last 5 updates
+            while (liveUpdates.children.length > 5) {
+                liveUpdates.removeChild(liveUpdates.lastChild);
+            }
             
             setTimeout(() => {
                 if (notification.parentElement) {
@@ -882,9 +1203,8 @@
             }, 5000);
         }
 
-        function closeNotification(button) {
-            button.closest('.p-3').remove();
-        }
+        // Initialize the UI
+        updateAccountTypeUI();
     </script>
 </body>
 </html>
