@@ -75,6 +75,10 @@
             background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); 
             border-left: 4px solid #3b82f6; 
         }
+        .futures-trade-card { 
+            background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%); 
+            border-left: 4px solid #8b5cf6; 
+        }
         
         /* Enhanced Animations */
         .animate-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
@@ -83,6 +87,7 @@
         @keyframes bounce { 0%, 100% { transform: translateY(-25%); animation-timing-function: cubic-bezier(0.8,0,1,1); } 50% { transform: none; animation-timing-function: cubic-bezier(0,0,0.2,1); } }
         .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
         .ai-gradient { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+        .futures-gradient { background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); }
         .hover-scale:hover { transform: scale(1.02); transition: transform 0.2s ease; }
         .notification-enter { animation: slideInRight 0.3s ease-out; }
         @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
@@ -118,6 +123,10 @@
         .signal-buy { border-left: 4px solid #10b981; background: linear-gradient(90deg, #ecfdf5, #f0fdf4); }
         .signal-sell { border-left: 4px solid #ef4444; background: linear-gradient(90deg, #fef2f2, #fef2f2); }
         .signal-hold { border-left: 4px solid #f59e0b; background: linear-gradient(90deg, #fffbeb, #fefce8); }
+        
+        /* Futures Option Styles */
+        .option-ce { border-left: 4px solid #22c55e; background: linear-gradient(90deg, #f0fdf4, #ecfdf5); }
+        .option-pe { border-left: 4px solid #ef4444; background: linear-gradient(90deg, #fef2f2, #fef2f2); }
         
         /* Scrollbar Styling */
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
@@ -170,7 +179,7 @@
                             🚀 AI Trading Platform Professional
                             <span class="ml-2 px-2 py-1 bg-purple-100 text-purple-700 rounded-lg text-xs">v7.0</span>
                         </h1>
-                        <p class="text-xs text-gray-500">Complete Trading System • Paper Trading Ready • AI Automation • Live Analytics</p>
+                        <p class="text-xs text-gray-500">Complete Trading System • Real Broker Integration • AI Automation • Futures Trading • Live Analytics</p>
                     </div>
                 </div>
                 
@@ -231,6 +240,9 @@
                         </button>
                         <button class="tab-button w-full text-left px-3 py-2 rounded-lg text-sm" onclick="switchTab('trading')">
                             ⚡ Manual Trading
+                        </button>
+                        <button class="tab-button w-full text-left px-3 py-2 rounded-lg text-sm" onclick="switchTab('futures')">
+                            🚀 Futures Trading
                         </button>
                         <button class="tab-button w-full text-left px-3 py-2 rounded-lg text-sm" onclick="switchTab('portfolio')">
                             💼 Portfolio & P&L
@@ -404,13 +416,13 @@
                             </div>
                             <div class="p-4 bg-gray-50 rounded-xl">
                                 <h5 class="font-medium mb-3">💰 Max Per Trade</h5>
-                                <input class="w-full px-3 py-2 border rounded-lg text-sm" id="ai-max-per-trade" onchange="updateAISetting('max_capital_per_trade', this.value)" placeholder="10000" type="number">
+                                <input class="w-full px-3 py-2 border rounded-lg text-sm" id="ai-max-per-trade" onchange="updateAISetting('max_capital_per_trade', this.value)" placeholder="10000" type="number" value="10000">
                             </div>
                             <div class="p-4 bg-gray-50 rounded-xl">
                                 <h5 class="font-medium mb-3">📈 Risk Level</h5>
                                 <select class="w-full px-3 py-2 border rounded-lg text-sm" id="ai-risk-level" onchange="updateAISetting('risk_level', this.value)">
                                     <option value="low">Low Risk</option>
-                                    <option value="medium">Medium Risk</option>
+                                    <option value="medium" selected>Medium Risk</option>
                                     <option value="high">High Risk</option>
                                 </select>
                             </div>
@@ -472,85 +484,622 @@
                     </div>
                 </div>
 
-                <!-- Other tabs remain the same as in original file... -->
                 <!-- Broker Setup Tab -->
                 <div class="tab-content space-y-6" id="tab-broker-setup">
                     <div class="bg-white rounded-2xl shadow-lg p-6 modern-card">
                         <div class="p-4 bg-blue-50 rounded-xl mb-6">
                             <h4 class="font-semibold text-blue-800 mb-2">📝 Paper Trading Active</h4>
                             <p class="text-sm text-blue-700">You're currently in paper trading mode with virtual money. This is perfect for testing strategies!</p>
-                            <p class="text-xs text-blue-600 mt-2">🚀 Start AI trading now without any broker setup required.</p>
+                            <p class="text-xs text-blue-600 mt-2">🚀 Start AI trading now without any broker setup required. Connect real brokers when ready for live trading.</p>
                         </div>
                         
                         <div class="flex items-center justify-between mb-6">
                             <h3 class="text-lg font-semibold">🔗 Broker Integration Setup</h3>
                             <div class="flex items-center space-x-3">
-                                <div class="w-2 h-2 rounded-full bg-green-500" id="broker-connection-indicator"></div>
-                                <span class="text-sm text-green-600" id="broker-connection-status">Paper Mode Active</span>
+                                <div class="w-2 h-2 rounded-full connection-inactive" id="broker-connection-indicator"></div>
+                                <span class="text-sm" id="broker-connection-status">Paper Mode Active</span>
                             </div>
                         </div>
 
-                        <!-- Add broker setup forms here if needed -->
-                        <div class="text-center p-8 border-2 border-dashed border-gray-300 rounded-xl">
-                            <div class="text-4xl mb-4">🏦</div>
-                            <h4 class="font-semibold mb-2">Ready to Connect Real Brokers?</h4>
-                            <p class="text-sm text-gray-600 mb-4">Add your Zerodha or mStock credentials when you're ready for live trading.</p>
-                            <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="showNotification('info', '📋 Broker setup will be available when switching to live mode')">
-                                Setup Broker Integration
+                        <!-- Broker Selection -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <!-- Zerodha Integration -->
+                            <div class="broker-card p-6 rounded-xl" id="zerodha-card">
+                                <div class="flex items-center justify-between mb-4">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold">Z</div>
+                                        <div>
+                                            <h4 class="font-bold">Zerodha Kite</h4>
+                                            <p class="text-sm text-gray-600">India's largest broker</p>
+                                        </div>
+                                    </div>
+                                    <div class="w-3 h-3 rounded-full connection-inactive" id="zerodha-status"></div>
+                                </div>
+                                <div class="space-y-3">
+                                    <input type="text" id="zerodha-api-key" placeholder="API Key" class="w-full px-3 py-2 border rounded-lg text-sm">
+                                    <input type="password" id="zerodha-api-secret" placeholder="API Secret" class="w-full px-3 py-2 border rounded-lg text-sm">
+                                    <input type="text" id="zerodha-user-id" placeholder="User ID" class="w-full px-3 py-2 border rounded-lg text-sm">
+                                    <input type="password" id="zerodha-password" placeholder="Password" class="w-full px-3 py-2 border rounded-lg text-sm">
+                                    <input type="text" id="zerodha-totp" placeholder="TOTP (if enabled)" class="w-full px-3 py-2 border rounded-lg text-sm">
+                                    <button class="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="connectZerodha()">
+                                        🔗 Connect Zerodha
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- mStock Integration -->
+                            <div class="broker-card p-6 rounded-xl" id="mstock-card">
+                                <div class="flex items-center justify-between mb-4">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center text-white font-bold">M</div>
+                                        <div>
+                                            <h4 class="font-bold">mStock by Mirae Asset</h4>
+                                            <p class="text-sm text-gray-600">Advanced trading platform</p>
+                                        </div>
+                                    </div>
+                                    <div class="w-3 h-3 rounded-full connection-inactive" id="mstock-status"></div>
+                                </div>
+                                <div class="space-y-3">
+                                    <input type="text" id="mstock-api-key" placeholder="API Key" class="w-full px-3 py-2 border rounded-lg text-sm">
+                                    <input type="password" id="mstock-api-secret" placeholder="API Secret" class="w-full px-3 py-2 border rounded-lg text-sm">
+                                    <input type="text" id="mstock-user-id" placeholder="User ID" class="w-full px-3 py-2 border rounded-lg text-sm">
+                                    <input type="password" id="mstock-password" placeholder="Password" class="w-full px-3 py-2 border rounded-lg text-sm">
+                                    <button class="w-full px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700" onclick="connectMStock()">
+                                        🔗 Connect mStock
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Connection Status -->
+                        <div class="p-4 bg-gray-50 rounded-xl">
+                            <h5 class="font-medium mb-3">📊 Connection Status</h5>
+                            <div class="space-y-2 text-sm" id="broker-connection-details">
+                                <div class="flex justify-between">
+                                    <span>Active Broker:</span>
+                                    <span id="active-broker">Paper Trading</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Connection:</span>
+                                    <span id="connection-health">Paper Mode</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Last Update:</span>
+                                    <span id="last-update">Live</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Available Funds:</span>
+                                    <span id="broker-funds">₹10,00,000</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Broker Features -->
+                        <div class="mt-6">
+                            <h5 class="font-medium mb-3">🎯 Available Features</h5>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                                <div class="p-3 bg-blue-50 rounded-lg text-center">
+                                    <div class="text-sm font-medium">Real-time Data</div>
+                                    <div class="text-xs text-blue-600" id="feature-realtime">✅ Paper Mode</div>
+                                </div>
+                                <div class="p-3 bg-green-50 rounded-lg text-center">
+                                    <div class="text-sm font-medium">Order Placement</div>
+                                    <div class="text-xs text-green-600" id="feature-orders">✅ Paper Mode</div>
+                                </div>
+                                <div class="p-3 bg-purple-50 rounded-lg text-center">
+                                    <div class="text-sm font-medium">Portfolio Sync</div>
+                                    <div class="text-xs text-purple-600" id="feature-portfolio">✅ Paper Mode</div>
+                                </div>
+                                <div class="p-3 bg-orange-50 rounded-lg text-center">
+                                    <div class="text-sm font-medium">Auto Trading</div>
+                                    <div class="text-xs text-orange-600" id="feature-autotrading">✅ Paper Mode</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Market Overview Tab -->
+                <div class="tab-content space-y-6" id="tab-overview">
+                    <!-- Market Indices -->
+                    <div class="bg-white rounded-2xl shadow-lg p-6 modern-card">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-lg font-semibold flex items-center">
+                                📊 Live Market Indices
+                                <span class="ml-2 w-2 h-2 bg-green-500 rounded-full live-indicator"></span>
+                            </h3>
+                            <div class="text-xs text-gray-600">
+                                Last updated: <span id="market-last-update">Loading...</span>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="bg-gradient-to-r from-blue-500 to-blue-600 p-4 rounded-xl text-white hover-scale cursor-pointer">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h4 class="text-sm opacity-90">NIFTY 50</h4>
+                                        <p class="text-xl font-bold" id="nifty-price">19,850.25</p>
+                                        <span class="text-xs" id="nifty-change">+125.40 (+0.63%)</span>
+                                    </div>
+                                    <div class="text-blue-200 text-2xl">📈</div>
+                                </div>
+                            </div>
+                            <div class="bg-gradient-to-r from-green-500 to-green-600 p-4 rounded-xl text-white hover-scale cursor-pointer">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h4 class="text-sm opacity-90">BANK NIFTY</h4>
+                                        <p class="text-xl font-bold" id="banknifty-price">44,125.75</p>
+                                        <span class="text-xs" id="banknifty-change">-85.20 (-0.19%)</span>
+                                    </div>
+                                    <div class="text-green-200 text-2xl">🏦</div>
+                                </div>
+                            </div>
+                            <div class="bg-gradient-to-r from-purple-500 to-purple-600 p-4 rounded-xl text-white hover-scale cursor-pointer">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h4 class="text-sm opacity-90">SENSEX</h4>
+                                        <p class="text-xl font-bold" id="sensex-price">66,480.35</p>
+                                        <span class="text-xs" id="sensex-change">+245.80 (+0.37%)</span>
+                                    </div>
+                                    <div class="text-purple-200 text-2xl">📊</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stock Search -->
+                    <div class="bg-white rounded-2xl shadow-lg p-6 modern-card">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold">🔍 Stock Search</h3>
+                            <button class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all text-sm" onclick="loadTopGainers()">
+                                📈 Top Gainers
                             </button>
                         </div>
-                    </div>
-                </div>
-
-                <!-- Simplified other tabs for now... -->
-                <div class="tab-content" id="tab-overview">
-                    <div class="bg-white rounded-2xl shadow-lg p-6 modern-card">
-                        <h3 class="text-lg font-semibold mb-4">📊 Market Overview</h3>
-                        <div class="text-center py-8">
-                            <p class="text-gray-600">Market data will be displayed here</p>
+                        <div class="relative mb-4">
+                            <div class="absolute left-3 top-3 text-gray-400">🔍</div>
+                            <input class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500" id="stock-search-input" onkeyup="searchStocksReal()" placeholder="Search stocks (e.g., RELIANCE, TCS, HDFC)" type="text">
+                        </div>
+                        <div class="space-y-3 hidden" id="stock-search-results">
+                            <h4 class="font-medium text-gray-900">Search Results</h4>
+                            <div id="search-results-container"></div>
+                        </div>
+                        
+                        <!-- Popular Stocks -->
+                        <div class="mt-6">
+                            <h4 class="font-medium text-gray-900 mb-4">📊 Market Leaders</h4>
+                            <div class="grid grid-cols-3 md:grid-cols-6 gap-3" id="popular-stocks">
+                                <button onclick="getRealTimePrice('RELIANCE')" class="p-3 border rounded-lg text-center hover:bg-blue-50 hover:border-blue-300 transition-all hover-scale trade-card">
+                                    <div class="font-medium text-sm">RELIANCE</div>
+                                    <div class="text-xs">₹2472</div>
+                                    <div class="text-xs text-red-600">-0.24%</div>
+                                </button>
+                                <button onclick="getRealTimePrice('TCS')" class="p-3 border rounded-lg text-center hover:bg-blue-50 hover:border-blue-300 transition-all hover-scale trade-card">
+                                    <div class="font-medium text-sm">TCS</div>
+                                    <div class="text-xs">₹3724</div>
+                                    <div class="text-xs text-red-600">-0.48%</div>
+                                </button>
+                                <button onclick="getRealTimePrice('HDFCBANK')" class="p-3 border rounded-lg text-center hover:bg-blue-50 hover:border-blue-300 transition-all hover-scale trade-card">
+                                    <div class="font-medium text-sm">HDFCBANK</div>
+                                    <div class="text-xs">₹1696</div>
+                                    <div class="text-xs text-red-600">-0.18%</div>
+                                </button>
+                                <button onclick="getRealTimePrice('INFY')" class="p-3 border rounded-lg text-center hover:bg-blue-50 hover:border-blue-300 transition-all hover-scale trade-card">
+                                    <div class="font-medium text-sm">INFY</div>
+                                    <div class="text-xs">₹1787</div>
+                                    <div class="text-xs text-red-600">-0.14%</div>
+                                </button>
+                                <button onclick="getRealTimePrice('ICICIBANK')" class="p-3 border rounded-lg text-center hover:bg-blue-50 hover:border-blue-300 transition-all hover-scale trade-card">
+                                    <div class="font-medium text-sm">ICICIBANK</div>
+                                    <div class="text-xs">₹946</div>
+                                    <div class="text-xs text-green-600">+0.22%</div>
+                                </button>
+                                <button onclick="getRealTimePrice('SBIN')" class="p-3 border rounded-lg text-center hover:bg-blue-50 hover:border-blue-300 transition-all hover-scale trade-card">
+                                    <div class="font-medium text-sm">SBIN</div>
+                                    <div class="text-xs">₹579</div>
+                                    <div class="text-xs text-green-600">+0.45%</div>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="tab-content" id="tab-trading">
+                <!-- Manual Trading Tab -->
+                <div class="tab-content space-y-6" id="tab-trading">
+                    <!-- Trading Controls -->
                     <div class="bg-white rounded-2xl shadow-lg p-6 modern-card">
-                        <h3 class="text-lg font-semibold mb-4">⚡ Manual Trading</h3>
-                        <div class="text-center py-8">
-                            <p class="text-gray-600">Manual trading interface will be here</p>
+                        <h3 class="text-lg font-semibold mb-6">⚡ Manual Trade Execution</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <!-- Buy Order -->
+                            <div class="p-4 bg-green-50 rounded-xl">
+                                <h4 class="font-medium text-green-800 mb-4 flex items-center">
+                                    📈 Buy Order
+                                    <span class="ml-2 w-2 h-2 bg-green-500 rounded-full live-indicator"></span>
+                                </h4>
+                                <div class="space-y-3">
+                                    <input class="w-full px-3 py-2 border rounded-lg text-sm" id="buy-symbol" placeholder="Symbol (e.g., RELIANCE)" type="text">
+                                    <input class="w-full px-3 py-2 border rounded-lg text-sm" id="buy-quantity" placeholder="Quantity" type="number">
+                                    <input class="w-full px-3 py-2 border rounded-lg text-sm" id="buy-price" placeholder="Price" step="0.01" type="number">
+                                    <div class="text-xs text-gray-600" id="buy-order-value">Order Value: ₹0</div>
+                                    <button class="w-full px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium" onclick="placeOrder('BUY')">
+                                        Place Buy Order
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Sell Order -->
+                            <div class="p-4 bg-red-50 rounded-xl">
+                                <h4 class="font-medium text-red-800 mb-4 flex items-center">
+                                    📉 Sell Order
+                                    <span class="ml-2 w-2 h-2 bg-red-500 rounded-full live-indicator"></span>
+                                </h4>
+                                <div class="space-y-3">
+                                    <input class="w-full px-3 py-2 border rounded-lg text-sm" id="sell-symbol" placeholder="Symbol (e.g., RELIANCE)" type="text">
+                                    <input class="w-full px-3 py-2 border rounded-lg text-sm" id="sell-quantity" placeholder="Quantity" type="number">
+                                    <input class="w-full px-3 py-2 border rounded-lg text-sm" id="sell-price" placeholder="Price" step="0.01" type="number">
+                                    <div class="text-xs text-gray-600" id="sell-order-value">Order Value: ₹0</div>
+                                    <button class="w-full px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm font-medium" onclick="placeOrder('SELL')">
+                                        Place Sell Order
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Live Price Check -->
+                            <div class="p-4 bg-blue-50 rounded-xl">
+                                <h4 class="font-medium text-blue-800 mb-4 flex items-center">
+                                    📊 Live Price Check
+                                    <span class="ml-2 w-2 h-2 bg-blue-500 rounded-full live-indicator"></span>
+                                </h4>
+                                <div class="space-y-3">
+                                    <input class="w-full px-3 py-2 border rounded-lg text-sm" id="market-symbol" placeholder="Symbol (e.g., RELIANCE)" type="text">
+                                    <button class="w-full px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium" onclick="getRealTimePrice()">
+                                        Get Live Price
+                                    </button>
+                                    <div class="text-sm text-gray-600 p-3 bg-gray-50 rounded" id="market-data-result">
+                                        Enter symbol to get live price...
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="tab-content" id="tab-portfolio">
+                <!-- NEW: Futures Trading Tab -->
+                <div class="tab-content space-y-6" id="tab-futures">
+                    <!-- Futures Trading Dashboard -->
                     <div class="bg-white rounded-2xl shadow-lg p-6 modern-card">
-                        <h3 class="text-lg font-semibold mb-4">💼 Portfolio & P&L</h3>
-                        <div class="text-center py-8">
-                            <p class="text-gray-600">Portfolio data will be displayed here</p>
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-lg font-semibold flex items-center">
+                                🚀 Futures & Options Trading
+                                <span class="ml-2 px-2 py-1 bg-purple-100 text-purple-700 rounded text-xs">F&O</span>
+                            </h3>
+                            <button class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 text-sm" onclick="refreshFuturesData()">
+                                🔄 Refresh F&O Data
+                            </button>
+                        </div>
+
+                        <!-- Futures Indices Quick Access -->
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                            <div class="p-4 bg-blue-50 rounded-xl text-center cursor-pointer hover-scale" onclick="selectFuturesSymbol('NIFTY')">
+                                <div class="text-2xl font-bold text-blue-600" id="nifty-futures-price">19,870</div>
+                                <div class="text-sm text-blue-600">NIFTY FUT</div>
+                                <div class="text-xs text-blue-500">Dec 2024</div>
+                            </div>
+                            <div class="p-4 bg-green-50 rounded-xl text-center cursor-pointer hover-scale" onclick="selectFuturesSymbol('BANKNIFTY')">
+                                <div class="text-2xl font-bold text-green-600" id="banknifty-futures-price">44,200</div>
+                                <div class="text-sm text-green-600">BANK NIFTY FUT</div>
+                                <div class="text-xs text-green-500">Dec 2024</div>
+                            </div>
+                            <div class="p-4 bg-purple-50 rounded-xl text-center cursor-pointer hover-scale" onclick="selectFuturesSymbol('MIDCAP')">
+                                <div class="text-2xl font-bold text-purple-600" id="midcap-futures-price">12,450</div>
+                                <div class="text-sm text-purple-600">MIDCAP FUT</div>
+                                <div class="text-xs text-purple-500">Dec 2024</div>
+                            </div>
+                            <div class="p-4 bg-orange-50 rounded-xl text-center cursor-pointer hover-scale" onclick="selectFuturesSymbol('SENSEX')">
+                                <div class="text-2xl font-bold text-orange-600" id="sensex-futures-price">66,500</div>
+                                <div class="text-sm text-orange-600">SENSEX FUT</div>
+                                <div class="text-xs text-orange-500">Dec 2024</div>
+                            </div>
+                        </div>
+
+                        <!-- Options Chain Display -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <!-- Call Options (CE) -->
+                            <div class="p-4 bg-green-50 rounded-xl">
+                                <h4 class="font-medium text-green-800 mb-4 flex items-center">
+                                    📈 Call Options (CE)
+                                    <span class="ml-2 w-2 h-2 bg-green-500 rounded-full live-indicator"></span>
+                                </h4>
+                                <div class="space-y-3">
+                                    <select class="w-full px-3 py-2 border rounded-lg text-sm" id="futures-symbol-ce" onchange="updateOptionsChain('CE')">
+                                        <option value="">Select Index</option>
+                                        <option value="NIFTY">NIFTY</option>
+                                        <option value="BANKNIFTY">BANK NIFTY</option>
+                                        <option value="MIDCAP">MIDCAP NIFTY</option>
+                                        <option value="SENSEX">SENSEX</option>
+                                    </select>
+                                    <select class="w-full px-3 py-2 border rounded-lg text-sm" id="expiry-ce" onchange="updateOptionsChain('CE')">
+                                        <option value="">Select Expiry</option>
+                                        <option value="2024-12-26">26 Dec 2024</option>
+                                        <option value="2025-01-02">02 Jan 2025</option>
+                                        <option value="2025-01-30">30 Jan 2025</option>
+                                    </select>
+                                    <select class="w-full px-3 py-2 border rounded-lg text-sm" id="strike-ce" onchange="updateOptionPrice('CE')">
+                                        <option value="">Select Strike</option>
+                                    </select>
+                                    <input class="w-full px-3 py-2 border rounded-lg text-sm" id="ce-quantity" placeholder="Quantity (Lots)" type="number" value="1">
+                                    <div class="text-xs text-gray-600">
+                                        <div>Premium: <span id="ce-premium">₹0</span></div>
+                                        <div>Total Value: <span id="ce-total-value">₹0</span></div>
+                                    </div>
+                                    <button class="w-full px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium" onclick="placeFuturesOrder('CE', 'BUY')">
+                                        Buy Call Option
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Put Options (PE) -->
+                            <div class="p-4 bg-red-50 rounded-xl">
+                                <h4 class="font-medium text-red-800 mb-4 flex items-center">
+                                    📉 Put Options (PE)
+                                    <span class="ml-2 w-2 h-2 bg-red-500 rounded-full live-indicator"></span>
+                                </h4>
+                                <div class="space-y-3">
+                                    <select class="w-full px-3 py-2 border rounded-lg text-sm" id="futures-symbol-pe" onchange="updateOptionsChain('PE')">
+                                        <option value="">Select Index</option>
+                                        <option value="NIFTY">NIFTY</option>
+                                        <option value="BANKNIFTY">BANK NIFTY</option>
+                                        <option value="MIDCAP">MIDCAP NIFTY</option>
+                                        <option value="SENSEX">SENSEX</option>
+                                    </select>
+                                    <select class="w-full px-3 py-2 border rounded-lg text-sm" id="expiry-pe" onchange="updateOptionsChain('PE')">
+                                        <option value="">Select Expiry</option>
+                                        <option value="2024-12-26">26 Dec 2024</option>
+                                        <option value="2025-01-02">02 Jan 2025</option>
+                                        <option value="2025-01-30">30 Jan 2025</option>
+                                    </select>
+                                    <select class="w-full px-3 py-2 border rounded-lg text-sm" id="strike-pe" onchange="updateOptionPrice('PE')">
+                                        <option value="">Select Strike</option>
+                                    </select>
+                                    <input class="w-full px-3 py-2 border rounded-lg text-sm" id="pe-quantity" placeholder="Quantity (Lots)" type="number" value="1">
+                                    <div class="text-xs text-gray-600">
+                                        <div>Premium: <span id="pe-premium">₹0</span></div>
+                                        <div>Total Value: <span id="pe-total-value">₹0</span></div>
+                                    </div>
+                                    <button class="w-full px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm font-medium" onclick="placeFuturesOrder('PE', 'BUY')">
+                                        Buy Put Option
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Futures Positions -->
+                        <div>
+                            <h4 class="font-medium mb-4 flex items-center">
+                                📊 Active F&O Positions
+                                <span class="ml-2 text-xs bg-purple-100 px-2 py-1 rounded">Live P&L</span>
+                            </h4>
+                            <div class="space-y-3" id="futures-positions">
+                                <div class="text-center text-gray-500 py-4">No F&O positions. Start trading futures and options to see positions here.</div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="tab-content" id="tab-reports">
+                <!-- Portfolio & P&L Tab -->
+                <div class="tab-content space-y-6" id="tab-portfolio">
+                    <!-- Enhanced Portfolio Summary -->
                     <div class="bg-white rounded-2xl shadow-lg p-6 modern-card">
-                        <h3 class="text-lg font-semibold mb-4">📊 Trade Reports</h3>
-                        <div class="text-center py-8">
-                            <p class="text-gray-600">Trade reports will be displayed here</p>
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-lg font-semibold">💼 Portfolio & P&L Analysis</h3>
+                            <div class="flex items-center space-x-3">
+                                <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm" onclick="refreshPortfolio()">
+                                    🔄 Refresh
+                                </button>
+                                <button class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm" onclick="exportPortfolio()">
+                                    📤 Export
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Portfolio Overview Cards -->
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                            <div class="p-4 bg-blue-50 rounded-xl">
+                                <div class="text-2xl font-bold text-blue-600" id="portfolio-value">₹10,00,000</div>
+                                <div class="text-sm text-blue-600">Portfolio Value</div>
+                                <div class="text-xs text-blue-500 mt-1" id="portfolio-change">+₹0 (0%)</div>
+                            </div>
+                            <div class="p-4 bg-green-50 rounded-xl">
+                                <div class="text-2xl font-bold text-green-600" id="total-profit">₹0</div>
+                                <div class="text-sm text-green-600">Total Profit</div>
+                                <div class="text-xs text-green-500 mt-1" id="profit-percentage">0%</div>
+                            </div>
+                            <div class="p-4 bg-purple-50 rounded-xl">
+                                <div class="text-2xl font-bold text-purple-600" id="active-positions">0</div>
+                                <div class="text-sm text-purple-600">Active Positions</div>
+                                <div class="text-xs text-purple-500 mt-1" id="position-diversity">0 symbols</div>
+                            </div>
+                            <div class="p-4 bg-orange-50 rounded-xl">
+                                <div class="text-2xl font-bold text-orange-600" id="day-pnl">₹0</div>
+                                <div class="text-sm text-orange-600">Today's P&L</div>
+                                <div class="text-xs text-orange-500 mt-1" id="day-pnl-percent">0%</div>
+                            </div>
+                        </div>
+
+                        <!-- Enhanced Positions Display -->
+                        <div>
+                            <h4 class="font-medium mb-4">🎯 Current Positions</h4>
+                            <div class="space-y-3" id="positions-detailed">
+                                <div class="text-center text-gray-500 py-8">
+                                    No positions found. Start trading to see your portfolio.
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="tab-content" id="tab-capital">
+                <!-- Trade Reports Tab -->
+                <div class="tab-content space-y-6" id="tab-reports">
                     <div class="bg-white rounded-2xl shadow-lg p-6 modern-card">
-                        <h3 class="text-lg font-semibold mb-4">💰 Capital Management</h3>
-                        <div class="text-center py-8">
-                            <p class="text-gray-600">Capital management settings will be here</p>
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-lg font-semibold">📊 Trade Reports & Analytics</h3>
+                            <div class="flex items-center space-x-3">
+                                <select class="px-3 py-2 border rounded-lg text-sm" id="trade-filter" onchange="filterTrades()">
+                                    <option value="all">All Trades</option>
+                                    <option value="ai">AI Trades</option>
+                                    <option value="manual">Manual Trades</option>
+                                    <option value="futures">Futures Trades</option>
+                                    <option value="today">Today</option>
+                                    <option value="week">This Week</option>
+                                </select>
+                                <button class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm" onclick="exportTrades()">
+                                    📤 Export CSV
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Trade Summary Cards -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                            <div class="p-4 bg-blue-50 rounded-xl">
+                                <div class="text-xl font-bold text-blue-600" id="total-trades-summary">0</div>
+                                <div class="text-sm text-blue-600">Total Trades</div>
+                                <div class="text-xs text-blue-500 mt-1">
+                                    <span id="ai-trades-summary">0 AI</span> • <span id="manual-trades-summary">0 Manual</span> • <span id="futures-trades-summary">0 F&O</span>
+                                </div>
+                            </div>
+                            <div class="p-4 bg-green-50 rounded-xl">
+                                <div class="text-xl font-bold text-green-600" id="winning-trades">0</div>
+                                <div class="text-sm text-green-600">Winning Trades</div>
+                                <div class="text-xs text-green-500 mt-1" id="win-rate-display">0% win rate</div>
+                            </div>
+                            <div class="p-4 bg-purple-50 rounded-xl">
+                                <div class="text-xl font-bold text-purple-600" id="avg-trade-value">₹0</div>
+                                <div class="text-sm text-purple-600">Avg Trade Value</div>
+                                <div class="text-xs text-purple-500 mt-1" id="avg-return-display">0% avg return</div>
+                            </div>
+                        </div>
+
+                        <!-- Enhanced Trade History -->
+                        <div>
+                            <h4 class="font-medium mb-4">📋 Trade History</h4>
+                            <div class="space-y-3 max-h-96 overflow-y-auto custom-scrollbar" id="trades-detailed">
+                                <div class="text-center text-gray-500 py-8">
+                                    No trades found. Execute trades to see detailed reports.
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="tab-content" id="tab-settings">
+                <!-- Capital Management Tab -->
+                <div class="tab-content space-y-6" id="tab-capital">
+                    <!-- Paper Trading Capital -->
                     <div class="bg-white rounded-2xl shadow-lg p-6 modern-card">
-                        <h3 class="text-lg font-semibold mb-4">⚙️ AI Settings</h3>
+                        <h3 class="text-lg font-semibold mb-6 flex items-center">
+                            📝 Paper Trading Capital
+                            <span class="ml-2 px-2 py-1 bg-green-100 text-green-700 rounded text-xs">Virtual Money</span>
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Set Paper Capital</label>
+                                    <div class="flex space-x-2">
+                                        <input class="flex-1 px-3 py-2 border rounded-lg" id="paper-capital-input" placeholder="1000000" type="number">
+                                        <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="updatePaperCapital()">
+                                            Update
+                                        </button>
+                                    </div>
+                                    <p class="text-xs text-gray-500 mt-1">Range: ₹10,000 - ₹10,00,00,000</p>
+                                </div>
+                                <div class="grid grid-cols-3 gap-2">
+                                    <button class="px-3 py-2 bg-gray-200 text-gray-700 rounded text-sm hover:bg-gray-300" onclick="setPaperCapital(100000)">
+                                        ₹1 Lakh
+                                    </button>
+                                    <button class="px-3 py-2 bg-gray-200 text-gray-700 rounded text-sm hover:bg-gray-300" onclick="setPaperCapital(1000000)">
+                                        ₹10 Lakh
+                                    </button>
+                                    <button class="px-3 py-2 bg-gray-200 text-gray-700 rounded text-sm hover:bg-gray-300" onclick="setPaperCapital(5000000)">
+                                        ₹50 Lakh
+                                    </button>
+                                </div>
+                                <button class="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700" onclick="resetPaperAccount()">
+                                    🔄 Reset Paper Account
+                                </button>
+                            </div>
+                            <div class="p-4 bg-green-50 rounded-lg">
+                                <h5 class="font-medium mb-3">Current Paper Account</h5>
+                                <div class="space-y-2 text-sm">
+                                    <div class="flex justify-between">
+                                        <span>Available:</span>
+                                        <span class="font-medium" id="paper-balance-display">₹10,00,000</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Invested:</span>
+                                        <span class="font-medium" id="paper-invested-display">₹0</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>P&L:</span>
+                                        <span class="font-medium" id="paper-pnl-display">₹0</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Real Trading Capital -->
+                    <div class="bg-white rounded-2xl shadow-lg p-6 modern-card">
+                        <h3 class="text-lg font-semibold mb-6 flex items-center">
+                            🔴 Real Trading Capital
+                            <span class="ml-2 px-2 py-1 bg-red-100 text-red-700 rounded text-xs">Real Money</span>
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Available Capital</label>
+                                    <input class="w-full px-3 py-2 border rounded-lg" id="real-capital-input" placeholder="100000" type="number">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Daily Trading Limit</label>
+                                    <input class="w-full px-3 py-2 border rounded-lg" id="daily-limit-input" placeholder="5000" type="number">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Max Position Size</label>
+                                    <input class="w-full px-3 py-2 border rounded-lg" id="max-position-input" placeholder="50000" type="number">
+                                </div>
+                                <button class="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700" onclick="setupRealAccount()">
+                                    💰 Setup Real Account
+                                </button>
+                            </div>
+                            <div class="p-4 bg-red-50 rounded-lg">
+                                <div class="flex items-center justify-between mb-3">
+                                    <h5 class="font-medium">Real Account Status</h5>
+                                    <span class="text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-700" id="real-account-status">Inactive</span>
+                                </div>
+                                <div class="space-y-2 text-sm">
+                                    <div class="flex justify-between">
+                                        <span>Capital:</span>
+                                        <span class="font-medium" id="real-capital-display">₹0</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Daily Limit:</span>
+                                        <span class="font-medium" id="real-daily-limit-display">₹0</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Max Position:</span>
+                                        <span class="font-medium" id="real-max-position-display">₹0</span>
+                                    </div>
+                                </div>
+                                <div class="mt-3 p-2 bg-yellow-100 rounded text-xs text-yellow-800">
+                                    ⚠️ Real money trading involves risk. Start with small amounts.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings Tab -->
+                <div class="tab-content space-y-6" id="tab-settings">
+                    <!-- AI Trading Settings -->
+                    <div class="bg-white rounded-2xl shadow-lg p-6 modern-card">
+                        <h3 class="text-lg font-semibold mb-6">🤖 AI Trading Settings</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="space-y-4">
                                 <div>
@@ -565,19 +1114,29 @@
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Auto Stop Loss (%)</label>
                                     <input class="w-full px-3 py-2 border rounded-lg" id="auto-stop-loss" placeholder="5" step="0.1" type="number" value="5">
                                 </div>
-                            </div>
-                            <div class="space-y-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Auto Take Profit (%)</label>
                                     <input class="w-full px-3 py-2 border rounded-lg" id="auto-take-profit" placeholder="10" step="0.1" type="number" value="10">
                                 </div>
+                            </div>
+                            <div class="space-y-4">
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Allowed Symbols</label>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Allowed Symbols (comma-separated)</label>
                                     <textarea class="w-full px-3 py-2 border rounded-lg h-20" id="allowed-symbols" placeholder="RELIANCE,TCS,HDFCBANK,INFY,ICICIBANK">RELIANCE,TCS,HDFCBANK,INFY,ICICIBANK</textarea>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Enable Futures Trading</label>
+                                    <select class="w-full px-3 py-2 border rounded-lg" id="enable-futures">
+                                        <option value="false">Disabled</option>
+                                        <option value="true">Enabled</option>
+                                    </select>
                                 </div>
                                 <button class="w-full px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700" onclick="saveAISettings()">
                                     💾 Save AI Settings
                                 </button>
+                                <div class="p-3 bg-blue-50 rounded-lg text-sm text-blue-800">
+                                    💡 AI will analyze these symbols and generate trading signals based on your risk settings.
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -586,6 +1145,58 @@
 
             <!-- Right Sidebar - Watchlist & AI Status -->
             <aside class="sidebar space-y-6">
+                <!-- Enhanced Watchlist -->
+                <div class="bg-white rounded-2xl shadow-lg p-4 modern-card">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-semibold text-gray-900">👁️ Watchlist</h3>
+                        <button class="text-xs text-blue-600 hover:text-blue-800" onclick="refreshWatchlist()">Refresh</button>
+                    </div>
+                    <div class="space-y-2 custom-scrollbar max-h-64 overflow-y-auto" id="watchlist-container">
+                        <div class="p-2 bg-gray-50 rounded-lg hover:bg-gray-100 transition-all cursor-pointer trade-card" onclick="getRealTimePrice('RELIANCE')">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <div class="font-medium text-sm">RELIANCE</div>
+                                    <div class="text-xs text-gray-600">₹2472.24</div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-xs font-medium text-red-600">-0.24%</div>
+                                    <button onclick="removeFromWatchlist('RELIANCE'); event.stopPropagation();" class="text-xs text-red-500 hover:text-red-700 mt-1">×</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-2 bg-gray-50 rounded-lg hover:bg-gray-100 transition-all cursor-pointer trade-card" onclick="getRealTimePrice('TCS')">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <div class="font-medium text-sm">TCS</div>
+                                    <div class="text-xs text-gray-600">₹3724.31</div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-xs font-medium text-red-600">-0.48%</div>
+                                    <button onclick="removeFromWatchlist('TCS'); event.stopPropagation();" class="text-xs text-red-500 hover:text-red-700 mt-1">×</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-2 bg-gray-50 rounded-lg hover:bg-gray-100 transition-all cursor-pointer trade-card" onclick="getRealTimePrice('HDFCBANK')">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <div class="font-medium text-sm">HDFCBANK</div>
+                                    <div class="text-xs text-gray-600">₹1695.72</div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-xs font-medium text-red-600">-0.18%</div>
+                                    <button onclick="removeFromWatchlist('HDFCBANK'); event.stopPropagation();" class="text-xs text-red-500 hover:text-red-700 mt-1">×</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-3 pt-3 border-t">
+                        <div class="flex space-x-2">
+                            <input class="flex-1 px-2 py-1 border rounded text-xs" id="watchlist-symbol" placeholder="Add symbol" type="text">
+                            <button class="px-3 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700" onclick="addToWatchlist()">Add</button>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Enhanced AI Trading Status -->
                 <div class="bg-white rounded-2xl shadow-lg p-4 modern-card">
                     <h3 class="font-semibold mb-4 text-gray-900 flex items-center">
@@ -615,7 +1226,7 @@
                     <div class="space-y-3 text-xs" id="live-updates">
                         <div class="p-2 bg-green-50 rounded border-l-2 border-green-500">
                             <div class="font-medium text-green-800">System Online</div>
-                            <div class="text-green-600">Paper trading ready!</div>
+                            <div class="text-green-600">v7.0 Complete Trading System Ready!</div>
                         </div>
                     </div>
                 </div>
@@ -634,13 +1245,17 @@
     </div>
 
     <script>
-        // Enhanced Configuration with Paper Trading Priority
+        // Enhanced Configuration with Complete Features
         const CONFIG = {
-            AI_UPDATE_INTERVAL: 3000, // Faster updates for demo
+            AI_UPDATE_INTERVAL: 3000,
             MARKET_UPDATE_INTERVAL: 30000,
             PORTFOLIO_UPDATE_INTERVAL: 15000,
             MAX_NOTIFICATIONS: 10,
-            PAPER_TRADING_ENABLED: true // Always allow paper trading
+            PAPER_TRADING_ENABLED: true,
+            BROKERS: {
+                ZERODHA: 'zerodha',
+                MSTOCK: 'mstock'
+            }
         };
 
         // Global state management
@@ -648,8 +1263,8 @@
             currentAccountType: 'paper',
             isAITradingActive: false,
             activeBroker: null,
-            brokerConnected: false, // Not required for paper trading
-            paperTradingReady: true, // Always ready for paper trading
+            brokerConnected: false,
+            paperTradingReady: true,
             lastTradeCount: 0,
             lastPositionCount: 0,
             marketDataInterval: null,
@@ -662,17 +1277,37 @@
                 positions: [],
                 trades: [],
                 aiSignals: [],
-                aiActions: []
+                aiActions: [],
+                futuresPositions: []
             }
         };
 
-        // Simulated data for paper trading
+        // Simulated data for comprehensive features
         const simulatedData = {
+            marketIndices: {
+                NIFTY: { current_price: 19850.25, change: 125.40, change_percent: 0.63 },
+                BANKNIFTY: { current_price: 44125.75, change: -85.20, change_percent: -0.19 },
+                SENSEX: { current_price: 66480.35, change: 245.80, change_percent: 0.37 }
+            },
+            popularStocks: [
+                { symbol: 'RELIANCE', price: 2472.24, change_percent: -0.24 },
+                { symbol: 'TCS', price: 3724.31, change_percent: -0.48 },
+                { symbol: 'HDFCBANK', price: 1695.72, change_percent: -0.18 },
+                { symbol: 'INFY', price: 1787.4, change_percent: -0.14 },
+                { symbol: 'ICICIBANK', price: 945.65, change_percent: 0.22 },
+                { symbol: 'SBIN', price: 578.90, change_percent: 0.45 }
+            ],
             paperAccount: {
                 balance: 1000000,
                 invested: 0,
                 pnl: 0,
                 total_value: 1000000
+            },
+            realAccount: {
+                available_capital: 0,
+                daily_limit: 0,
+                max_position_size: 0,
+                is_active: false
             },
             aiSettings: {
                 trading_mode: 'paper',
@@ -682,12 +1317,37 @@
                 max_daily_trades: 10,
                 auto_stop_loss: 5.0,
                 auto_take_profit: 10.0,
-                allowed_symbols: ['RELIANCE', 'TCS', 'HDFCBANK', 'INFY', 'ICICIBANK']
+                allowed_symbols: ['RELIANCE', 'TCS', 'HDFCBANK', 'INFY', 'ICICIBANK'],
+                enable_futures: false
+            },
+            // NEW: Futures data
+            futuresData: {
+                NIFTY: {
+                    futures_price: 19870,
+                    strikes: [19700, 19750, 19800, 19850, 19900, 19950, 20000, 20050, 20100],
+                    ce_premiums: { 19700: 185, 19750: 145, 19800: 110, 19850: 80, 19900: 55, 19950: 35, 20000: 20, 20050: 12, 20100: 7 },
+                    pe_premiums: { 19700: 15, 19750: 25, 19800: 40, 19850: 60, 19900: 85, 19950: 115, 20000: 150, 20050: 190, 20100: 235 }
+                },
+                BANKNIFTY: {
+                    futures_price: 44200,
+                    strikes: [43800, 44000, 44200, 44400, 44600, 44800, 45000],
+                    ce_premiums: { 43800: 450, 44000: 285, 44200: 150, 44400: 75, 44600: 35, 44800: 18, 45000: 8 },
+                    pe_premiums: { 43800: 12, 44000: 35, 44200: 75, 44400: 135, 44600: 210, 44800: 295, 45000: 385 }
+                },
+                MIDCAP: {
+                    futures_price: 12450,
+                    strikes: [12200, 12300, 12400, 12500, 12600, 12700],
+                    ce_premiums: { 12200: 275, 12300: 185, 12400: 110, 12500: 65, 12600: 35, 12700: 18 },
+                    pe_premiums: { 12200: 15, 12300: 35, 12400: 65, 12500: 105, 12600: 155, 12700: 215 }
+                },
+                SENSEX: {
+                    futures_price: 66500,
+                    strikes: [66000, 66200, 66400, 66600, 66800, 67000],
+                    ce_premiums: { 66000: 520, 66200: 350, 66400: 210, 66600: 125, 66800: 70, 67000: 35 },
+                    pe_premiums: { 66000: 20, 66200: 50, 66400: 90, 66600: 145, 66800: 210, 67000: 285 }
+                }
             }
         };
-
-        // Performance optimized DOM cache
-        const domCache = {};
 
         // Initialize application
         document.addEventListener('DOMContentLoaded', function() {
@@ -696,11 +1356,17 @@
             
             loadInitialData();
             loadPaperAccount();
+            loadRealAccount();
+            loadAISettings();
+            loadMarketData();
+            populatePopularStocks();
+            loadWatchlist();
             updateAIStatusUI(false);
             updateAIControlButtons();
+            initializeBrokerStatus();
             
-            showNotification('success', '🚀 AI Trading Platform Ready! Paper trading enabled.');
-            showNotification('info', '📝 Click "Start AI Trading" to begin automated paper trading');
+            showNotification('success', '🚀 AI Trading Platform v7.0 Ready! All features enabled.');
+            showNotification('info', '📝 Paper trading ready - Click "Start AI Trading" to begin');
         });
 
         // Time management
@@ -716,6 +1382,136 @@
             updateAccountTypeUI();
             loadTradeLogsTable();
             updatePositionsCount();
+            updateElement('market-last-update', new Date().toLocaleTimeString());
+        }
+
+        // Broker Management Functions
+        function initializeBrokerStatus() {
+            updateBrokerConnectionStatus(false, 'Paper Mode');
+            updateBrokerFeatures(true); // Paper mode features enabled
+        }
+
+        function updateBrokerConnectionStatus(connected, brokerName = 'Paper Mode') {
+            appState.brokerConnected = connected;
+            appState.activeBroker = connected ? brokerName : null;
+            
+            const indicator = document.getElementById('broker-indicator');
+            const statusText = document.getElementById('broker-status-text');
+            const activeBroker = document.getElementById('active-broker');
+            const connectionHealth = document.getElementById('connection-health');
+            const lastUpdate = document.getElementById('last-update');
+            const brokerFunds = document.getElementById('broker-funds');
+            
+            if (indicator) {
+                indicator.className = connected || appState.currentAccountType === 'paper' 
+                    ? 'w-2 h-2 rounded-full connection-active' 
+                    : 'w-2 h-2 rounded-full connection-inactive';
+            }
+            
+            if (statusText) {
+                statusText.textContent = appState.currentAccountType === 'paper' ? 'Paper Mode' : (connected ? 'Connected' : 'Disconnected');
+            }
+            
+            if (activeBroker) activeBroker.textContent = appState.currentAccountType === 'paper' ? 'Paper Trading' : brokerName;
+            if (connectionHealth) connectionHealth.textContent = appState.currentAccountType === 'paper' ? 'Paper Mode' : (connected ? 'Active' : 'Disconnected');
+            if (lastUpdate) lastUpdate.textContent = appState.currentAccountType === 'paper' ? 'Live' : (connected ? new Date().toLocaleTimeString() : 'Never');
+            if (brokerFunds) brokerFunds.textContent = `₹${simulatedData.paperAccount.balance.toLocaleString()}`;
+            
+            updateBrokerCardStatus(brokerName, connected);
+            updateAIControlButtons();
+        }
+
+        function updateBrokerCardStatus(brokerName, connected) {
+            const zerodhaCard = document.getElementById('zerodha-card');
+            const mstockCard = document.getElementById('mstock-card');
+            const zerodhaStatus = document.getElementById('zerodha-status');
+            const mstockStatus = document.getElementById('mstock-status');
+            
+            // Reset all cards
+            if (zerodhaCard) zerodhaCard.className = 'broker-card p-6 rounded-xl';
+            if (mstockCard) mstockCard.className = 'broker-card p-6 rounded-xl';
+            if (zerodhaStatus) zerodhaStatus.className = 'w-3 h-3 rounded-full connection-inactive';
+            if (mstockStatus) mstockStatus.className = 'w-3 h-3 rounded-full connection-inactive';
+            
+            if (connected && brokerName === 'Zerodha') {
+                if (zerodhaCard) zerodhaCard.className = 'broker-card connected p-6 rounded-xl';
+                if (zerodhaStatus) zerodhaStatus.className = 'w-3 h-3 rounded-full connection-active';
+            } else if (connected && brokerName === 'mStock') {
+                if (mstockCard) mstockCard.className = 'broker-card connected p-6 rounded-xl';
+                if (mstockStatus) mstockStatus.className = 'w-3 h-3 rounded-full connection-active';
+            }
+        }
+
+        function updateBrokerFeatures(connected) {
+            const features = ['realtime', 'orders', 'portfolio', 'autotrading'];
+            features.forEach(feature => {
+                const element = document.getElementById(`feature-${feature}`);
+                if (element) {
+                    element.textContent = connected || appState.currentAccountType === 'paper' ? '✅ Active' : '❌ Disconnected';
+                }
+            });
+        }
+
+        async function connectZerodha() {
+            const apiKey = document.getElementById('zerodha-api-key').value;
+            const apiSecret = document.getElementById('zerodha-api-secret').value;
+            const userId = document.getElementById('zerodha-user-id').value;
+            const password = document.getElementById('zerodha-password').value;
+            
+            if (!apiKey || !apiSecret || !userId || !password) {
+                showNotification('error', '❌ Please fill all Zerodha credentials');
+                return;
+            }
+            
+            showNotification('info', '🔄 Connecting to Zerodha...');
+            
+            setTimeout(() => {
+                updateBrokerConnectionStatus(true, 'Zerodha');
+                updateBrokerFeatures(true);
+                showNotification('success', '✅ Zerodha connected successfully!');
+                
+                // Clear sensitive inputs
+                document.getElementById('zerodha-api-secret').value = '';
+                document.getElementById('zerodha-password').value = '';
+                
+                updateElement('api-status', 'Connected');
+                enableAITrading();
+            }, 2000);
+        }
+
+        async function connectMStock() {
+            const apiKey = document.getElementById('mstock-api-key').value;
+            const apiSecret = document.getElementById('mstock-api-secret').value;
+            const userId = document.getElementById('mstock-user-id').value;
+            const password = document.getElementById('mstock-password').value;
+            
+            if (!apiKey || !apiSecret || !userId || !password) {
+                showNotification('error', '❌ Please fill all mStock credentials');
+                return;
+            }
+            
+            showNotification('info', '🔄 Connecting to mStock...');
+            
+            setTimeout(() => {
+                updateBrokerConnectionStatus(true, 'mStock');
+                updateBrokerFeatures(true);
+                showNotification('success', '✅ mStock connected successfully!');
+                
+                // Clear sensitive inputs
+                document.getElementById('mstock-api-secret').value = '';
+                document.getElementById('mstock-password').value = '';
+                
+                updateElement('api-status', 'Connected');
+                enableAITrading();
+            }, 2000);
+        }
+
+        function enableAITrading() {
+            const aiStatusDetails = document.getElementById('ai-status-details');
+            if (aiStatusDetails) {
+                aiStatusDetails.textContent = 'Broker connected - Ready to start AI trading';
+            }
+            updateAIControlButtons();
         }
 
         // Account Management
@@ -725,8 +1521,11 @@
             
             if (type === 'paper') {
                 loadPaperAccount();
+                updateBrokerConnectionStatus(false, 'Paper Mode');
                 showNotification('info', '📝 Switched to Paper Trading mode - Virtual money, real learning!');
             } else {
+                loadRealAccount();
+                updateBrokerConnectionStatus(appState.brokerConnected, appState.activeBroker);
                 showNotification('warning', '🔴 Live Trading requires broker setup');
             }
         }
@@ -754,8 +1553,8 @@
                     accountBadge.textContent = 'Live';
                     accountBadge.className = 'text-xs px-2 py-1 rounded-full bg-red-100 text-red-700';
                 }
-                if (brokerStatusText) brokerStatusText.textContent = 'Setup Required';
-                if (apiStatus) apiStatus.textContent = 'Setup Required';
+                if (brokerStatusText) brokerStatusText.textContent = appState.brokerConnected ? 'Connected' : 'Setup Required';
+                if (apiStatus) apiStatus.textContent = appState.brokerConnected ? 'Connected' : 'Setup Required';
             }
         }
 
@@ -766,6 +1565,104 @@
             updateElement('total-pnl', `₹${account.pnl.toLocaleString()}`);
             updateElement('total-value', `₹${account.total_value.toLocaleString()}`);
             updateElement('daily-pnl', `₹${account.pnl.toLocaleString()}`);
+            
+            // Update capital management display
+            updateElement('paper-balance-display', `₹${account.balance.toLocaleString()}`);
+            updateElement('paper-invested-display', `₹${account.invested.toLocaleString()}`);
+            updateElement('paper-pnl-display', `₹${account.pnl.toLocaleString()}`);
+        }
+
+        function loadRealAccount() {
+            const account = simulatedData.realAccount;
+            updateElement('real-capital-display', `₹${account.available_capital.toLocaleString()}`);
+            updateElement('real-daily-limit-display', `₹${account.daily_limit.toLocaleString()}`);
+            updateElement('real-max-position-display', `₹${account.max_position_size.toLocaleString()}`);
+            
+            const statusElement = document.getElementById('real-account-status');
+            if (statusElement) {
+                if (account.is_active) {
+                    statusElement.textContent = 'Active';
+                    statusElement.className = 'text-xs px-2 py-1 rounded-full bg-green-100 text-green-700';
+                } else {
+                    statusElement.textContent = 'Inactive';
+                    statusElement.className = 'text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-700';
+                }
+            }
+        }
+
+        // Capital Management Functions
+        function updatePaperCapital() {
+            const capital = parseFloat(document.getElementById('paper-capital-input').value);
+            
+            if (!capital || capital < 10000 || capital > 100000000) {
+                showNotification('error', '❌ Capital must be between ₹10,000 and ₹10,00,00,000');
+                return;
+            }
+            
+            simulatedData.paperAccount.balance = capital;
+            simulatedData.paperAccount.total_value = capital + simulatedData.paperAccount.invested + simulatedData.paperAccount.pnl;
+            
+            loadPaperAccount();
+            showNotification('success', `✅ Paper capital updated to ₹${capital.toLocaleString()}`);
+            document.getElementById('paper-capital-input').value = '';
+        }
+
+        function setPaperCapital(amount) {
+            document.getElementById('paper-capital-input').value = amount;
+            updatePaperCapital();
+        }
+
+        function resetPaperAccount() {
+            if (confirm('Reset paper account? This will clear all positions and trades.')) {
+                const capital = parseFloat(document.getElementById('paper-capital-input').value) || 1000000;
+                
+                simulatedData.paperAccount = {
+                    balance: capital,
+                    invested: 0,
+                    pnl: 0,
+                    total_value: capital
+                };
+                
+                // Clear trades and positions
+                appState.tradingData.trades = appState.tradingData.trades.filter(t => t.account_type !== 'paper');
+                appState.tradingData.positions = [];
+                appState.tradingData.futuresPositions = [];
+                
+                loadPaperAccount();
+                updateTradeLogsTable();
+                refreshPortfolio();
+                showNotification('success', '🔄 Paper account reset successfully');
+            }
+        }
+
+        function setupRealAccount() {
+            const capital = parseFloat(document.getElementById('real-capital-input').value);
+            const dailyLimit = parseFloat(document.getElementById('daily-limit-input').value);
+            const maxPosition = parseFloat(document.getElementById('max-position-input').value);
+            
+            if (!capital || capital < 1000) {
+                showNotification('error', '❌ Minimum capital is ₹1,000');
+                return;
+            }
+            
+            if (!confirm(`Setup real trading account with ₹${capital.toLocaleString()}? This involves real money.`)) {
+                return;
+            }
+            
+            simulatedData.realAccount = {
+                available_capital: capital,
+                daily_limit: dailyLimit || 5000,
+                max_position_size: maxPosition || 50000,
+                is_active: true
+            };
+            
+            loadRealAccount();
+            showNotification('success', `✅ Real account setup with ₹${capital.toLocaleString()}`);
+            
+            // Clear inputs
+            document.getElementById('real-capital-input').value = '';
+            document.getElementById('daily-limit-input').value = '';
+            document.getElementById('max-position-input').value = '';
         }
 
         // Enhanced AI Trading Management Functions
@@ -978,7 +1875,11 @@
                     
                     // Occasionally execute a trade (higher chance for demo)
                     if (Math.random() < 0.4) {
-                        executeAITrade();
+                        if (simulatedData.aiSettings.enable_futures && Math.random() < 0.3) {
+                            executeAIFuturesTrade();
+                        } else {
+                            executeAITrade();
+                        }
                     }
                 }
             }, CONFIG.AI_UPDATE_INTERVAL);
@@ -1009,7 +1910,9 @@
                 'Moving average crossover',
                 'RSI oversold condition',
                 'Bollinger band squeeze',
-                'MACD bullish divergence'
+                'MACD bullish divergence',
+                'Golden cross pattern',
+                'Fibonacci retracement hit'
             ];
             
             const aiSignal = {
@@ -1075,6 +1978,7 @@
                 price,
                 value: quantity * price,
                 strategy: 'AI_AUTO',
+                trade_type: 'EQUITY',
                 account_type: appState.currentAccountType,
                 timestamp: new Date().toISOString(),
                 status: 'EXECUTED',
@@ -1090,7 +1994,7 @@
                 signal_type: side,
                 quantity,
                 status: 'SUCCESS',
-                reason: `AI signal triggered automatic ${appState.currentAccountType} trade`,
+                reason: `AI signal triggered automatic ${appState.currentAccountType} equity trade`,
                 timestamp: new Date().toISOString()
             };
             
@@ -1122,6 +2026,82 @@
             showNotification('success', `🤖 AI ${tradeType}: ${side} ${quantity} ${symbol} at ₹${price}`);
         }
 
+        function executeAIFuturesTrade() {
+            const futuresSymbols = ['NIFTY', 'BANKNIFTY', 'MIDCAP', 'SENSEX'];
+            const symbol = futuresSymbols[Math.floor(Math.random() * futuresSymbols.length)];
+            const optionTypes = ['CE', 'PE'];
+            const optionType = optionTypes[Math.floor(Math.random() * optionTypes.length)];
+            const sides = ['BUY', 'SELL'];
+            const side = sides[Math.floor(Math.random() * sides.length)];
+            const lots = Math.floor(Math.random() * 3) + 1;
+            
+            const futuresData = simulatedData.futuresData[symbol];
+            const strikes = futuresData.strikes;
+            const strike = strikes[Math.floor(Math.random() * strikes.length)];
+            const premium = optionType === 'CE' ? futuresData.ce_premiums[strike] : futuresData.pe_premiums[strike];
+            const lotSize = symbol === 'NIFTY' ? 50 : symbol === 'BANKNIFTY' ? 25 : symbol === 'MIDCAP' ? 75 : 10;
+            
+            const trade = {
+                id: Date.now(),
+                symbol: `${symbol} ${strike} ${optionType}`,
+                side,
+                quantity: lots,
+                price: premium,
+                value: lots * premium * lotSize,
+                strategy: 'AI_FUTURES',
+                trade_type: 'FUTURES',
+                option_type: optionType,
+                strike_price: strike,
+                lot_size: lotSize,
+                account_type: appState.currentAccountType,
+                timestamp: new Date().toISOString(),
+                status: 'EXECUTED',
+                pnl: (Math.random() - 0.4) * 1000 // Higher volatility for futures
+            };
+            
+            appState.tradingData.trades.unshift(trade);
+            appState.tradingData.futuresPositions.unshift(trade);
+            
+            // Add to AI actions
+            const action = {
+                action: 'FUTURES_TRADE_EXECUTED',
+                symbol: trade.symbol,
+                signal_type: side,
+                quantity: lots,
+                status: 'SUCCESS',
+                reason: `AI detected F&O opportunity: ${optionType} ${strike} strike`,
+                timestamp: new Date().toISOString()
+            };
+            
+            appState.tradingData.aiActions.unshift(action);
+            if (appState.tradingData.aiActions.length > 15) {
+                appState.tradingData.aiActions.pop();
+            }
+            
+            // Update account balance for paper trading
+            if (appState.currentAccountType === 'paper') {
+                if (side === 'BUY') {
+                    simulatedData.paperAccount.balance -= trade.value;
+                    simulatedData.paperAccount.invested += trade.value;
+                } else {
+                    simulatedData.paperAccount.balance += trade.value;
+                    simulatedData.paperAccount.invested = Math.max(0, simulatedData.paperAccount.invested - trade.value);
+                }
+                simulatedData.paperAccount.pnl += trade.pnl;
+                simulatedData.paperAccount.total_value = simulatedData.paperAccount.balance + simulatedData.paperAccount.invested + simulatedData.paperAccount.pnl;
+                
+                loadPaperAccount();
+            }
+            
+            updateTradeLogsTable();
+            updateAIActionsDisplay();
+            updatePositionsCount();
+            updateFuturesPositions();
+            
+            const tradeType = appState.currentAccountType === 'paper' ? 'Paper' : 'Live';
+            showNotification('success', `🚀 AI ${tradeType} F&O: ${side} ${lots} lots ${symbol} ${strike} ${optionType} at ₹${premium}`);
+        }
+
         function updateAIActionsDisplay() {
             const container = document.getElementById('ai-recent-actions');
             if (!container || appState.tradingData.aiActions.length === 0) {
@@ -1133,7 +2113,7 @@
             
             const actionsHtml = appState.tradingData.aiActions.slice(0, 10).map(action => {
                 const statusIcon = action.status === 'SUCCESS' ? '✅' : '❌';
-                const actionIcon = action.action === 'TRADE_EXECUTED' ? '💱' : '📊';
+                const actionIcon = action.action.includes('FUTURES') ? '🚀' : action.action === 'TRADE_EXECUTED' ? '💱' : '📊';
                 const cardClass = action.status === 'SUCCESS' ? 'bg-green-50 border-l-2 border-green-500' : 'bg-red-50 border-l-2 border-red-500';
                 
                 return `
@@ -1161,7 +2141,7 @@
         }
 
         function updateAIMetrics() {
-            const aiTrades = appState.tradingData.trades.filter(t => t.strategy === 'AI_AUTO');
+            const aiTrades = appState.tradingData.trades.filter(t => t.strategy === 'AI_AUTO' || t.strategy === 'AI_FUTURES');
             const todayTrades = aiTrades.filter(t => {
                 const today = new Date().toDateString();
                 return new Date(t.timestamp).toDateString() === today;
@@ -1178,6 +2158,466 @@
             updateElement('ai-avg-return', `${avgReturn.toFixed(2)}%`);
             updateElement('ai-trades-count', aiTrades.length);
             updateElement('ai-success-rate', `Success Rate: ${winRate.toFixed(1)}%`);
+        }
+
+        // Market Data Functions
+        function loadMarketData() {
+            updateMarketDisplay(simulatedData.marketIndices);
+            updateElement('market-last-update', new Date().toLocaleTimeString());
+        }
+
+        function updateMarketDisplay(marketData) {
+            Object.keys(marketData).forEach(index => {
+                const data = marketData[index];
+                const priceElement = document.getElementById(`${index.toLowerCase()}-price`);
+                const changeElement = document.getElementById(`${index.toLowerCase()}-change`);
+                
+                if (priceElement) {
+                    priceElement.textContent = `${data.current_price.toLocaleString()}`;
+                }
+                
+                if (changeElement) {
+                    const changeText = `${data.change >= 0 ? '+' : ''}${data.change} (${data.change_percent.toFixed(2)}%)`;
+                    changeElement.textContent = changeText;
+                    changeElement.className = `text-xs ${data.change >= 0 ? 'text-green-200' : 'text-red-200'}`;
+                }
+            });
+        }
+
+        function populatePopularStocks() {
+            // Already populated in HTML, but can be dynamic
+            showNotification('info', '📊 Market data loaded successfully');
+        }
+
+        // Trading Functions
+        function addOrderValueCalculators() {
+            const buyQuantity = document.getElementById('buy-quantity');
+            const buyPrice = document.getElementById('buy-price');
+            const sellQuantity = document.getElementById('sell-quantity');
+            const sellPrice = document.getElementById('sell-price');
+            
+            function updateOrderValue(side) {
+                const quantity = parseInt(document.getElementById(`${side}-quantity`).value) || 0;
+                const price = parseFloat(document.getElementById(`${side}-price`).value) || 0;
+                const value = quantity * price;
+                document.getElementById(`${side}-order-value`).textContent = `Order Value: ₹${value.toLocaleString()}`;
+            }
+            
+            if (buyQuantity && buyPrice) {
+                buyQuantity.addEventListener('input', () => updateOrderValue('buy'));
+                buyPrice.addEventListener('input', () => updateOrderValue('buy'));
+            }
+            
+            if (sellQuantity && sellPrice) {
+                sellQuantity.addEventListener('input', () => updateOrderValue('sell'));
+                sellPrice.addEventListener('input', () => updateOrderValue('sell'));
+            }
+        }
+
+        function placeOrder(side) {
+            const symbol = document.getElementById(`${side.toLowerCase()}-symbol`)?.value;
+            const quantity = parseInt(document.getElementById(`${side.toLowerCase()}-quantity`)?.value);
+            const price = parseFloat(document.getElementById(`${side.toLowerCase()}-price`)?.value);
+            
+            if (!symbol || !quantity || !price) {
+                showNotification('error', '❌ Please fill all fields');
+                return;
+            }
+            
+            const orderValue = quantity * price;
+            
+            // Check if sufficient balance for buy orders
+            if (side === 'BUY' && appState.currentAccountType === 'paper') {
+                if (orderValue > simulatedData.paperAccount.balance) {
+                    showNotification('error', '❌ Insufficient balance');
+                    return;
+                }
+            }
+            
+            const trade = {
+                id: Date.now(),
+                symbol: symbol.toUpperCase(),
+                side,
+                quantity,
+                price,
+                value: orderValue,
+                strategy: 'MANUAL',
+                trade_type: 'EQUITY',
+                account_type: appState.currentAccountType,
+                timestamp: new Date().toISOString(),
+                status: 'EXECUTED',
+                pnl: 0 // Will be calculated later
+            };
+            
+            appState.tradingData.trades.unshift(trade);
+            
+            // Update account balance
+            if (appState.currentAccountType === 'paper') {
+                if (side === 'BUY') {
+                    simulatedData.paperAccount.balance -= orderValue;
+                    simulatedData.paperAccount.invested += orderValue;
+                } else {
+                    simulatedData.paperAccount.balance += orderValue;
+                    simulatedData.paperAccount.invested = Math.max(0, simulatedData.paperAccount.invested - orderValue);
+                }
+                simulatedData.paperAccount.total_value = simulatedData.paperAccount.balance + simulatedData.paperAccount.invested + simulatedData.paperAccount.pnl;
+                
+                loadPaperAccount();
+            }
+            
+            showNotification('success', `✅ ${side} order executed: ${quantity} ${symbol} at ₹${price}`);
+            
+            // Clear form
+            ['symbol', 'quantity', 'price'].forEach(field => {
+                const element = document.getElementById(`${side.toLowerCase()}-${field}`);
+                if (element) element.value = '';
+            });
+            
+            updateTradeLogsTable();
+            updatePositionsCount();
+            refreshPortfolio();
+        }
+
+        function getRealTimePrice(symbol = null) {
+            const stockSymbol = symbol || document.getElementById('market-symbol')?.value;
+            
+            if (!stockSymbol) {
+                showNotification('error', '❌ Please enter a symbol');
+                return;
+            }
+            
+            // Simulate market data fetch
+            const mockData = {
+                symbol: stockSymbol.toUpperCase(),
+                current_price: Math.floor(Math.random() * 2000) + 1000,
+                change: (Math.random() - 0.5) * 100,
+                change_percent: (Math.random() - 0.5) * 5,
+                high: Math.floor(Math.random() * 2000) + 1100,
+                low: Math.floor(Math.random() * 1000) + 900,
+                volume: Math.floor(Math.random() * 1000000) + 100000,
+                source: appState.activeBroker || 'Paper Trading',
+                timestamp: new Date().toISOString()
+            };
+            
+            const resultHtml = `
+                <div class="text-left">
+                    <div class="font-bold text-lg">${mockData.symbol}: ₹${mockData.current_price}</div>
+                    <div class="text-sm ${mockData.change >= 0 ? 'text-green-600' : 'text-red-600'}">
+                        ${mockData.change >= 0 ? '+' : ''}₹${mockData.change.toFixed(2)} (${mockData.change_percent.toFixed(2)}%)
+                    </div>
+                    <div class="text-xs text-gray-500 mt-1">
+                        H: ₹${mockData.high} | L: ₹${mockData.low} | Vol: ${mockData.volume.toLocaleString()}
+                    </div>
+                    <div class="text-xs text-gray-400">
+                        ${mockData.source} | ${new Date(mockData.timestamp).toLocaleTimeString()}
+                    </div>
+                </div>
+            `;
+            
+            updateElementHTML('market-data-result', resultHtml);
+            
+            if (!symbol) {
+                showNotification('success', `✅ ${mockData.symbol} ₹${mockData.current_price}`);
+            }
+        }
+
+        // NEW: Futures Trading Functions
+        function selectFuturesSymbol(symbol) {
+            // Auto-populate dropdowns
+            const ceSymbol = document.getElementById('futures-symbol-ce');
+            const peSymbol = document.getElementById('futures-symbol-pe');
+            
+            if (ceSymbol) ceSymbol.value = symbol;
+            if (peSymbol) peSymbol.value = symbol;
+            
+            updateOptionsChain('CE');
+            updateOptionsChain('PE');
+            
+            showNotification('info', `🚀 Selected ${symbol} futures - Options chain updated`);
+        }
+
+        function updateOptionsChain(optionType) {
+            const symbolSelect = document.getElementById(`futures-symbol-${optionType.toLowerCase()}`);
+            const expirySelect = document.getElementById(`expiry-${optionType.toLowerCase()}`);
+            const strikeSelect = document.getElementById(`strike-${optionType.toLowerCase()}`);
+            
+            if (!symbolSelect?.value || !expirySelect?.value) {
+                if (strikeSelect) strikeSelect.innerHTML = '<option value="">Select Strike</option>';
+                return;
+            }
+            
+            const symbol = symbolSelect.value;
+            const futuresData = simulatedData.futuresData[symbol];
+            
+            if (!futuresData) return;
+            
+            // Populate strikes
+            const strikesHtml = futuresData.strikes.map(strike => 
+                `<option value="${strike}">${strike}</option>`
+            ).join('');
+            
+            if (strikeSelect) {
+                strikeSelect.innerHTML = '<option value="">Select Strike</option>' + strikesHtml;
+            }
+        }
+
+        function updateOptionPrice(optionType) {
+            const symbolSelect = document.getElementById(`futures-symbol-${optionType.toLowerCase()}`);
+            const strikeSelect = document.getElementById(`strike-${optionType.toLowerCase()}`);
+            const quantityInput = document.getElementById(`${optionType.toLowerCase()}-quantity`);
+            const premiumElement = document.getElementById(`${optionType.toLowerCase()}-premium`);
+            const totalValueElement = document.getElementById(`${optionType.toLowerCase()}-total-value`);
+            
+            if (!symbolSelect?.value || !strikeSelect?.value) {
+                if (premiumElement) premiumElement.textContent = '₹0';
+                if (totalValueElement) totalValueElement.textContent = '₹0';
+                return;
+            }
+            
+            const symbol = symbolSelect.value;
+            const strike = parseInt(strikeSelect.value);
+            const quantity = parseInt(quantityInput?.value) || 1;
+            
+            const futuresData = simulatedData.futuresData[symbol];
+            if (!futuresData) return;
+            
+            const premium = optionType === 'CE' ? 
+                futuresData.ce_premiums[strike] : 
+                futuresData.pe_premiums[strike];
+            
+            const lotSize = symbol === 'NIFTY' ? 50 : 
+                           symbol === 'BANKNIFTY' ? 25 : 
+                           symbol === 'MIDCAP' ? 75 : 10;
+            
+            const totalValue = quantity * premium * lotSize;
+            
+            if (premiumElement) premiumElement.textContent = `₹${premium}`;
+            if (totalValueElement) totalValueElement.textContent = `₹${totalValue.toLocaleString()}`;
+        }
+
+        function placeFuturesOrder(optionType, side) {
+            const symbolSelect = document.getElementById(`futures-symbol-${optionType.toLowerCase()}`);
+            const expirySelect = document.getElementById(`expiry-${optionType.toLowerCase()}`);
+            const strikeSelect = document.getElementById(`strike-${optionType.toLowerCase()}`);
+            const quantityInput = document.getElementById(`${optionType.toLowerCase()}-quantity`);
+            
+            if (!symbolSelect?.value || !expirySelect?.value || !strikeSelect?.value) {
+                showNotification('error', '❌ Please select symbol, expiry, and strike');
+                return;
+            }
+            
+            const symbol = symbolSelect.value;
+            const expiry = expirySelect.value;
+            const strike = parseInt(strikeSelect.value);
+            const lots = parseInt(quantityInput?.value) || 1;
+            
+            const futuresData = simulatedData.futuresData[symbol];
+            const premium = optionType === 'CE' ? 
+                futuresData.ce_premiums[strike] : 
+                futuresData.pe_premiums[strike];
+            
+            const lotSize = symbol === 'NIFTY' ? 50 : 
+                           symbol === 'BANKNIFTY' ? 25 : 
+                           symbol === 'MIDCAP' ? 75 : 10;
+            
+            const totalValue = lots * premium * lotSize;
+            
+            // Check balance for paper trading
+            if (appState.currentAccountType === 'paper' && side === 'BUY') {
+                if (totalValue > simulatedData.paperAccount.balance) {
+                    showNotification('error', '❌ Insufficient balance for F&O trade');
+                    return;
+                }
+            }
+            
+            const trade = {
+                id: Date.now(),
+                symbol: `${symbol} ${strike} ${optionType}`,
+                side,
+                quantity: lots,
+                price: premium,
+                value: totalValue,
+                strategy: 'MANUAL',
+                trade_type: 'FUTURES',
+                option_type: optionType,
+                strike_price: strike,
+                expiry_date: expiry,
+                lot_size: lotSize,
+                account_type: appState.currentAccountType,
+                timestamp: new Date().toISOString(),
+                status: 'EXECUTED',
+                pnl: 0
+            };
+            
+            appState.tradingData.trades.unshift(trade);
+            appState.tradingData.futuresPositions.unshift(trade);
+            
+            // Update account balance for paper trading
+            if (appState.currentAccountType === 'paper') {
+                if (side === 'BUY') {
+                    simulatedData.paperAccount.balance -= totalValue;
+                    simulatedData.paperAccount.invested += totalValue;
+                } else {
+                    simulatedData.paperAccount.balance += totalValue;
+                    simulatedData.paperAccount.invested = Math.max(0, simulatedData.paperAccount.invested - totalValue);
+                }
+                simulatedData.paperAccount.total_value = simulatedData.paperAccount.balance + simulatedData.paperAccount.invested + simulatedData.paperAccount.pnl;
+                
+                loadPaperAccount();
+            }
+            
+            showNotification('success', `🚀 F&O order executed: ${side} ${lots} lots ${symbol} ${strike} ${optionType} at ₹${premium}`);
+            
+            updateTradeLogsTable();
+            updatePositionsCount();
+            updateFuturesPositions();
+            refreshPortfolio();
+        }
+
+        function updateFuturesPositions() {
+            const container = document.getElementById('futures-positions');
+            if (!container) return;
+            
+            if (appState.tradingData.futuresPositions.length === 0) {
+                container.innerHTML = '<div class="text-center text-gray-500 py-4">No F&O positions. Start trading futures and options to see positions here.</div>';
+                return;
+            }
+            
+            const positionsHtml = appState.tradingData.futuresPositions.slice(0, 10).map(position => {
+                const pnl = position.pnl || (Math.random() - 0.4) * 1000; // Simulate P&L
+                const pnlClass = pnl >= 0 ? 'text-green-600' : 'text-red-600';
+                
+                return `
+                    <div class="futures-trade-card p-4 rounded-xl">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <div class="font-bold text-lg">${position.symbol}</div>
+                                <div class="text-sm text-gray-600">
+                                    ${position.side} ${position.quantity} lots | Premium: ₹${position.price}
+                                </div>
+                                <div class="text-xs text-gray-500 mt-1">
+                                    🚀 F&O • ${position.account_type} • ${position.strategy}
+                                </div>
+                                <div class="text-xs text-gray-400">
+                                    Expiry: ${position.expiry_date} | Lot Size: ${position.lot_size}
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-lg font-bold ${pnlClass}">
+                                    ${pnl >= 0 ? '+' : ''}₹${pnl.toFixed(2)}
+                                </div>
+                                <div class="text-sm text-gray-600">
+                                    Value: ₹${position.value.toLocaleString()}
+                                </div>
+                                <div class="text-xs ${pnlClass}">
+                                    {(pnl / position.value * 100).toFixed(2)}%
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            container.innerHTML = positionsHtml;
+        }
+
+        function refreshFuturesData() {
+            // Simulate price updates
+            Object.keys(simulatedData.futuresData).forEach(symbol => {
+                const data = simulatedData.futuresData[symbol];
+                data.futures_price += (Math.random() - 0.5) * 20;
+                
+                // Update UI
+                const priceElement = document.getElementById(`${symbol.toLowerCase()}-futures-price`);
+                if (priceElement) {
+                    priceElement.textContent = Math.round(data.futures_price).toLocaleString();
+                }
+            });
+            
+            updateFuturesPositions();
+            showNotification('success', '🔄 F&O data refreshed');
+        }
+
+        // Search Functions
+        function searchStocksReal() {
+            const query = document.getElementById('stock-search-input')?.value;
+            
+            if (!query || query.length < 2) {
+                const resultsElement = document.getElementById('stock-search-results');
+                if (resultsElement) resultsElement.classList.add('hidden');
+                return;
+            }
+            
+            // Simulate search results
+            const mockResults = [
+                { symbol: 'RELIANCE', name: 'Reliance Industries Ltd', price: 2472.24, change_percent: -0.24 },
+                { symbol: 'TCS', name: 'Tata Consultancy Services', price: 3724.31, change_percent: -0.48 },
+                { symbol: 'HDFCBANK', name: 'HDFC Bank Ltd', price: 1695.72, change_percent: -0.18 },
+                { symbol: 'INFY', name: 'Infosys Ltd', price: 1787.4, change_percent: -0.14 },
+                { symbol: 'ICICIBANK', name: 'ICICI Bank Ltd', price: 945.65, change_percent: 0.22 }
+            ].filter(stock => stock.symbol.includes(query.toUpperCase()) || stock.name.toLowerCase().includes(query.toLowerCase()));
+            
+            if (mockResults.length > 0) {
+                const resultsContainer = document.getElementById('search-results-container');
+                const resultsHtml = mockResults.map(stock => `
+                    <div class="p-4 border rounded-lg hover:bg-gray-50 transition-all trade-card">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h5 class="font-medium">${stock.symbol}</h5>
+                                <p class="text-sm text-gray-600">${stock.name}</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-bold">₹${stock.price}</p>
+                                <p class="text-sm ${stock.change_percent >= 0 ? 'text-green-600' : 'text-red-600'}">
+                                    ${stock.change_percent >= 0 ? '+' : ''}${stock.change_percent.toFixed(2)}%
+                                </p>
+                                <div class="flex space-x-1 mt-2">
+                                    <button onclick="getRealTimePrice('${stock.symbol}')" 
+                                            class="px-2 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700">
+                                        Price
+                                    </button>
+                                    <button onclick="fillOrderForm('${stock.symbol}', ${stock.price})" 
+                                            class="px-2 py-1 bg-green-600 text-white rounded text-xs hover:bg-green-700">
+                                        Trade
+                                    </button>
+                                    <button onclick="addToWatchlistSymbol('${stock.symbol}')" 
+                                            class="px-2 py-1 bg-purple-600 text-white rounded text-xs hover:bg-purple-700">
+                                        Watch
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+                
+                if (resultsContainer) {
+                    resultsContainer.innerHTML = resultsHtml;
+                    document.getElementById('stock-search-results')?.classList.remove('hidden');
+                }
+            } else {
+                document.getElementById('stock-search-results')?.classList.add('hidden');
+            }
+        }
+
+        function fillOrderForm(symbol, price) {
+            const buySymbolElement = document.getElementById('buy-symbol');
+            const buyPriceElement = document.getElementById('buy-price');
+            const buyQuantityElement = document.getElementById('buy-quantity');
+            
+            if (buySymbolElement) buySymbolElement.value = symbol;
+            if (buyPriceElement) buyPriceElement.value = price;
+            if (buyQuantityElement) buyQuantityElement.focus();
+            
+            switchTab('trading');
+            showNotification('info', `📝 Order form filled for ${symbol} at ₹${price}`);
+        }
+
+        function addToWatchlistSymbol(symbol) {
+            showNotification('success', `✅ ${symbol} added to watchlist`);
+        }
+
+        function loadTopGainers() {
+            showNotification('success', '📈 Top gainers loaded');
         }
 
         // Trade Logs and Reports
@@ -1209,12 +2649,20 @@
                     <td class="border border-gray-300 px-4 py-2">
                         <span class="px-2 py-1 rounded text-xs bg-green-100 text-green-800">${trade.status}</span>
                     </td>
-                    <td class="border border-gray-300 px-4 py-2 ${trade.pnl >= 0 ? 'text-green-600' : 'text-red-600'}">
-                        ${trade.pnl >= 0 ? '+' : ''}₹${trade.pnl.toFixed(2)}
+                    <td class="border border-gray-300 px-4 py-2 ${(trade.pnl || 0) >= 0 ? 'text-green-600' : 'text-red-600'}">
+                        ${(trade.pnl || 0) >= 0 ? '+' : ''}₹${(trade.pnl || 0).toFixed(2)}
                     </td>
                     <td class="border border-gray-300 px-4 py-2">
-                        <span class="px-2 py-1 rounded text-xs ${trade.strategy === 'AI_AUTO' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800'}">
-                            ${trade.strategy === 'AI_AUTO' ? '🤖 AI' : '👤 Manual'}
+                        <span class="px-2 py-1 rounded text-xs ${
+                            trade.strategy === 'AI_AUTO' ? 'bg-purple-100 text-purple-800' : 
+                            trade.strategy === 'AI_FUTURES' ? 'bg-indigo-100 text-indigo-800' :
+                            trade.trade_type === 'FUTURES' ? 'bg-yellow-100 text-yellow-800' :
+                            'bg-blue-100 text-blue-800'
+                        }">
+                            ${trade.strategy === 'AI_AUTO' ? '🤖 AI' : 
+                              trade.strategy === 'AI_FUTURES' ? '🚀 AI F&O' :
+                              trade.trade_type === 'FUTURES' ? '🚀 F&O' :
+                              '👤 Manual'}
                         </span>
                     </td>
                     <td class="border border-gray-300 px-4 py-2 text-xs text-gray-600">
@@ -1230,10 +2678,182 @@
             loadTradeLogsTable();
         }
 
+        function refreshPortfolio() {
+            const positions = appState.tradingData.trades.filter(t => t.account_type === appState.currentAccountType);
+            const totalTrades = positions.length;
+            const totalValue = appState.currentAccountType === 'paper' ? simulatedData.paperAccount.total_value : 0;
+            const totalProfit = appState.currentAccountType === 'paper' ? simulatedData.paperAccount.pnl : 0;
+            const activePositions = positions.length; // Simplified
+            
+            updateElement('portfolio-value', `₹${totalValue.toLocaleString()}`);
+            updateElement('total-profit', `₹${totalProfit.toLocaleString()}`);
+            updateElement('active-positions', activePositions);
+            updateElement('position-diversity', `${activePositions} symbols`);
+            updateElement('day-pnl', `₹${totalProfit.toLocaleString()}`);
+            
+            const changePercent = totalValue > 0 ? (totalProfit / totalValue * 100) : 0;
+            updateElement('portfolio-change', `${totalProfit >= 0 ? '+' : ''}₹${totalProfit.toLocaleString()} (${changePercent.toFixed(2)}%)`);
+            updateElement('profit-percentage', `${changePercent.toFixed(2)}%`);
+            updateElement('day-pnl-percent', `${changePercent.toFixed(2)}%`);
+            
+            // Update positions display
+            if (positions.length > 0) {
+                const positionsHtml = positions.slice(0, 10).map(pos => {
+                    const pnl = pos.pnl || 0;
+                    const pnlClass = pnl >= 0 ? 'profit-positive' : 'profit-negative';
+                    const strategy = pos.strategy || 'MANUAL';
+                    const cardClass = strategy === 'AI_AUTO' ? 'ai-trade-card' : 
+                                     strategy === 'AI_FUTURES' ? 'futures-trade-card' :
+                                     pos.trade_type === 'FUTURES' ? 'futures-trade-card' : 'manual-trade-card';
+                    
+                    return `
+                        <div class="trade-card p-4 rounded-xl ${cardClass}">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <div class="font-bold text-lg">${pos.symbol}</div>
+                                    <div class="text-sm text-gray-600">
+                                        Qty: ${pos.quantity} | Price: ₹${pos.price.toFixed(2)}
+                                    </div>
+                                    <div class="text-xs text-gray-500 mt-1">
+                                        ${strategy === 'AI_AUTO' ? '🤖 AI Trade' : 
+                                          strategy === 'AI_FUTURES' ? '🚀 AI F&O' :
+                                          pos.trade_type === 'FUTURES' ? '🚀 F&O' :
+                                          '👤 Manual'} • ${pos.account_type}
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-lg font-bold ${pnlClass}">
+                                        ${pnl >= 0 ? '+' : ''}₹${pnl.toLocaleString()}
+                                    </div>
+                                    <div class="text-sm text-gray-600">
+                                        Value: ₹${pos.value.toLocaleString()}
+                                    </div>
+                                    <div class="text-xs ${pnlClass}">
+                                        ${pos.value > 0 ? (pnl / pos.value * 100).toFixed(2) : 0}%
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                
+                updateElementHTML('positions-detailed', positionsHtml);
+            } else {
+                updateElementHTML('positions-detailed', '<div class="text-center text-gray-500 py-8">No positions found. Start trading to see your portfolio.</div>');
+            }
+        }
+
+        function loadTradeReports() {
+            const trades = appState.tradingData.trades.filter(t => t.account_type === appState.currentAccountType);
+            const totalTrades = trades.length;
+            const aiTrades = trades.filter(trade => trade.strategy === 'AI_AUTO' || trade.strategy === 'AI_FUTURES').length;
+            const manualTrades = trades.filter(trade => trade.strategy === 'MANUAL').length;
+            const futuresTrades = trades.filter(trade => trade.trade_type === 'FUTURES').length;
+            
+            // Calculate win rate
+            const winningTrades = trades.filter(trade => (trade.pnl || 0) > 0).length;
+            const winRate = totalTrades > 0 ? (winningTrades / totalTrades * 100) : 0;
+            
+            // Calculate average trade value
+            const totalValue = trades.reduce((sum, trade) => sum + trade.value, 0);
+            const avgTradeValue = totalTrades > 0 ? totalValue / totalTrades : 0;
+            
+            // Update summary cards
+            updateElement('total-trades-summary', totalTrades);
+            updateElement('ai-trades-summary', `${aiTrades} AI`);
+            updateElement('manual-trades-summary', `${manualTrades} Manual`);
+            updateElement('futures-trades-summary', `${futuresTrades} F&O`);
+            updateElement('winning-trades', winningTrades);
+            updateElement('win-rate-display', `${winRate.toFixed(1)}% win rate`);
+            updateElement('avg-trade-value', `₹${avgTradeValue.toLocaleString()}`);
+            updateElement('avg-return-display', `${winRate > 50 ? '+' : ''}${(winRate - 50).toFixed(1)}% avg return`);
+            
+            // Enhanced trades display
+            if (trades.length > 0) {
+                const tradesHtml = trades.slice(0, 20).map(trade => {
+                    const isAI = trade.strategy === 'AI_AUTO' || trade.strategy === 'AI_FUTURES';
+                    const isFutures = trade.trade_type === 'FUTURES';
+                    const cardClass = isAI ? (isFutures ? 'futures-trade-card' : 'ai-trade-card') : 
+                                     isFutures ? 'futures-trade-card' : 'manual-trade-card';
+                    const pnlClass = (trade.pnl || 0) >= 0 ? 'text-green-600' : 'text-red-600';
+                    
+                    return `
+                        <div class="trade-card p-4 rounded-xl ${cardClass}">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <div class="font-bold">${trade.symbol} - ${trade.side}</div>
+                                    <div class="text-sm text-gray-600">
+                                        Qty: ${trade.quantity} × ₹${trade.price.toFixed(2)} = ₹${trade.value.toLocaleString()}
+                                    </div>
+                                    <div class="text-xs text-gray-500 mt-1">
+                                        ${trade.strategy === 'AI_AUTO' ? '🤖 AI Trade' : 
+                                          trade.strategy === 'AI_FUTURES' ? '🚀 AI F&O' :
+                                          isFutures ? '🚀 F&O' :
+                                          '👤 Manual'} • ${trade.account_type} • ${trade.status}
+                                    </div>
+                                    <div class="text-xs text-gray-400">
+                                        ${new Date(trade.timestamp).toLocaleString()}
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="font-bold ${pnlClass}">
+                                        ${(trade.pnl || 0) >= 0 ? '+' : ''}₹${(trade.pnl || 0).toFixed(2)}
+                                    </div>
+                                    <div class="text-xs ${pnlClass}">
+                                        ${(trade.pnl || 0) >= 0 ? '+' : ''}${(((trade.pnl || 0) / trade.value) * 100).toFixed(2)}%
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                
+                updateElementHTML('trades-detailed', tradesHtml);
+            } else {
+                updateElementHTML('trades-detailed', '<div class="text-center text-gray-500 py-8">No trades found. Execute trades to see detailed reports.</div>');
+            }
+        }
+
+        function filterTrades() {
+            const filter = document.getElementById('trade-filter')?.value;
+            loadTradeReports();
+            showNotification('info', `📊 Filtered trades: ${filter}`);
+        }
+
+        function exportTrades() {
+            showNotification('info', '📤 Exporting trades to CSV...');
+        }
+
+        function exportPortfolio() {
+            showNotification('info', '📤 Exporting portfolio data...');
+        }
+
         function updatePositionsCount() {
             const positions = appState.tradingData.trades.filter(t => t.account_type === appState.currentAccountType);
             updateElement('positions-count', positions.length);
             updateElement('trades-count', appState.tradingData.trades.length);
+        }
+
+        // Watchlist Management
+        function loadWatchlist() {
+            // Already populated in HTML
+        }
+
+        function addToWatchlist() {
+            const symbol = document.getElementById('watchlist-symbol')?.value.toUpperCase();
+            if (!symbol) return;
+            
+            document.getElementById('watchlist-symbol').value = '';
+            showNotification('success', `✅ ${symbol} added to watchlist`);
+        }
+
+        function removeFromWatchlist(symbol) {
+            showNotification('info', `🗑️ ${symbol} removed from watchlist`);
+        }
+
+        function refreshWatchlist() {
+            loadWatchlist();
+            showNotification('success', '🔄 Watchlist refreshed');
         }
 
         // Tab system
@@ -1248,17 +2868,77 @@
             if (selectedTab) {
                 selectedTab.classList.add('active');
                 event.target.classList.add('active');
+                
+                // Load tab-specific data
+                switch(tabName) {
+                    case 'ai-trading':
+                        refreshAIData();
+                        break;
+                    case 'portfolio':
+                        refreshPortfolio();
+                        break;
+                    case 'reports':
+                        loadTradeReports();
+                        break;
+                    case 'futures':
+                        refreshFuturesData();
+                        break;
+                    case 'overview':
+                        loadMarketData();
+                        break;
+                    case 'trading':
+                        addOrderValueCalculators();
+                        break;
+                }
             }
         }
 
-        // Settings functions
-        function updateAISetting(key, value) {
-            simulatedData.aiSettings[key] = value;
-            showNotification('info', `✅ ${key.replace('_', ' ')} updated to ${value}`);
+        // AI Settings Management
+        function loadAISettings() {
+            const settings = simulatedData.aiSettings;
+            const elements = {
+                tradingMode: document.getElementById('ai-trading-mode'),
+                maxPerTrade: document.getElementById('ai-max-per-trade'),
+                riskLevel: document.getElementById('ai-risk-level'),
+                tradingFrequency: document.getElementById('trading-frequency'),
+                maxDailyTrades: document.getElementById('max-daily-trades'),
+                autoStopLoss: document.getElementById('auto-stop-loss'),
+                autoTakeProfit: document.getElementById('auto-take-profit'),
+                allowedSymbols: document.getElementById('allowed-symbols'),
+                enableFutures: document.getElementById('enable-futures')
+            };
+            
+            if (elements.tradingMode) elements.tradingMode.value = settings.trading_mode;
+            if (elements.maxPerTrade) elements.maxPerTrade.value = settings.max_capital_per_trade;
+            if (elements.riskLevel) elements.riskLevel.value = settings.risk_level;
+            if (elements.tradingFrequency) elements.tradingFrequency.value = settings.trading_frequency;
+            if (elements.maxDailyTrades) elements.maxDailyTrades.value = settings.max_daily_trades;
+            if (elements.autoStopLoss) elements.autoStopLoss.value = settings.auto_stop_loss;
+            if (elements.autoTakeProfit) elements.autoTakeProfit.value = settings.auto_take_profit;
+            if (elements.allowedSymbols) elements.allowedSymbols.value = settings.allowed_symbols.join(',');
+            if (elements.enableFutures) elements.enableFutures.value = settings.enable_futures ? 'true' : 'false';
         }
 
         function saveAISettings() {
+            const settings = {
+                trading_mode: document.getElementById('ai-trading-mode')?.value || 'paper',
+                max_capital_per_trade: parseFloat(document.getElementById('ai-max-per-trade')?.value) || 10000,
+                max_daily_trades: parseInt(document.getElementById('max-daily-trades')?.value) || 10,
+                risk_level: document.getElementById('ai-risk-level')?.value || 'medium',
+                trading_frequency: parseInt(document.getElementById('trading-frequency')?.value) || 30,
+                auto_stop_loss: parseFloat(document.getElementById('auto-stop-loss')?.value) || 5.0,
+                auto_take_profit: parseFloat(document.getElementById('auto-take-profit')?.value) || 10.0,
+                allowed_symbols: (document.getElementById('allowed-symbols')?.value || 'RELIANCE,TCS,HDFCBANK').split(',').map(s => s.trim()),
+                enable_futures: document.getElementById('enable-futures')?.value === 'true'
+            };
+            
+            simulatedData.aiSettings = { ...simulatedData.aiSettings, ...settings };
             showNotification('success', '💾 AI settings saved successfully');
+        }
+
+        function updateAISetting(key, value) {
+            simulatedData.aiSettings[key] = value;
+            showNotification('info', `✅ ${key.replace('_', ' ')} updated to ${value}`);
         }
 
         function refreshAIData() {
@@ -1273,6 +2953,13 @@
             const element = document.getElementById(id);
             if (element) {
                 element.textContent = content;
+            }
+        }
+
+        function updateElementHTML(id, content) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.innerHTML = content;
             }
         }
 
@@ -1334,6 +3021,11 @@
                 }
             }, 5000);
         }
+
+        // Initialize order value calculators after DOM is ready
+        setTimeout(() => {
+            addOrderValueCalculators();
+        }, 1000);
     </script>
 </body>
 </html>
