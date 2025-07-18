@@ -5,27 +5,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>AI Trading Platform Professional v6.0</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js">
-document.addEventListener("DOMContentLoaded", function () {
-    const startBtn = document.getElementById("startPaperTrade");
-    if (startBtn) {
-        startBtn.onclick = async () => {
-            const res = await fetch("/api/ai-trading/start", { method: "POST" });
-            const data = await res.json();
-            alert("AI Trading Started: " + (data?.message || "Check backend logs."));
-        };
-    }
-
-    const refreshStats = async () => {
-        const res = await fetch("/api/stats");
-        const data = await res.json();
-        document.getElementById("pnl").innerText = "P&L: ₹" + (data.pnl || 0);
-        document.getElementById("status").innerText = "Status: " + (data.status || "N/A");
-    };
-
-    setInterval(refreshStats, 3000);
-});
-</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
 <style>
         @import url('https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css');
         
@@ -130,7 +110,7 @@ document.addEventListener("DOMContentLoaded", function () {
         .modern-card:hover { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
     </style>
 </head>
-<body class="bg-gray-50"><div id="pnl">P&amp;L: ₹0</div><div id="status">Status: Waiting</div>
+<body class="bg-gray-50">
 <!-- Enhanced Header with Better Performance -->
 <header class="bg-white shadow-lg border-b sticky top-0 z-40 performance-optimized">
 <div class="desktop-container px-6 py-4">
@@ -388,6 +368,52 @@ document.addEventListener("DOMContentLoaded", function () {
 </div>
 </div>
 </div>
+
+<div id="trade-logs-section" style="margin-top: 20px;">
+<h5>Executed Trades</h5>
+<table class="table table-bordered table-striped">
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Qty</th>
+<th>Buy/Sell</th>
+<th>Entry</th>
+<th>Status</th>
+<th>P&amp;L</th>
+</tr>
+</thead>
+<tbody id="trade-logs-body">
+<tr><td colspan="6" style="text-align:center;">Loading trade data...</td></tr>
+</tbody>
+</table>
+</div>
+<script>
+fetch('/api/ai-trading/logs')
+  .then(res => res.json())
+  .then(data => {
+    const tbody = document.getElementById('trade-logs-body');
+    tbody.innerHTML = '';
+    if (data.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No trades found</td></tr>';
+    } else {
+      data.forEach(trade => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${trade.symbol}</td>
+          <td>${trade.quantity}</td>
+          <td>${trade.side}</td>
+          <td>${trade.entry_price}</td>
+          <td>${trade.status}</td>
+          <td>${trade.pnl}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+  })
+  .catch(err => {
+    document.getElementById('trade-logs-body').innerHTML = '<tr><td colspan="6" style="text-align:center;">Error fetching data</td></tr>';
+  });
+</script>
 </div>
 <!-- Portfolio & P&L Tab -->
 <div class="tab-content space-y-6" id="tab-portfolio">
