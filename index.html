@@ -1,11 +1,12 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Trading Platform Professional v6.0</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
-    <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI Trading Platform Professional v6.0</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
+<style>
         @import url('https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css');
         
         /* Performance Optimizations */
@@ -110,754 +111,739 @@
     </style>
 </head>
 <body class="bg-gray-50">
-    <!-- Enhanced Header with Better Performance -->
-    <header class="bg-white shadow-lg border-b sticky top-0 z-40 performance-optimized">
-        <div class="desktop-container px-6 py-4">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-4">
-                    <div class="h-10 w-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center text-white font-bold text-lg">🤖</div>
-                    <div>
-                        <h1 class="text-xl font-bold text-gray-900 flex items-center">
+<!-- Enhanced Header with Better Performance -->
+<header class="bg-white shadow-lg border-b sticky top-0 z-40 performance-optimized">
+<div class="desktop-container px-6 py-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-4">
+<div class="h-10 w-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center text-white font-bold text-lg">🤖</div>
+<div>
+<h1 class="text-xl font-bold text-gray-900 flex items-center">
                             🚀 AI Trading Platform Professional
                             <span class="ml-2 px-2 py-1 bg-purple-100 text-purple-700 rounded-lg text-xs">v6.0</span>
-                        </h1>
-                        <p class="text-xs text-gray-500">Advanced AI Trading • Real-time Analytics • Professional Dashboard • Lightning Fast</p>
-                    </div>
-                </div>
-                
-                <!-- Enhanced AI Trading Status & Controls -->
-                <div class="flex items-center space-x-4">
-                    <div class="flex items-center space-x-2" id="ai-status-indicator">
-                        <div class="w-3 h-3 rounded-full bg-gray-400" id="ai-status-dot"></div>
-                        <span class="text-sm font-medium" id="ai-status-text">AI Inactive</span>
-                        <span class="text-xs bg-gray-100 px-2 py-1 rounded" id="ai-trades-counter">0 trades</span>
-                    </div>
-                    
-                    <div class="flex items-center space-x-2">
-                        <button id="paper-mode-btn" onclick="switchAccountType('paper')" 
-                                class="px-3 py-1 rounded-lg text-xs font-medium transition-all paper-badge text-white">
+</h1>
+<p class="text-xs text-gray-500">Advanced AI Trading • Real-time Analytics • Professional Dashboard • Lightning Fast</p>
+</div>
+</div>
+<!-- Enhanced AI Trading Status & Controls -->
+<div class="flex items-center space-x-4">
+<div class="flex items-center space-x-2" id="ai-status-indicator">
+<div class="w-3 h-3 rounded-full bg-gray-400" id="ai-status-dot"></div>
+<span class="text-sm font-medium" id="ai-status-text">AI Inactive</span>
+<span class="text-xs bg-gray-100 px-2 py-1 rounded" id="ai-trades-counter">0 trades</span>
+</div>
+<div class="flex items-center space-x-2">
+<button class="px-3 py-1 rounded-lg text-xs font-medium transition-all paper-badge text-white" id="paper-mode-btn" onclick="switchAccountType('paper')">
                             📝 Paper
                         </button>
-                        <button id="live-mode-btn" onclick="switchAccountType('live')" 
-                                class="px-3 py-1 rounded-lg text-xs font-medium transition-all bg-gray-200 text-gray-700 hover:bg-gray-300">
+<button class="px-3 py-1 rounded-lg text-xs font-medium transition-all bg-gray-200 text-gray-700 hover:bg-gray-300" id="live-mode-btn" onclick="switchAccountType('live')">
                             🔴 Live
                         </button>
-                    </div>
-                    
-                    <div class="flex items-center space-x-2">
-                        <div class="w-2 h-2 rounded-full bg-green-500 live-indicator"></div>
-                        <span class="text-xs text-gray-600" id="current-time"></span>
-                    </div>
-                    
-                    <button class="relative p-2 text-gray-600 hover:text-gray-900 transition-all" onclick="toggleNotifications()">
+</div>
+<div class="flex items-center space-x-2">
+<div class="w-2 h-2 rounded-full bg-green-500 live-indicator"></div>
+<span class="text-xs text-gray-600" id="current-time"></span>
+</div>
+<button class="relative p-2 text-gray-600 hover:text-gray-900 transition-all" onclick="toggleNotifications()">
                         🔔
                         <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center" id="notification-count">0</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Layout -->
-    <div class="desktop-container py-6">
-        <div class="desktop-grid">
-            <!-- Left Sidebar - Navigation & AI Controls -->
-            <aside class="sidebar space-y-6">
-                <!-- Navigation Tabs -->
-                <div class="bg-white rounded-2xl shadow-lg p-4 modern-card">
-                    <h3 class="font-semibold mb-4 text-gray-900">🎛️ Dashboard</h3>
-                    <div class="space-y-2">
-                        <button onclick="switchTab('ai-trading')" class="tab-button w-full text-left px-3 py-2 rounded-lg text-sm active">
+</button>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Layout -->
+<div class="desktop-container py-6">
+<div class="desktop-grid">
+<!-- Left Sidebar - Navigation & AI Controls -->
+<aside class="sidebar space-y-6">
+<!-- Navigation Tabs -->
+<div class="bg-white rounded-2xl shadow-lg p-4 modern-card">
+<h3 class="font-semibold mb-4 text-gray-900">🎛️ Dashboard</h3>
+<div class="space-y-2">
+<button class="tab-button w-full text-left px-3 py-2 rounded-lg text-sm active" onclick="switchTab('ai-trading')">
                             🤖 AI Trading Hub
                         </button>
-                        <button onclick="switchTab('overview')" class="tab-button w-full text-left px-3 py-2 rounded-lg text-sm">
+<button class="tab-button w-full text-left px-3 py-2 rounded-lg text-sm" onclick="switchTab('overview')">
                             📈 Market Overview
                         </button>
-                        <button onclick="switchTab('trading')" class="tab-button w-full text-left px-3 py-2 rounded-lg text-sm">
+<button class="tab-button w-full text-left px-3 py-2 rounded-lg text-sm" onclick="switchTab('trading')">
                             ⚡ Manual Trading
                         </button>
-                        <button onclick="switchTab('portfolio')" class="tab-button w-full text-left px-3 py-2 rounded-lg text-sm">
-                            💼 Portfolio & P&L
+<button class="tab-button w-full text-left px-3 py-2 rounded-lg text-sm" onclick="switchTab('portfolio')">
+                            💼 Portfolio &amp; P&amp;L
                         </button>
-                        <button onclick="switchTab('capital')" class="tab-button w-full text-left px-3 py-2 rounded-lg text-sm">
+<button class="tab-button w-full text-left px-3 py-2 rounded-lg text-sm" onclick="switchTab('capital')">
                             💰 Capital Management
                         </button>
-                        <button onclick="switchTab('reports')" class="tab-button w-full text-left px-3 py-2 rounded-lg text-sm">
+<button class="tab-button w-full text-left px-3 py-2 rounded-lg text-sm" onclick="switchTab('reports')">
                             📊 Trade Reports
                         </button>
-                        <button onclick="switchTab('settings')" class="tab-button w-full text-left px-3 py-2 rounded-lg text-sm">
+<button class="tab-button w-full text-left px-3 py-2 rounded-lg text-sm" onclick="switchTab('settings')">
                             ⚙️ Settings
                         </button>
-                    </div>
-                </div>
-
-                <!-- Enhanced AI Trading Quick Controls -->
-                <div class="bg-white rounded-2xl shadow-lg p-4 modern-card" id="ai-quick-controls">
-                    <div class="flex items-center justify-between mb-3">
-                        <h3 class="font-semibold text-gray-900">🤖 AI Control</h3>
-                        <div class="flex items-center space-x-2">
-                            <div class="w-2 h-2 rounded-full bg-gray-400" id="ai-control-indicator"></div>
-                            <span class="text-xs font-medium" id="ai-control-status">Inactive</span>
-                        </div>
-                    </div>
-                    <div class="space-y-3">
-                        <button onclick="startAITrading()" id="start-ai-btn" 
-                                class="w-full px-3 py-2 rounded-lg text-sm font-medium transition-all ai-gradient text-white hover:ai-glow">
+</div>
+</div>
+<!-- Enhanced AI Trading Quick Controls -->
+<div class="bg-white rounded-2xl shadow-lg p-4 modern-card" id="ai-quick-controls">
+<div class="flex items-center justify-between mb-3">
+<h3 class="font-semibold text-gray-900">🤖 AI Control</h3>
+<div class="flex items-center space-x-2">
+<div class="w-2 h-2 rounded-full bg-gray-400" id="ai-control-indicator"></div>
+<span class="text-xs font-medium" id="ai-control-status">Inactive</span>
+</div>
+</div>
+<div class="space-y-3">
+<button class="w-full px-3 py-2 rounded-lg text-sm font-medium transition-all ai-gradient text-white hover:ai-glow" id="start-ai-btn" onclick="startAITrading()">
                             🚀 Start AI Trading
                         </button>
-                        <button onclick="stopAITrading()" id="stop-ai-btn" 
-                                class="w-full px-3 py-2 rounded-lg text-sm font-medium transition-all bg-red-600 text-white hover:bg-red-700" disabled>
+<button class="w-full px-3 py-2 rounded-lg text-sm font-medium transition-all bg-red-600 text-white hover:bg-red-700" disabled="" id="stop-ai-btn" onclick="stopAITrading()">
                             🛑 Stop AI Trading
                         </button>
-                        <div class="text-xs text-gray-600 p-2 bg-gray-50 rounded" id="ai-status-details">
+<div class="text-xs text-gray-600 p-2 bg-gray-50 rounded" id="ai-status-details">
                             AI trading inactive - configure settings to start
                         </div>
-                        <div class="text-xs text-center" id="ai-last-action">
+<div class="text-xs text-center" id="ai-last-action">
                             No recent AI activity
                         </div>
-                    </div>
-                </div>
-
-                <!-- Enhanced Account Summary -->
-                <div class="bg-white rounded-2xl shadow-lg p-4 modern-card" id="account-summary">
-                    <div class="flex items-center justify-between mb-3">
-                        <h3 class="font-semibold text-gray-900">💰 Account</h3>
-                        <span class="text-xs px-2 py-1 rounded-full" id="account-type-badge">Paper</span>
-                    </div>
-                    <div class="space-y-2 text-sm">
-                        <div class="flex justify-between">
-                            <span class="text-gray-600">Available:</span>
-                            <span class="font-medium" id="available-balance">₹10,00,000</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-gray-600">Invested:</span>
-                            <span class="font-medium" id="invested-amount">₹0</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-gray-600">P&L:</span>
-                            <span class="font-medium" id="total-pnl">₹0</span>
-                        </div>
-                        <div class="border-t pt-2 mt-2">
-                            <div class="flex justify-between">
-                                <span class="text-gray-800 font-medium">Total Value:</span>
-                                <span class="font-bold" id="total-value">₹10,00,000</span>
-                            </div>
-                        </div>
-                        <div class="text-xs text-gray-500 mt-2">
-                            <div class="flex justify-between">
-                                <span>Today's P&L:</span>
-                                <span id="daily-pnl">₹0</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Enhanced Quick Stats -->
-                <div class="bg-white rounded-2xl shadow-lg p-4 modern-card">
-                    <h3 class="font-semibold mb-4 text-gray-900">📊 Live Stats</h3>
-                    <div class="grid grid-cols-2 gap-3">
-                        <div class="text-center p-3 bg-blue-50 rounded-lg hover-scale cursor-pointer" onclick="switchTab('portfolio')">
-                            <div class="text-lg font-bold text-blue-600" id="positions-count">0</div>
-                            <div class="text-xs text-blue-600">Positions</div>
-                        </div>
-                        <div class="text-center p-3 bg-green-50 rounded-lg hover-scale cursor-pointer" onclick="switchTab('reports')">
-                            <div class="text-lg font-bold text-green-600" id="trades-count">0</div>
-                            <div class="text-xs text-green-600">Total Trades</div>
-                        </div>
-                        <div class="text-center p-3 bg-purple-50 rounded-lg hover-scale cursor-pointer">
-                            <div class="text-lg font-bold text-purple-600" id="ai-trades-count">0</div>
-                            <div class="text-xs text-purple-600">AI Trades</div>
-                        </div>
-                        <div class="text-center p-3 bg-orange-50 rounded-lg hover-scale cursor-pointer">
-                            <div class="text-lg font-bold text-orange-600" id="api-status">Connected</div>
-                            <div class="text-xs text-orange-600">API</div>
-                        </div>
-                    </div>
-                </div>
-            </aside>
-
-            <!-- Main Content Area -->
-            <main class="main-content custom-scrollbar">
-                <!-- AI Trading Hub Tab -->
-                <div id="tab-ai-trading" class="tab-content active space-y-6">
-                    <!-- AI Trading Dashboard -->
-                    <div class="bg-white rounded-2xl shadow-lg p-6 modern-card">
-                        <div class="flex items-center justify-between mb-6">
-                            <h3 class="text-xl font-semibold flex items-center">
+</div>
+</div>
+<!-- Enhanced Account Summary -->
+<div class="bg-white rounded-2xl shadow-lg p-4 modern-card" id="account-summary">
+<div class="flex items-center justify-between mb-3">
+<h3 class="font-semibold text-gray-900">💰 Account</h3>
+<span class="text-xs px-2 py-1 rounded-full" id="account-type-badge">Paper</span>
+</div>
+<div class="space-y-2 text-sm">
+<div class="flex justify-between">
+<span class="text-gray-600">Available:</span>
+<span class="font-medium" id="available-balance">₹10,00,000</span>
+</div>
+<div class="flex justify-between">
+<span class="text-gray-600">Invested:</span>
+<span class="font-medium" id="invested-amount">₹0</span>
+</div>
+<div class="flex justify-between">
+<span class="text-gray-600">P&amp;L:</span>
+<span class="font-medium" id="total-pnl">₹0</span>
+</div>
+<div class="border-t pt-2 mt-2">
+<div class="flex justify-between">
+<span class="text-gray-800 font-medium">Total Value:</span>
+<span class="font-bold" id="total-value">₹10,00,000</span>
+</div>
+</div>
+<div class="text-xs text-gray-500 mt-2">
+<div class="flex justify-between">
+<span>Today's P&amp;L:</span>
+<span id="daily-pnl">₹0</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Enhanced Quick Stats -->
+<div class="bg-white rounded-2xl shadow-lg p-4 modern-card">
+<h3 class="font-semibold mb-4 text-gray-900">📊 Live Stats</h3>
+<div class="grid grid-cols-2 gap-3">
+<div class="text-center p-3 bg-blue-50 rounded-lg hover-scale cursor-pointer" onclick="switchTab('portfolio')">
+<div class="text-lg font-bold text-blue-600" id="positions-count">0</div>
+<div class="text-xs text-blue-600">Positions</div>
+</div>
+<div class="text-center p-3 bg-green-50 rounded-lg hover-scale cursor-pointer" onclick="switchTab('reports')">
+<div class="text-lg font-bold text-green-600" id="trades-count">0</div>
+<div class="text-xs text-green-600">Total Trades</div>
+</div>
+<div class="text-center p-3 bg-purple-50 rounded-lg hover-scale cursor-pointer">
+<div class="text-lg font-bold text-purple-600" id="ai-trades-count">0</div>
+<div class="text-xs text-purple-600">AI Trades</div>
+</div>
+<div class="text-center p-3 bg-orange-50 rounded-lg hover-scale cursor-pointer">
+<div class="text-lg font-bold text-orange-600" id="api-status">Connected</div>
+<div class="text-xs text-orange-600">API</div>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="main-content custom-scrollbar">
+<!-- AI Trading Hub Tab -->
+<div class="tab-content active space-y-6" id="tab-ai-trading">
+<!-- AI Trading Dashboard -->
+<div class="bg-white rounded-2xl shadow-lg p-6 modern-card">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-xl font-semibold flex items-center">
                                 🤖 AI Trading Hub
                                 <span class="ml-2 w-3 h-3 rounded-full bg-gray-400" id="ai-dashboard-indicator"></span>
-                            </h3>
-                            <div class="flex items-center space-x-3">
-                                <button onclick="refreshAIData()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
+</h3>
+<div class="flex items-center space-x-3">
+<button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm" onclick="refreshAIData()">
                                     🔄 Refresh Data
                                 </button>
-                                <button onclick="loadAISettings()" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 text-sm">
+<button class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 text-sm" onclick="loadAISettings()">
                                     ⚙️ AI Settings
                                 </button>
-                            </div>
-                        </div>
-
-                        <!-- Enhanced AI Status Banner -->
-                        <div class="p-4 rounded-xl mb-6" id="ai-status-banner">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center space-x-3">
-                                    <div class="w-4 h-4 rounded-full" id="ai-banner-indicator"></div>
-                                    <div>
-                                        <h4 class="font-semibold" id="ai-banner-title">🤖 AI Trading Inactive</h4>
-                                        <p class="text-sm opacity-90" id="ai-banner-desc">Configure settings and start automated trading</p>
-                                    </div>
-                                </div>
-                                <div class="flex items-center space-x-3">
-                                    <div class="text-right text-sm" id="ai-performance-summary">
-                                        <div class="font-medium">Performance</div>
-                                        <div class="text-xs opacity-80" id="ai-success-rate">Success Rate: --</div>
-                                    </div>
-                                    <button onclick="toggleAITrading()" class="px-4 py-2 bg-white bg-opacity-20 rounded-lg text-sm font-medium hover:bg-opacity-30 transition-all" id="ai-toggle-btn">
+</div>
+</div>
+<!-- Enhanced AI Status Banner -->
+<div class="p-4 rounded-xl mb-6" id="ai-status-banner">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-3">
+<div class="w-4 h-4 rounded-full" id="ai-banner-indicator"></div>
+<div>
+<h4 class="font-semibold" id="ai-banner-title">🤖 AI Trading Inactive</h4>
+<p class="text-sm opacity-90" id="ai-banner-desc">Configure settings and start automated trading</p>
+</div>
+</div>
+<div class="flex items-center space-x-3">
+<div class="text-right text-sm" id="ai-performance-summary">
+<div class="font-medium">Performance</div>
+<div class="text-xs opacity-80" id="ai-success-rate">Success Rate: --</div>
+</div>
+<button class="px-4 py-2 bg-white bg-opacity-20 rounded-lg text-sm font-medium hover:bg-opacity-30 transition-all" id="ai-toggle-btn" onclick="toggleAITrading()">
                                         Start AI
                                     </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- AI Performance Metrics -->
-                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                            <div class="p-4 bg-green-50 rounded-xl text-center">
-                                <div class="text-2xl font-bold text-green-600" id="ai-profit-total">₹0</div>
-                                <div class="text-sm text-green-600">AI Profit Today</div>
-                            </div>
-                            <div class="p-4 bg-blue-50 rounded-xl text-center">
-                                <div class="text-2xl font-bold text-blue-600" id="ai-trades-today">0</div>
-                                <div class="text-sm text-blue-600">Trades Today</div>
-                            </div>
-                            <div class="p-4 bg-purple-50 rounded-xl text-center">
-                                <div class="text-2xl font-bold text-purple-600" id="ai-win-rate">0%</div>
-                                <div class="text-sm text-purple-600">Win Rate</div>
-                            </div>
-                            <div class="p-4 bg-orange-50 rounded-xl text-center">
-                                <div class="text-2xl font-bold text-orange-600" id="ai-avg-return">0%</div>
-                                <div class="text-sm text-orange-600">Avg Return</div>
-                            </div>
-                        </div>
-
-                        <!-- AI Settings Quick Config -->
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                            <div class="p-4 bg-gray-50 rounded-xl">
-                                <h5 class="font-medium mb-3">🎯 Trading Mode</h5>
-                                <select id="ai-trading-mode" class="w-full px-3 py-2 border rounded-lg text-sm" onchange="updateAISetting('trading_mode', this.value)">
-                                    <option value="paper">Paper Trading</option>
-                                    <option value="live">Live Trading</option>
-                                </select>
-                            </div>
-                            <div class="p-4 bg-gray-50 rounded-xl">
-                                <h5 class="font-medium mb-3">💰 Max Per Trade</h5>
-                                <input type="number" id="ai-max-per-trade" placeholder="10000" 
-                                       class="w-full px-3 py-2 border rounded-lg text-sm" 
-                                       onchange="updateAISetting('max_capital_per_trade', this.value)">
-                            </div>
-                            <div class="p-4 bg-gray-50 rounded-xl">
-                                <h5 class="font-medium mb-3">📈 Risk Level</h5>
-                                <select id="ai-risk-level" class="w-full px-3 py-2 border rounded-lg text-sm" onchange="updateAISetting('risk_level', this.value)">
-                                    <option value="low">Low Risk</option>
-                                    <option value="medium">Medium Risk</option>
-                                    <option value="high">High Risk</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <!-- Enhanced Live AI Signals -->
-                        <div class="mb-6">
-                            <h4 class="font-medium mb-4 flex items-center">
+</div>
+</div>
+</div>
+<!-- AI Performance Metrics -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+<div class="p-4 bg-green-50 rounded-xl text-center">
+<div class="text-2xl font-bold text-green-600" id="ai-profit-total">₹0</div>
+<div class="text-sm text-green-600">AI Profit Today</div>
+</div>
+<div class="p-4 bg-blue-50 rounded-xl text-center">
+<div class="text-2xl font-bold text-blue-600" id="ai-trades-today">0</div>
+<div class="text-sm text-blue-600">Trades Today</div>
+</div>
+<div class="p-4 bg-purple-50 rounded-xl text-center">
+<div class="text-2xl font-bold text-purple-600" id="ai-win-rate">0%</div>
+<div class="text-sm text-purple-600">Win Rate</div>
+</div>
+<div class="p-4 bg-orange-50 rounded-xl text-center">
+<div class="text-2xl font-bold text-orange-600" id="ai-avg-return">0%</div>
+<div class="text-sm text-orange-600">Avg Return</div>
+</div>
+</div>
+<!-- AI Settings Quick Config -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+<div class="p-4 bg-gray-50 rounded-xl">
+<h5 class="font-medium mb-3">🎯 Trading Mode</h5>
+<select class="w-full px-3 py-2 border rounded-lg text-sm" id="ai-trading-mode" onchange="updateAISetting('trading_mode', this.value)">
+<option value="paper">Paper Trading</option>
+<option value="live">Live Trading</option>
+</select>
+</div>
+<div class="p-4 bg-gray-50 rounded-xl">
+<h5 class="font-medium mb-3">💰 Max Per Trade</h5>
+<input class="w-full px-3 py-2 border rounded-lg text-sm" id="ai-max-per-trade" onchange="updateAISetting('max_capital_per_trade', this.value)" placeholder="10000" type="number"/>
+</div>
+<div class="p-4 bg-gray-50 rounded-xl">
+<h5 class="font-medium mb-3">📈 Risk Level</h5>
+<select class="w-full px-3 py-2 border rounded-lg text-sm" id="ai-risk-level" onchange="updateAISetting('risk_level', this.value)">
+<option value="low">Low Risk</option>
+<option value="medium">Medium Risk</option>
+<option value="high">High Risk</option>
+</select>
+</div>
+</div>
+<!-- Enhanced Live AI Signals -->
+<div class="mb-6">
+<h4 class="font-medium mb-4 flex items-center">
                                 🎯 Live AI Signals
                                 <span class="ml-2 w-2 h-2 bg-green-500 rounded-full live-indicator"></span>
-                                <span class="ml-2 text-xs bg-blue-100 px-2 py-1 rounded">Real-time Analysis</span>
-                            </h4>
-                            <div id="ai-signals-container" class="space-y-3">
-                                <div class="text-center text-gray-500 py-4 skeleton">Loading AI signals...</div>
-                            </div>
-                        </div>
-
-                        <!-- Recent AI Actions -->
-                        <div>
-                            <h4 class="font-medium mb-4 flex items-center">
+<span class="ml-2 text-xs bg-blue-100 px-2 py-1 rounded">Real-time Analysis</span>
+</h4>
+<div class="space-y-3" id="ai-signals-container">
+<div class="text-center text-gray-500 py-4 skeleton">Loading AI signals...</div>
+</div>
+</div>
+<!-- Recent AI Actions -->
+<div>
+<h4 class="font-medium mb-4 flex items-center">
                                 📋 Recent AI Actions
                                 <span class="ml-2 text-xs bg-purple-100 px-2 py-1 rounded">Live Updates</span>
-                            </h4>
-                            <div id="ai-recent-actions" class="space-y-2 max-h-64 overflow-y-auto custom-scrollbar">
-                                <div class="text-center text-gray-500 py-4">No recent AI actions</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Portfolio & P&L Tab -->
-                <div id="tab-portfolio" class="tab-content space-y-6">
-                    <!-- Enhanced Portfolio Summary -->
-                    <div class="bg-white rounded-2xl shadow-lg p-6 modern-card">
-                        <div class="flex items-center justify-between mb-6">
-                            <h3 class="text-lg font-semibold">💼 Portfolio & P&L Analysis</h3>
-                            <div class="flex items-center space-x-3">
-                                <button onclick="refreshPortfolio()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
+</h4>
+<div class="space-y-2 max-h-64 overflow-y-auto custom-scrollbar" id="ai-recent-actions">
+<div class="text-center text-gray-500 py-4">No recent AI actions</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Portfolio & P&L Tab -->
+<div class="tab-content space-y-6" id="tab-portfolio">
+<!-- Enhanced Portfolio Summary -->
+<div class="bg-white rounded-2xl shadow-lg p-6 modern-card">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-lg font-semibold">💼 Portfolio &amp; P&amp;L Analysis</h3>
+<div class="flex items-center space-x-3">
+<button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm" onclick="refreshPortfolio()">
                                     🔄 Refresh
                                 </button>
-                                <button onclick="exportPortfolio()" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm">
+<button class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm" onclick="exportPortfolio()">
                                     📤 Export
                                 </button>
-                            </div>
-                        </div>
-
-                        <!-- Portfolio Overview Cards -->
-                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                            <div class="p-4 bg-blue-50 rounded-xl">
-                                <div class="text-2xl font-bold text-blue-600" id="portfolio-value">₹0</div>
-                                <div class="text-sm text-blue-600">Portfolio Value</div>
-                                <div class="text-xs text-blue-500 mt-1" id="portfolio-change">+₹0 (0%)</div>
-                            </div>
-                            <div class="p-4 bg-green-50 rounded-xl">
-                                <div class="text-2xl font-bold text-green-600" id="total-profit">₹0</div>
-                                <div class="text-sm text-green-600">Total Profit</div>
-                                <div class="text-xs text-green-500 mt-1" id="profit-percentage">0%</div>
-                            </div>
-                            <div class="p-4 bg-purple-50 rounded-xl">
-                                <div class="text-2xl font-bold text-purple-600" id="active-positions">0</div>
-                                <div class="text-sm text-purple-600">Active Positions</div>
-                                <div class="text-xs text-purple-500 mt-1" id="position-diversity">0 symbols</div>
-                            </div>
-                            <div class="p-4 bg-orange-50 rounded-xl">
-                                <div class="text-2xl font-bold text-orange-600" id="day-pnl">₹0</div>
-                                <div class="text-sm text-orange-600">Today's P&L</div>
-                                <div class="text-xs text-orange-500 mt-1" id="day-pnl-percent">0%</div>
-                            </div>
-                        </div>
-
-                        <!-- Enhanced Positions Display -->
-                        <div>
-                            <h4 class="font-medium mb-4">🎯 Current Positions</h4>
-                            <div id="positions-detailed" class="space-y-3">
-                                <div class="text-center text-gray-500 py-8">Loading positions...</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Trade Reports Tab -->
-                <div id="tab-reports" class="tab-content space-y-6">
-                    <div class="bg-white rounded-2xl shadow-lg p-6 modern-card">
-                        <div class="flex items-center justify-between mb-6">
-                            <h3 class="text-lg font-semibold">📊 Trade Reports & Analytics</h3>
-                            <div class="flex items-center space-x-3">
-                                <select id="trade-filter" class="px-3 py-2 border rounded-lg text-sm" onchange="filterTrades()">
-                                    <option value="all">All Trades</option>
-                                    <option value="ai">AI Trades</option>
-                                    <option value="manual">Manual Trades</option>
-                                    <option value="today">Today</option>
-                                    <option value="week">This Week</option>
-                                </select>
-                                <button onclick="exportTrades()" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm">
+</div>
+</div>
+<!-- Portfolio Overview Cards -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+<div class="p-4 bg-blue-50 rounded-xl">
+<div class="text-2xl font-bold text-blue-600" id="portfolio-value">₹0</div>
+<div class="text-sm text-blue-600">Portfolio Value</div>
+<div class="text-xs text-blue-500 mt-1" id="portfolio-change">+₹0 (0%)</div>
+</div>
+<div class="p-4 bg-green-50 rounded-xl">
+<div class="text-2xl font-bold text-green-600" id="total-profit">₹0</div>
+<div class="text-sm text-green-600">Total Profit</div>
+<div class="text-xs text-green-500 mt-1" id="profit-percentage">0%</div>
+</div>
+<div class="p-4 bg-purple-50 rounded-xl">
+<div class="text-2xl font-bold text-purple-600" id="active-positions">0</div>
+<div class="text-sm text-purple-600">Active Positions</div>
+<div class="text-xs text-purple-500 mt-1" id="position-diversity">0 symbols</div>
+</div>
+<div class="p-4 bg-orange-50 rounded-xl">
+<div class="text-2xl font-bold text-orange-600" id="day-pnl">₹0</div>
+<div class="text-sm text-orange-600">Today's P&amp;L</div>
+<div class="text-xs text-orange-500 mt-1" id="day-pnl-percent">0%</div>
+</div>
+</div>
+<!-- Enhanced Positions Display -->
+<div>
+<h4 class="font-medium mb-4">🎯 Current Positions</h4>
+<div class="space-y-3" id="positions-detailed">
+<div class="text-center text-gray-500 py-8">Loading positions...</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Trade Reports Tab -->
+<div class="tab-content space-y-6" id="tab-reports">
+<div class="bg-white rounded-2xl shadow-lg p-6 modern-card">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-lg font-semibold">📊 Trade Reports &amp; Analytics</h3>
+<div class="flex items-center space-x-3">
+<select class="px-3 py-2 border rounded-lg text-sm" id="trade-filter" onchange="filterTrades()">
+<option value="all">All Trades</option>
+<option value="ai">AI Trades</option>
+<option value="manual">Manual Trades</option>
+<option value="today">Today</option>
+<option value="week">This Week</option>
+</select>
+<button class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm" onclick="exportTrades()">
                                     📤 Export CSV
                                 </button>
-                            </div>
-                        </div>
-
-                        <!-- Trade Summary Cards -->
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                            <div class="p-4 bg-blue-50 rounded-xl">
-                                <div class="text-xl font-bold text-blue-600" id="total-trades-summary">0</div>
-                                <div class="text-sm text-blue-600">Total Trades</div>
-                                <div class="text-xs text-blue-500 mt-1">
-                                    <span id="ai-trades-summary">0 AI</span> • <span id="manual-trades-summary">0 Manual</span>
-                                </div>
-                            </div>
-                            <div class="p-4 bg-green-50 rounded-xl">
-                                <div class="text-xl font-bold text-green-600" id="winning-trades">0</div>
-                                <div class="text-sm text-green-600">Winning Trades</div>
-                                <div class="text-xs text-green-500 mt-1" id="win-rate-display">0% win rate</div>
-                            </div>
-                            <div class="p-4 bg-purple-50 rounded-xl">
-                                <div class="text-xl font-bold text-purple-600" id="avg-trade-value">₹0</div>
-                                <div class="text-sm text-purple-600">Avg Trade Value</div>
-                                <div class="text-xs text-purple-500 mt-1" id="avg-return-display">0% avg return</div>
-                            </div>
-                        </div>
-
-                        <!-- Enhanced Trade History -->
-                        <div>
-                            <h4 class="font-medium mb-4">📋 Trade History</h4>
-                            <div id="trades-detailed" class="space-y-3 max-h-96 overflow-y-auto custom-scrollbar">
-                                <div class="text-center text-gray-500 py-8">Loading trades...</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Market Overview Tab -->
-                <div id="tab-overview" class="tab-content space-y-6">
-                    <!-- Market Indices -->
-                    <div class="bg-white rounded-2xl shadow-lg p-6 modern-card">
-                        <div class="flex items-center justify-between mb-6">
-                            <h3 class="text-lg font-semibold flex items-center">
+</div>
+</div>
+<!-- Trade Summary Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+<div class="p-4 bg-blue-50 rounded-xl">
+<div class="text-xl font-bold text-blue-600" id="total-trades-summary">0</div>
+<div class="text-sm text-blue-600">Total Trades</div>
+<div class="text-xs text-blue-500 mt-1">
+<span id="ai-trades-summary">0 AI</span> • <span id="manual-trades-summary">0 Manual</span>
+</div>
+</div>
+<div class="p-4 bg-green-50 rounded-xl">
+<div class="text-xl font-bold text-green-600" id="winning-trades">0</div>
+<div class="text-sm text-green-600">Winning Trades</div>
+<div class="text-xs text-green-500 mt-1" id="win-rate-display">0% win rate</div>
+</div>
+<div class="p-4 bg-purple-50 rounded-xl">
+<div class="text-xl font-bold text-purple-600" id="avg-trade-value">₹0</div>
+<div class="text-sm text-purple-600">Avg Trade Value</div>
+<div class="text-xs text-purple-500 mt-1" id="avg-return-display">0% avg return</div>
+</div>
+</div>
+<!-- Enhanced Trade History -->
+<div>
+<h4 class="font-medium mb-4">📋 Trade History</h4>
+<div class="space-y-3 max-h-96 overflow-y-auto custom-scrollbar" id="trades-detailed">
+<div class="text-center text-gray-500 py-8">Loading trades...</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Market Overview Tab -->
+<div class="tab-content space-y-6" id="tab-overview">
+<!-- Market Indices -->
+<div class="bg-white rounded-2xl shadow-lg p-6 modern-card">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-lg font-semibold flex items-center">
                                 📊 Live Market Indices
                                 <span class="ml-2 w-2 h-2 bg-green-500 rounded-full live-indicator"></span>
-                            </h3>
-                            <div class="text-xs text-gray-600">
+</h3>
+<div class="text-xs text-gray-600">
                                 Last updated: <span id="market-last-update">Loading...</span>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div class="bg-gradient-to-r from-blue-500 to-blue-600 p-4 rounded-xl text-white hover-scale cursor-pointer">
-                                <div class="flex items-center justify-between">
-                                    <div>
-                                        <h4 class="text-sm opacity-90">NIFTY 50</h4>
-                                        <p class="text-xl font-bold" id="nifty-price">Loading...</p>
-                                        <span class="text-xs" id="nifty-change">Loading...</span>
-                                    </div>
-                                    <div class="text-blue-200 text-2xl">📈</div>
-                                </div>
-                            </div>
-                            <div class="bg-gradient-to-r from-green-500 to-green-600 p-4 rounded-xl text-white hover-scale cursor-pointer">
-                                <div class="flex items-center justify-between">
-                                    <div>
-                                        <h4 class="text-sm opacity-90">BANK NIFTY</h4>
-                                        <p class="text-xl font-bold" id="banknifty-price">Loading...</p>
-                                        <span class="text-xs" id="banknifty-change">Loading...</span>
-                                    </div>
-                                    <div class="text-green-200 text-2xl">🏦</div>
-                                </div>
-                            </div>
-                            <div class="bg-gradient-to-r from-purple-500 to-purple-600 p-4 rounded-xl text-white hover-scale cursor-pointer">
-                                <div class="flex items-center justify-between">
-                                    <div>
-                                        <h4 class="text-sm opacity-90">SENSEX</h4>
-                                        <p class="text-xl font-bold" id="sensex-price">Loading...</p>
-                                        <span class="text-xs" id="sensex-change">Loading...</span>
-                                    </div>
-                                    <div class="text-purple-200 text-2xl">📊</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Stock Search -->
-                    <div class="bg-white rounded-2xl shadow-lg p-6 modern-card">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-lg font-semibold">🔍 Stock Search</h3>
-                            <button onclick="loadTopGainers()" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all text-sm">
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div class="bg-gradient-to-r from-blue-500 to-blue-600 p-4 rounded-xl text-white hover-scale cursor-pointer">
+<div class="flex items-center justify-between">
+<div>
+<h4 class="text-sm opacity-90">NIFTY 50</h4>
+<p class="text-xl font-bold" id="nifty-price">Loading...</p>
+<span class="text-xs" id="nifty-change">Loading...</span>
+</div>
+<div class="text-blue-200 text-2xl">📈</div>
+</div>
+</div>
+<div class="bg-gradient-to-r from-green-500 to-green-600 p-4 rounded-xl text-white hover-scale cursor-pointer">
+<div class="flex items-center justify-between">
+<div>
+<h4 class="text-sm opacity-90">BANK NIFTY</h4>
+<p class="text-xl font-bold" id="banknifty-price">Loading...</p>
+<span class="text-xs" id="banknifty-change">Loading...</span>
+</div>
+<div class="text-green-200 text-2xl">🏦</div>
+</div>
+</div>
+<div class="bg-gradient-to-r from-purple-500 to-purple-600 p-4 rounded-xl text-white hover-scale cursor-pointer">
+<div class="flex items-center justify-between">
+<div>
+<h4 class="text-sm opacity-90">SENSEX</h4>
+<p class="text-xl font-bold" id="sensex-price">Loading...</p>
+<span class="text-xs" id="sensex-change">Loading...</span>
+</div>
+<div class="text-purple-200 text-2xl">📊</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Stock Search -->
+<div class="bg-white rounded-2xl shadow-lg p-6 modern-card">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-lg font-semibold">🔍 Stock Search</h3>
+<button class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all text-sm" onclick="loadTopGainers()">
                                 📈 Top Gainers
                             </button>
-                        </div>
-                        
-                        <div class="relative mb-4">
-                            <div class="absolute left-3 top-3 text-gray-400">🔍</div>
-                            <input
-                                type="text"
-                                id="stock-search-input"
-                                onkeyup="searchStocksReal()"
-                                placeholder="Search stocks (e.g., RELIANCE, TCS, HDFC)"
-                                class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                            />
-                        </div>
-
-                        <div id="stock-search-results" class="space-y-3 hidden">
-                            <h4 class="font-medium text-gray-900">Search Results</h4>
-                            <div id="search-results-container"></div>
-                        </div>
-
-                        <!-- Popular Stocks -->
-                        <div class="mt-6">
-                            <h4 class="font-medium text-gray-900 mb-4">📊 Market Leaders</h4>
-                            <div class="grid grid-cols-3 md:grid-cols-6 gap-3" id="popular-stocks">
-                                <div class="text-center p-3 bg-gray-100 rounded-lg skeleton">Loading...</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Manual Trading Tab -->
-                <div id="tab-trading" class="tab-content space-y-6">
-                    <!-- Trading Controls -->
-                    <div class="bg-white rounded-2xl shadow-lg p-6 modern-card">
-                        <h3 class="text-lg font-semibold mb-6">⚡ Manual Trade Execution</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            <!-- Buy Order -->
-                            <div class="p-4 bg-green-50 rounded-xl">
-                                <h4 class="font-medium text-green-800 mb-4 flex items-center">
+</div>
+<div class="relative mb-4">
+<div class="absolute left-3 top-3 text-gray-400">🔍</div>
+<input class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500" id="stock-search-input" onkeyup="searchStocksReal()" placeholder="Search stocks (e.g., RELIANCE, TCS, HDFC)" type="text">
+</input></div>
+<div class="space-y-3 hidden" id="stock-search-results">
+<h4 class="font-medium text-gray-900">Search Results</h4>
+<div id="search-results-container"></div>
+</div>
+<!-- Popular Stocks -->
+<div class="mt-6">
+<h4 class="font-medium text-gray-900 mb-4">📊 Market Leaders</h4>
+<div class="grid grid-cols-3 md:grid-cols-6 gap-3" id="popular-stocks">
+<div class="text-center p-3 bg-gray-100 rounded-lg skeleton">Loading...</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Manual Trading Tab -->
+<div class="tab-content space-y-6" id="tab-trading">
+<!-- Trading Controls -->
+<div class="bg-white rounded-2xl shadow-lg p-6 modern-card">
+<h3 class="text-lg font-semibold mb-6">⚡ Manual Trade Execution</h3>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Buy Order -->
+<div class="p-4 bg-green-50 rounded-xl">
+<h4 class="font-medium text-green-800 mb-4 flex items-center">
                                     📈 Buy Order
                                     <span class="ml-2 w-2 h-2 bg-green-500 rounded-full live-indicator"></span>
-                                </h4>
-                                <div class="space-y-3">
-                                    <input type="text" id="buy-symbol" placeholder="Symbol (e.g., RELIANCE)" class="w-full px-3 py-2 border rounded-lg text-sm">
-                                    <input type="number" id="buy-quantity" placeholder="Quantity" class="w-full px-3 py-2 border rounded-lg text-sm">
-                                    <input type="number" id="buy-price" placeholder="Price" step="0.01" class="w-full px-3 py-2 border rounded-lg text-sm">
-                                    <div class="text-xs text-gray-600" id="buy-order-value">Order Value: ₹0</div>
-                                    <button onclick="placeOrder('BUY')" class="w-full px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium">
+</h4>
+<div class="space-y-3">
+<input class="w-full px-3 py-2 border rounded-lg text-sm" id="buy-symbol" placeholder="Symbol (e.g., RELIANCE)" type="text"/>
+<input class="w-full px-3 py-2 border rounded-lg text-sm" id="buy-quantity" placeholder="Quantity" type="number"/>
+<input class="w-full px-3 py-2 border rounded-lg text-sm" id="buy-price" placeholder="Price" step="0.01" type="number"/>
+<div class="text-xs text-gray-600" id="buy-order-value">Order Value: ₹0</div>
+<button class="w-full px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium" onclick="placeOrder('BUY')">
                                         Place Buy Order
                                     </button>
-                                </div>
-                            </div>
-
-                            <!-- Sell Order -->
-                            <div class="p-4 bg-red-50 rounded-xl">
-                                <h4 class="font-medium text-red-800 mb-4 flex items-center">
+</div>
+</div>
+<!-- Sell Order -->
+<div class="p-4 bg-red-50 rounded-xl">
+<h4 class="font-medium text-red-800 mb-4 flex items-center">
                                     📉 Sell Order
                                     <span class="ml-2 w-2 h-2 bg-red-500 rounded-full live-indicator"></span>
-                                </h4>
-                                <div class="space-y-3">
-                                    <input type="text" id="sell-symbol" placeholder="Symbol (e.g., RELIANCE)" class="w-full px-3 py-2 border rounded-lg text-sm">
-                                    <input type="number" id="sell-quantity" placeholder="Quantity" class="w-full px-3 py-2 border rounded-lg text-sm">
-                                    <input type="number" id="sell-price" placeholder="Price" step="0.01" class="w-full px-3 py-2 border rounded-lg text-sm">
-                                    <div class="text-xs text-gray-600" id="sell-order-value">Order Value: ₹0</div>
-                                    <button onclick="placeOrder('SELL')" class="w-full px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm font-medium">
+</h4>
+<div class="space-y-3">
+<input class="w-full px-3 py-2 border rounded-lg text-sm" id="sell-symbol" placeholder="Symbol (e.g., RELIANCE)" type="text"/>
+<input class="w-full px-3 py-2 border rounded-lg text-sm" id="sell-quantity" placeholder="Quantity" type="number"/>
+<input class="w-full px-3 py-2 border rounded-lg text-sm" id="sell-price" placeholder="Price" step="0.01" type="number"/>
+<div class="text-xs text-gray-600" id="sell-order-value">Order Value: ₹0</div>
+<button class="w-full px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm font-medium" onclick="placeOrder('SELL')">
                                         Place Sell Order
                                     </button>
-                                </div>
-                            </div>
-
-                            <!-- Live Price Check -->
-                            <div class="p-4 bg-blue-50 rounded-xl">
-                                <h4 class="font-medium text-blue-800 mb-4 flex items-center">
+</div>
+</div>
+<!-- Live Price Check -->
+<div class="p-4 bg-blue-50 rounded-xl">
+<h4 class="font-medium text-blue-800 mb-4 flex items-center">
                                     📊 Live Price Check
                                     <span class="ml-2 w-2 h-2 bg-blue-500 rounded-full live-indicator"></span>
-                                </h4>
-                                <div class="space-y-3">
-                                    <input type="text" id="market-symbol" placeholder="Symbol (e.g., RELIANCE)" class="w-full px-3 py-2 border rounded-lg text-sm">
-                                    <button onclick="getRealTimePrice()" class="w-full px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium">
+</h4>
+<div class="space-y-3">
+<input class="w-full px-3 py-2 border rounded-lg text-sm" id="market-symbol" placeholder="Symbol (e.g., RELIANCE)" type="text"/>
+<button class="w-full px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium" onclick="getRealTimePrice()">
                                         Get Live Price
                                     </button>
-                                    <div id="market-data-result" class="text-sm text-gray-600 p-3 bg-gray-50 rounded">
+<div class="text-sm text-gray-600 p-3 bg-gray-50 rounded" id="market-data-result">
                                         Enter symbol to get live price...
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Capital Management Tab -->
-                <div id="tab-capital" class="tab-content space-y-6">
-                    <!-- Paper Trading Capital -->
-                    <div class="bg-white rounded-2xl shadow-lg p-6 modern-card">
-                        <h3 class="text-lg font-semibold mb-6 flex items-center">
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Capital Management Tab -->
+<div class="tab-content space-y-6" id="tab-capital">
+<!-- Paper Trading Capital -->
+<div class="bg-white rounded-2xl shadow-lg p-6 modern-card">
+<h3 class="text-lg font-semibold mb-6 flex items-center">
                             📝 Paper Trading Capital
                             <span class="ml-2 px-2 py-1 bg-green-100 text-green-700 rounded text-xs">Virtual Money</span>
-                        </h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="space-y-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Set Paper Capital</label>
-                                    <div class="flex space-x-2">
-                                        <input type="number" id="paper-capital-input" placeholder="1000000" 
-                                               class="flex-1 px-3 py-2 border rounded-lg">
-                                        <button onclick="updatePaperCapital()" 
-                                                class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-4">
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">Set Paper Capital</label>
+<div class="flex space-x-2">
+<input class="flex-1 px-3 py-2 border rounded-lg" id="paper-capital-input" placeholder="1000000" type="number"/>
+<button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick="updatePaperCapital()">
                                             Update
                                         </button>
-                                    </div>
-                                    <p class="text-xs text-gray-500 mt-1">Range: ₹10,000 - ₹10,00,00,000</p>
-                                </div>
-                                <div class="grid grid-cols-3 gap-2">
-                                    <button onclick="setPaperCapital(100000)" class="px-3 py-2 bg-gray-200 text-gray-700 rounded text-sm hover:bg-gray-300">
+</div>
+<p class="text-xs text-gray-500 mt-1">Range: ₹10,000 - ₹10,00,00,000</p>
+</div>
+<div class="grid grid-cols-3 gap-2">
+<button class="px-3 py-2 bg-gray-200 text-gray-700 rounded text-sm hover:bg-gray-300" onclick="setPaperCapital(100000)">
                                         ₹1 Lakh
                                     </button>
-                                    <button onclick="setPaperCapital(1000000)" class="px-3 py-2 bg-gray-200 text-gray-700 rounded text-sm hover:bg-gray-300">
+<button class="px-3 py-2 bg-gray-200 text-gray-700 rounded text-sm hover:bg-gray-300" onclick="setPaperCapital(1000000)">
                                         ₹10 Lakh
                                     </button>
-                                    <button onclick="setPaperCapital(5000000)" class="px-3 py-2 bg-gray-200 text-gray-700 rounded text-sm hover:bg-gray-300">
+<button class="px-3 py-2 bg-gray-200 text-gray-700 rounded text-sm hover:bg-gray-300" onclick="setPaperCapital(5000000)">
                                         ₹50 Lakh
                                     </button>
-                                </div>
-                                <button onclick="resetPaperAccount()" 
-                                        class="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+</div>
+<button class="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700" onclick="resetPaperAccount()">
                                     🔄 Reset Paper Account
                                 </button>
-                            </div>
-                            <div class="p-4 bg-green-50 rounded-lg">
-                                <h5 class="font-medium mb-3">Current Paper Account</h5>
-                                <div class="space-y-2 text-sm">
-                                    <div class="flex justify-between">
-                                        <span>Available:</span>
-                                        <span class="font-medium" id="paper-balance-display">₹10,00,000</span>
-                                    </div>
-                                    <div class="flex justify-between">
-                                        <span>Invested:</span>
-                                        <span class="font-medium" id="paper-invested-display">₹0</span>
-                                    </div>
-                                    <div class="flex justify-between">
-                                        <span>P&L:</span>
-                                        <span class="font-medium" id="paper-pnl-display">₹0</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Real Trading Capital -->
-                    <div class="bg-white rounded-2xl shadow-lg p-6 modern-card">
-                        <h3 class="text-lg font-semibold mb-6 flex items-center">
+</div>
+<div class="p-4 bg-green-50 rounded-lg">
+<h5 class="font-medium mb-3">Current Paper Account</h5>
+<div class="space-y-2 text-sm">
+<div class="flex justify-between">
+<span>Available:</span>
+<span class="font-medium" id="paper-balance-display">₹10,00,000</span>
+</div>
+<div class="flex justify-between">
+<span>Invested:</span>
+<span class="font-medium" id="paper-invested-display">₹0</span>
+</div>
+<div class="flex justify-between">
+<span>P&amp;L:</span>
+<span class="font-medium" id="paper-pnl-display">₹0</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Real Trading Capital -->
+<div class="bg-white rounded-2xl shadow-lg p-6 modern-card">
+<h3 class="text-lg font-semibold mb-6 flex items-center">
                             🔴 Real Trading Capital
                             <span class="ml-2 px-2 py-1 bg-red-100 text-red-700 rounded text-xs">Real Money</span>
-                        </h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="space-y-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Available Capital</label>
-                                    <input type="number" id="real-capital-input" placeholder="100000" 
-                                           class="w-full px-3 py-2 border rounded-lg">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Daily Trading Limit</label>
-                                    <input type="number" id="daily-limit-input" placeholder="5000" 
-                                           class="w-full px-3 py-2 border rounded-lg">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Max Position Size</label>
-                                    <input type="number" id="max-position-input" placeholder="50000" 
-                                           class="w-full px-3 py-2 border rounded-lg">
-                                </div>
-                                <button onclick="setupRealAccount()" 
-                                        class="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-4">
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">Available Capital</label>
+<input class="w-full px-3 py-2 border rounded-lg" id="real-capital-input" placeholder="100000" type="number"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">Daily Trading Limit</label>
+<input class="w-full px-3 py-2 border rounded-lg" id="daily-limit-input" placeholder="5000" type="number"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">Max Position Size</label>
+<input class="w-full px-3 py-2 border rounded-lg" id="max-position-input" placeholder="50000" type="number"/>
+</div>
+<button class="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700" onclick="setupRealAccount()">
                                     💰 Setup Real Account
                                 </button>
-                            </div>
-                            <div class="p-4 bg-red-50 rounded-lg">
-                                <div class="flex items-center justify-between mb-3">
-                                    <h5 class="font-medium">Real Account Status</h5>
-                                    <span class="text-xs px-2 py-1 rounded-full" id="real-account-status">Inactive</span>
-                                </div>
-                                <div class="space-y-2 text-sm">
-                                    <div class="flex justify-between">
-                                        <span>Capital:</span>
-                                        <span class="font-medium" id="real-capital-display">₹0</span>
-                                    </div>
-                                    <div class="flex justify-between">
-                                        <span>Daily Limit:</span>
-                                        <span class="font-medium" id="real-daily-limit-display">₹0</span>
-                                    </div>
-                                    <div class="flex justify-between">
-                                        <span>Max Position:</span>
-                                        <span class="font-medium" id="real-max-position-display">₹0</span>
-                                    </div>
-                                </div>
-                                <div class="mt-3 p-2 bg-yellow-100 rounded text-xs text-yellow-800">
+</div>
+<div class="p-4 bg-red-50 rounded-lg">
+<div class="flex items-center justify-between mb-3">
+<h5 class="font-medium">Real Account Status</h5>
+<span class="text-xs px-2 py-1 rounded-full" id="real-account-status">Inactive</span>
+</div>
+<div class="space-y-2 text-sm">
+<div class="flex justify-between">
+<span>Capital:</span>
+<span class="font-medium" id="real-capital-display">₹0</span>
+</div>
+<div class="flex justify-between">
+<span>Daily Limit:</span>
+<span class="font-medium" id="real-daily-limit-display">₹0</span>
+</div>
+<div class="flex justify-between">
+<span>Max Position:</span>
+<span class="font-medium" id="real-max-position-display">₹0</span>
+</div>
+</div>
+<div class="mt-3 p-2 bg-yellow-100 rounded text-xs text-yellow-800">
                                     ⚠️ Real money trading involves risk. Start with small amounts.
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Settings Tab -->
-                <div id="tab-settings" class="tab-content space-y-6">
-                    <!-- AI Trading Settings -->
-                    <div class="bg-white rounded-2xl shadow-lg p-6 modern-card">
-                        <h3 class="text-lg font-semibold mb-6">🤖 AI Trading Settings</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="space-y-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Trading Frequency (seconds)</label>
-                                    <input type="number" id="trading-frequency" placeholder="30" 
-                                           class="w-full px-3 py-2 border rounded-lg">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Max Daily Trades</label>
-                                    <input type="number" id="max-daily-trades" placeholder="10" 
-                                           class="w-full px-3 py-2 border rounded-lg">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Auto Stop Loss (%)</label>
-                                    <input type="number" id="auto-stop-loss" placeholder="5" step="0.1"
-                                           class="w-full px-3 py-2 border rounded-lg">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Auto Take Profit (%)</label>
-                                    <input type="number" id="auto-take-profit" placeholder="10" step="0.1"
-                                           class="w-full px-3 py-2 border rounded-lg">
-                                </div>
-                            </div>
-                            <div class="space-y-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Allowed Symbols (comma-separated)</label>
-                                    <textarea id="allowed-symbols" placeholder="RELIANCE,TCS,HDFCBANK,INFY,ICICIBANK" 
-                                              class="w-full px-3 py-2 border rounded-lg h-20"></textarea>
-                                </div>
-                                <button onclick="saveAISettings()" 
-                                        class="w-full px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">
+</div>
+</div>
+</div>
+</div>
+<!-- Settings Tab -->
+<div class="tab-content space-y-6" id="tab-settings">
+<!-- AI Trading Settings -->
+<div class="bg-white rounded-2xl shadow-lg p-6 modern-card">
+<h3 class="text-lg font-semibold mb-6">🤖 AI Trading Settings</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-4">
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">Trading Frequency (seconds)</label>
+<input class="w-full px-3 py-2 border rounded-lg" id="trading-frequency" placeholder="30" type="number"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">Max Daily Trades</label>
+<input class="w-full px-3 py-2 border rounded-lg" id="max-daily-trades" placeholder="10" type="number"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">Auto Stop Loss (%)</label>
+<input class="w-full px-3 py-2 border rounded-lg" id="auto-stop-loss" placeholder="5" step="0.1" type="number"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">Auto Take Profit (%)</label>
+<input class="w-full px-3 py-2 border rounded-lg" id="auto-take-profit" placeholder="10" step="0.1" type="number"/>
+</div>
+</div>
+<div class="space-y-4">
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">Allowed Symbols (comma-separated)</label>
+<textarea class="w-full px-3 py-2 border rounded-lg h-20" id="allowed-symbols" placeholder="RELIANCE,TCS,HDFCBANK,INFY,ICICIBANK"></textarea>
+</div>
+<button class="w-full px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700" onclick="saveAISettings()">
                                     💾 Save AI Settings
                                 </button>
-                                <div class="p-3 bg-blue-50 rounded-lg text-sm text-blue-800">
+<div class="p-3 bg-blue-50 rounded-lg text-sm text-blue-800">
                                     💡 AI will analyze these symbols and generate trading signals based on your risk settings.
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </main>
+</div>
+</div>
+</div>
 
-            <!-- Right Sidebar - Watchlist & AI Status -->
-            <aside class="sidebar space-y-6">
-                <!-- Enhanced Watchlist -->
-                <div class="bg-white rounded-2xl shadow-lg p-4 modern-card">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="font-semibold text-gray-900">👁️ Watchlist</h3>
-                        <button onclick="refreshWatchlist()" class="text-xs text-blue-600 hover:text-blue-800">Refresh</button>
-                    </div>
-                    <div class="space-y-2 custom-scrollbar max-h-64 overflow-y-auto" id="watchlist-container">
-                        <div class="text-center text-gray-500 text-sm py-4 skeleton">Loading watchlist...</div>
-                    </div>
-                    <div class="mt-3 pt-3 border-t">
-                        <div class="flex space-x-2">
-                            <input type="text" id="watchlist-symbol" placeholder="Add symbol" class="flex-1 px-2 py-1 border rounded text-xs">
-                            <button onclick="addToWatchlist()" class="px-3 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700">Add</button>
-                        </div>
-                    </div>
-                </div>
+<!-- Broker Integration -->
+<div class="bg-white rounded-2xl shadow-lg p-6 modern-card">
+<h3 class="text-lg font-semibold mb-6">🔐 Broker Integration</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-4">
+<h4 class="text-sm font-semibold text-gray-700">Zerodha API</h4>
+<input class="w-full px-3 py-2 border rounded-lg" id="zerodha-api-key" placeholder="API Key" type="text"/>
+<input class="w-full px-3 py-2 border rounded-lg" id="zerodha-api-secret" placeholder="API Secret" type="text"/>
+<button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" id="zerodha-connect-btn" onclick="connectZerodha()">
+                    🔗 Generate Zerodha Token
+                </button>
+</div>
+<div class="space-y-4">
+<h4 class="text-sm font-semibold text-gray-700">MStock API</h4>
+<input class="w-full px-3 py-2 border rounded-lg" id="mstock-client-id" placeholder="Client ID" type="text"/>
+<input class="w-full px-3 py-2 border rounded-lg" id="mstock-api-key" placeholder="API Key" type="text"/>
+<input class="w-full px-3 py-2 border rounded-lg" id="mstock-api-secret" placeholder="API Secret" type="text"/>
+<button class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700" id="mstock-connect-btn" onclick="connectMStock()">
+                    🔗 Generate MStock Token
+                </button>
+</div>
+</div>
+</div>
+<script>
+    function connectZerodha() {
+        const key = document.getElementById("zerodha-api-key").value;
+        const secret = document.getElementById("zerodha-api-secret").value;
+        if (!key || !secret) {
+            alert("Enter API Key and Secret");
+            return;
+        }
+        window.location.href = `/api/zerodha/login?api_key=${key}`;
+    }
 
-                <!-- Enhanced AI Trading Status -->
-                <div class="bg-white rounded-2xl shadow-lg p-4 modern-card">
-                    <h3 class="font-semibold mb-4 text-gray-900 flex items-center">
+    function connectMStock() {
+        const clientId = document.getElementById("mstock-client-id").value;
+        const key = document.getElementById("mstock-api-key").value;
+        const secret = document.getElementById("mstock-api-secret").value;
+        if (!clientId || !key || !secret) {
+            alert("Enter all fields");
+            return;
+        }
+        window.location.href = `/api/mstock/login?client_id=${clientId}`;
+    }
+    </script>
+</div>
+</main>
+<!-- Right Sidebar - Watchlist & AI Status -->
+<aside class="sidebar space-y-6">
+<!-- Enhanced Watchlist -->
+<div class="bg-white rounded-2xl shadow-lg p-4 modern-card">
+<div class="flex items-center justify-between mb-4">
+<h3 class="font-semibold text-gray-900">👁️ Watchlist</h3>
+<button class="text-xs text-blue-600 hover:text-blue-800" onclick="refreshWatchlist()">Refresh</button>
+</div>
+<div class="space-y-2 custom-scrollbar max-h-64 overflow-y-auto" id="watchlist-container">
+<div class="text-center text-gray-500 text-sm py-4 skeleton">Loading watchlist...</div>
+</div>
+<div class="mt-3 pt-3 border-t">
+<div class="flex space-x-2">
+<input class="flex-1 px-2 py-1 border rounded text-xs" id="watchlist-symbol" placeholder="Add symbol" type="text"/>
+<button class="px-3 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700" onclick="addToWatchlist()">Add</button>
+</div>
+</div>
+</div>
+<!-- Enhanced AI Trading Status -->
+<div class="bg-white rounded-2xl shadow-lg p-4 modern-card">
+<h3 class="font-semibold mb-4 text-gray-900 flex items-center">
                         🤖 AI Status
                         <span class="ml-2 w-2 h-2 rounded-full" id="ai-sidebar-indicator"></span>
-                    </h3>
-                    <div class="space-y-3 text-sm" id="ai-status-details-sidebar">
-                        <div class="p-2 bg-gray-50 rounded">
-                            <div class="font-medium">Status: Inactive</div>
-                            <div class="text-gray-600">Configure settings to start</div>
-                        </div>
-                    </div>
-                    <div class="mt-3 text-xs">
-                        <div class="flex justify-between">
-                            <span>Next Analysis:</span>
-                            <span id="next-analysis-time">--</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Enhanced Live Updates -->
-                <div class="bg-white rounded-2xl shadow-lg p-4 modern-card">
-                    <h3 class="font-semibold mb-4 text-gray-900 flex items-center">
+</h3>
+<div class="space-y-3 text-sm" id="ai-status-details-sidebar">
+<div class="p-2 bg-gray-50 rounded">
+<div class="font-medium">Status: Inactive</div>
+<div class="text-gray-600">Configure settings to start</div>
+</div>
+</div>
+<div class="mt-3 text-xs">
+<div class="flex justify-between">
+<span>Next Analysis:</span>
+<span id="next-analysis-time">--</span>
+</div>
+</div>
+</div>
+<!-- Enhanced Live Updates -->
+<div class="bg-white rounded-2xl shadow-lg p-4 modern-card">
+<h3 class="font-semibold mb-4 text-gray-900 flex items-center">
                         📡 Live Updates
                         <span class="ml-2 w-2 h-2 bg-green-500 rounded-full live-indicator"></span>
-                    </h3>
-                    <div class="space-y-3 text-xs" id="live-updates">
-                        <div class="p-2 bg-green-50 rounded border-l-2 border-green-500">
-                            <div class="font-medium text-green-800">System Online</div>
-                            <div class="text-green-600">v6.0 Enhanced Performance</div>
-                        </div>
-                    </div>
-                </div>
-            </aside>
-        </div>
-    </div>
-
-    <!-- Enhanced Notifications Panel -->
-    <div id="notifications-panel" class="fixed top-20 right-4 w-80 bg-white rounded-lg shadow-xl border z-50 max-h-96 overflow-y-auto hidden">
-        <div class="p-3 border-b">
-            <h3 class="font-semibold">🔔 Notifications</h3>
-        </div>
-        <div class="divide-y" id="notifications-container">
-            <!-- Notifications will be populated here -->
-        </div>
-    </div>
-
-    <script>
+</h3>
+<div class="space-y-3 text-xs" id="live-updates">
+<div class="p-2 bg-green-50 rounded border-l-2 border-green-500">
+<div class="font-medium text-green-800">System Online</div>
+<div class="text-green-600">v6.0 Enhanced Performance</div>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</div>
+<!-- Enhanced Notifications Panel -->
+<div class="fixed top-20 right-4 w-80 bg-white rounded-lg shadow-xl border z-50 max-h-96 overflow-y-auto hidden" id="notifications-panel">
+<div class="p-3 border-b">
+<h3 class="font-semibold">🔔 Notifications</h3>
+</div>
+<div class="divide-y" id="notifications-container">
+<!-- Notifications will be populated here -->
+</div>
+</div>
+<script>
         // Configuration
         const API_BASE_URL = 'https://alfa-ai-backend-tt8m.onrender.com';
         
