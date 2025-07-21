@@ -1088,7 +1088,15 @@
 
     <script>
         // Configuration - UPDATE THIS URL TO YOUR BACKEND
-        const API_BASE_URL = 'http://localhost:10000'; // Change to your deployed backend URL
+        const API_BASE_URL = 'https://alfa-ai-backend-tt8m.onrender.com'; // Your deployed backend URL
+        
+        // Fallback URLs in case primary fails
+        const FALLBACK_URLS = [
+            'https://alfa-ai-backend-tt8m.onrender.com',
+            'http://localhost:10000' // For local development
+        ];
+        
+        let currentApiUrl = API_BASE_URL;
         
         // Global state management
         let appState = {
@@ -1174,39 +1182,57 @@
 
         // Enhanced Backend Connection Management
         async function testBackendConnection() {
-            try {
-                const startTime = Date.now();
-                const response = await fetch(`${API_BASE_URL}/api/health`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    timeout: 10000
-                });
+            let lastError = null;
+            
+            // Try primary URL first, then fallbacks
+            for (const url of [currentApiUrl, ...FALLBACK_URLS]) {
+                if (url === currentApiUrl && lastError) continue; // Skip if already tried
                 
-                const responseTime = Date.now() - startTime;
-                
-                if (response.ok) {
-                    const data = await response.json();
-                    appState.backendConnected = true;
-                    appState.zerodhaConnected = data.zerodha_status === 'configured';
+                try {
+                    const startTime = Date.now();
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
                     
-                    updateBackendStatus(true, responseTime, data);
-                    showNotification('success', '✅ Backend connected successfully!');
-                    addLiveUpdate('Backend Connected', `API response: ${responseTime}ms`);
+                    const response = await fetch(`${url}/api/health`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        signal: controller.signal
+                    });
                     
-                    await loadInitialData();
-                } else {
-                    throw new Error(`HTTP ${response.status}`);
+                    clearTimeout(timeoutId);
+                    const responseTime = Date.now() - startTime;
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        currentApiUrl = url; // Update to working URL
+                        appState.backendConnected = true;
+                        appState.zerodhaConnected = data.zerodha_status === 'configured';
+                        
+                        updateBackendStatus(true, responseTime, data);
+                        showNotification('success', `✅ Backend connected! (${url.includes('localhost') ? 'Local' : 'Cloud'})`);
+                        addLiveUpdate('Backend Connected', `API response: ${responseTime}ms via ${url.includes('localhost') ? 'localhost' : 'cloud'}`);
+                        
+                        await loadInitialData();
+                        return; // Success, exit the loop
+                    } else {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+                } catch (error) {
+                    lastError = error;
+                    logger.error(`Failed to connect to ${url}:`, error);
+                    continue; // Try next URL
                 }
-            } catch (error) {
-                console.error('Backend connection failed:', error);
-                appState.backendConnected = false;
-                updateBackendStatus(false, 0);
-                showNotification('error', '❌ Backend connection failed. Retrying...');
-                addLiveUpdate('Connection Failed', 'Retrying in 10 seconds...');
-                setTimeout(testBackendConnection, 10000);
             }
+            
+            // All URLs failed
+            console.error('All backend connection attempts failed:', lastError);
+            appState.backendConnected = false;
+            updateBackendStatus(false, 0);
+            showNotification('error', '❌ Backend connection failed. All endpoints unreachable.');
+            addLiveUpdate('Connection Failed', 'All backend URLs failed. Retrying in 15 seconds...');
+            setTimeout(testBackendConnection, 15000);
         }
 
         function updateBackendStatus(connected, responseTime = 0, healthData = null) {
@@ -1324,131 +1350,145 @@
             }
         }
 
-        // Enhanced Data Loading Functions
-        async function loadInitialData() {
-            if (!appState.backendConnected) return;
+        // Enhanced API Call Wrapper with Error Handling
+        async function apiCall(endpoint, options = {}) {
+            const maxRetries = 2;
+            let lastError = null;
             
-            try {
-                showNotification('info', '📊 Loading data from backend...');
-                
-                await Promise.all([
-                    loadPaperAccount(),
-                    loadAIStatus(), 
-                    loadTrades(),
-                    loadPositions(),
-                    loadMarketData(),
-                    loadWatchlist(),
-                    loadBrokerStatus()
-                ]);
-                
-                updateElement('last-sync', new Date().toLocaleTimeString());
-                showNotification('success', '📊 All data loaded successfully!');
-                addLiveUpdate('Data Loaded', 'All systems ready for trading');
-                
-            } catch (error) {
-                console.error('Error loading initial data:', error);
-                showNotification('error', '❌ Failed to load some data from backend');
-                addLiveUpdate('Data Load Error', 'Some data may be incomplete');
-            }
-        }
-
-        async function loadPaperAccount() {
-            try {
-                const response = await fetch(`${API_BASE_URL}/api/paper-account`);
-                if (response.ok) {
-                    const data = await response.json();
-                    const account = data.account;
+            for (let attempt = 0; attempt <= maxRetries; attempt++) {
+                try {
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
                     
-                    // Update all account displays
-                    const updates = {
-                        'available-balance': `₹${account.balance.toLocaleString()}`,
-                        'invested-amount': `₹${account.invested.toLocaleString()}`,
-                        'total-pnl': `₹${account.pnl.toLocaleString()}`,
-                        'total-value': `₹${account.total_value.toLocaleString()}`,
-                        'daily-pnl': `₹${account.day_pnl ? account.day_pnl.toLocaleString() : '0'}`,
-                        'portfolio-value': `₹${account.total_value.toLocaleString()}`,
-                        'total-profit': `₹${account.pnl.toLocaleString()}`,
-                        'day-pnl': `₹${account.day_pnl ? account.day_pnl.toLocaleString() : '0'}`,
-                        'paper-balance': `₹${account.balance.toLocaleString()}`,
-                        'win-rate': `${account.win_rate ? account.win_rate.toFixed(1) : '0'}%`
-                    };
-                    
-                    Object.entries(updates).forEach(([id, value]) => {
-                        updateElement(id, value);
-                    });
-                    
-                    // Update percentage displays with colors
-                    const changePercent = account.total_value > 0 ? (account.pnl / account.total_value * 100) : 0;
-                    const changeText = `${account.pnl >= 0 ? '+' : ''}₹${account.pnl.toLocaleString()} (${changePercent.toFixed(2)}%)`;
-                    
-                    updateElement('portfolio-change', changeText);
-                    updateElement('profit-percentage', `${changePercent.toFixed(2)}%`);
-                    updateElement('day-pnl-percent', `${changePercent.toFixed(2)}%`);
-                    
-                    // Apply colors based on P&L
-                    const pnlElements = ['total-pnl', 'total-profit', 'daily-pnl', 'day-pnl'];
-                    pnlElements.forEach(id => {
-                        const element = document.getElementById(id);
-                        if (element) {
-                            element.className = account.pnl >= 0 ? 'font-medium price-up' : 'font-medium price-down';
+                    const url = `${currentApiUrl}${endpoint}`;
+                    const response = await fetch(url, {
+                        ...options,
+                        signal: controller.signal,
+                        headers: {
+                            'Content-Type': 'application/json',
+                            ...options.headers
                         }
                     });
+                    
+                    clearTimeout(timeoutId);
+                    
+                    if (response.ok) {
+                        return response;
+                    } else {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                } catch (error) {
+                    lastError = error;
+                    
+                    if (attempt < maxRetries) {
+                        console.warn(`API call attempt ${attempt + 1} failed, retrying...`, error);
+                        await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second before retry
+                    }
                 }
+            }
+            
+            // All attempts failed
+            if (lastError.name === 'AbortError') {
+                throw new Error('Request timeout - backend may be slow or unreachable');
+            }
+            throw lastError;
+        }
+
+        // Updated data loading functions to use the new API wrapper
+        async function loadPaperAccount() {
+            try {
+                const response = await apiCall('/api/paper-account');
+                const data = await response.json();
+                const account = data.account;
+                
+                // Update all account displays
+                const updates = {
+                    'available-balance': `₹${account.balance.toLocaleString()}`,
+                    'invested-amount': `₹${account.invested.toLocaleString()}`,
+                    'total-pnl': `₹${account.pnl.toLocaleString()}`,
+                    'total-value': `₹${account.total_value.toLocaleString()}`,
+                    'daily-pnl': `₹${account.day_pnl ? account.day_pnl.toLocaleString() : '0'}`,
+                    'portfolio-value': `₹${account.total_value.toLocaleString()}`,
+                    'total-profit': `₹${account.pnl.toLocaleString()}`,
+                    'day-pnl': `₹${account.day_pnl ? account.day_pnl.toLocaleString() : '0'}`,
+                    'paper-balance': `₹${account.balance.toLocaleString()}`,
+                    'win-rate': `${account.win_rate ? account.win_rate.toFixed(1) : '0'}%`
+                };
+                
+                Object.entries(updates).forEach(([id, value]) => {
+                    updateElement(id, value);
+                });
+                
+                // Update percentage displays with colors
+                const changePercent = account.total_value > 0 ? (account.pnl / account.total_value * 100) : 0;
+                const changeText = `${account.pnl >= 0 ? '+' : ''}₹${account.pnl.toLocaleString()} (${changePercent.toFixed(2)}%)`;
+                
+                updateElement('portfolio-change', changeText);
+                updateElement('profit-percentage', `${changePercent.toFixed(2)}%`);
+                updateElement('day-pnl-percent', `${changePercent.toFixed(2)}%`);
+                
+                // Apply colors based on P&L
+                const pnlElements = ['total-pnl', 'total-profit', 'daily-pnl', 'day-pnl'];
+                pnlElements.forEach(id => {
+                    const element = document.getElementById(id);
+                    if (element) {
+                        element.className = account.pnl >= 0 ? 'font-medium price-up' : 'font-medium price-down';
+                    }
+                });
+                
             } catch (error) {
                 console.error('Error loading paper account:', error);
+                showNotification('error', '❌ Failed to load account data');
             }
         }
 
         async function loadAIStatus() {
             try {
-                const response = await fetch(`${API_BASE_URL}/api/ai-trading/settings`);
-                if (response.ok) {
-                    const data = await response.json();
-                    appState.isAITradingActive = data.settings.is_active;
-                    updateAIStatusUI(appState.isAITradingActive);
-                    
-                    // Load AI settings into form
-                    const settingsMap = {
-                        'ai-trading-mode': data.settings.trading_mode,
-                        'ai-max-per-trade': data.settings.max_capital_per_trade,
-                        'max-daily-trades': data.settings.max_daily_trades,
-                        'ai-risk-level': data.settings.risk_level,
-                        'trading-frequency': data.settings.trading_frequency,
-                        'auto-stop-loss': data.settings.auto_stop_loss,
-                        'auto-take-profit': data.settings.auto_take_profit,
-                        'min-signal-confidence': data.settings.min_signal_confidence || 70,
-                        'ai-data-source': data.settings.use_real_data ? 'real' : 'mock',
-                        'allowed-symbols': data.settings.allowed_symbols.join(',')
-                    };
-                    
-                    Object.entries(settingsMap).forEach(([id, value]) => {
-                        updateElement(id, value);
-                    });
-                }
+                const response = await apiCall('/api/ai-trading/settings');
+                const data = await response.json();
+                appState.isAITradingActive = data.settings.is_active;
+                updateAIStatusUI(appState.isAITradingActive);
+                
+                // Load AI settings into form
+                const settingsMap = {
+                    'ai-trading-mode': data.settings.trading_mode,
+                    'ai-max-per-trade': data.settings.max_capital_per_trade,
+                    'max-daily-trades': data.settings.max_daily_trades,
+                    'ai-risk-level': data.settings.risk_level,
+                    'trading-frequency': data.settings.trading_frequency,
+                    'auto-stop-loss': data.settings.auto_stop_loss,
+                    'auto-take-profit': data.settings.auto_take_profit,
+                    'min-signal-confidence': data.settings.min_signal_confidence || 70,
+                    'ai-data-source': data.settings.use_real_data ? 'real' : 'mock',
+                    'allowed-symbols': data.settings.allowed_symbols.join(',')
+                };
+                
+                Object.entries(settingsMap).forEach(([id, value]) => {
+                    updateElement(id, value);
+                });
             } catch (error) {
                 console.error('Error loading AI status:', error);
+                showNotification('warning', '⚠️ Could not load AI settings');
             }
         }
 
         async function loadTrades() {
             try {
                 const filter = document.getElementById('trade-filter')?.value || 'all';
-                const response = await fetch(`${API_BASE_URL}/api/trades?filter=${filter}&limit=50`);
+                const response = await apiCall(`/api/trades?filter=${filter}&limit=50`);
                 
-                if (response.ok) {
-                    const data = await response.json();
-                    updateTradesTable(data.trades);
-                    updateTradesStats(data.trades);
-                    updateElement('trades-count', data.count);
-                    
-                    const aiTrades = data.trades.filter(t => t.strategy === 'AI_AUTO').length;
-                    updateElement('ai-trades-count', aiTrades);
-                    updateElement('ai-trades-today', data.count);
-                    updateElement('ai-trades-counter', `${aiTrades} trades`);
-                    
-                    // Update detailed trade reports table
-                    updateDetailedTradesTable(data.trades);
-                }
+                const data = await response.json();
+                updateTradesTable(data.trades);
+                updateTradesStats(data.trades);
+                updateElement('trades-count', data.count);
+                
+                const aiTrades = data.trades.filter(t => t.strategy === 'AI_AUTO').length;
+                updateElement('ai-trades-count', aiTrades);
+                updateElement('ai-trades-today', data.count);
+                updateElement('ai-trades-counter', `${aiTrades} trades`);
+                
+                // Update detailed trade reports table
+                updateDetailedTradesTable(data.trades);
             } catch (error) {
                 console.error('Error loading trades:', error);
                 showNotification('error', '❌ Failed to load trades');
@@ -1457,33 +1497,31 @@
 
         async function loadPositions() {
             try {
-                const response = await fetch(`${API_BASE_URL}/api/positions`);
-                if (response.ok) {
-                    const data = await response.json();
-                    updatePositionsDisplay(data.positions);
-                    updateElement('positions-count', data.count);
-                    updateElement('active-positions', data.count);
-                    updateElement('position-diversity', `${data.count} symbols`);
-                }
+                const response = await apiCall('/api/positions');
+                const data = await response.json();
+                updatePositionsDisplay(data.positions);
+                updateElement('positions-count', data.count);
+                updateElement('active-positions', data.count);
+                updateElement('position-diversity', `${data.count} symbols`);
             } catch (error) {
                 console.error('Error loading positions:', error);
+                showNotification('warning', '⚠️ Could not load positions');
             }
         }
 
         async function loadMarketData() {
             try {
-                const response = await fetch(`${API_BASE_URL}/api/market-overview`);
-                if (response.ok) {
-                    const data = await response.json();
-                    updateMarketDisplay(data.market_data);
-                    
-                    // Update data source indicators
-                    const sourceText = data.zerodha_active ? 'Zerodha + Yahoo' : 'Yahoo Finance';
-                    updateElement('market-data-source', sourceText);
-                    updateElement('data-source-text', sourceText);
-                }
+                const response = await apiCall('/api/market-overview');
+                const data = await response.json();
+                updateMarketDisplay(data.market_data);
+                
+                // Update data source indicators
+                const sourceText = data.zerodha_active ? 'Zerodha + Yahoo' : 'Yahoo Finance';
+                updateElement('market-data-source', sourceText);
+                updateElement('data-source-text', sourceText);
             } catch (error) {
                 console.error('Error loading market data:', error);
+                showNotification('warning', '⚠️ Using cached market data');
             }
         }
 
@@ -1521,7 +1559,18 @@
                 tbody.innerHTML = `
                     <tr>
                         <td colspan="10" class="border border-gray-300 px-4 py-8 text-center text-gray-500">
-                            No trades yet. Start trading to see live data from backend.
+                            <div class="space-y-2">
+                                <div class="text-lg">📊 No trades yet</div>
+                                <div class="text-sm">Start trading manually or enable AI trading to see live data here.</div>
+                                <div class="mt-4 space-x-2">
+                                    <button onclick="switchTab('trading')" class="px-4 py-2 bg-blue-600 text-white rounded text-sm hover:bg-blue-700">
+                                        Start Manual Trading
+                                    </button>
+                                    <button onclick="startAITrading()" class="px-4 py-2 bg-green-600 text-white rounded text-sm hover:bg-green-700">
+                                        Enable AI Trading
+                                    </button>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                 `;
@@ -1580,7 +1629,18 @@
                 tbody.innerHTML = `
                     <tr>
                         <td colspan="14" class="border border-gray-300 px-4 py-8 text-center text-gray-500">
-                            No trades found. Execute trades to see detailed reports.
+                            <div class="space-y-3">
+                                <div class="text-lg">📈 No trade history yet</div>
+                                <div class="text-sm">Execute manual or AI trades to see detailed reports with entry/exit times, P&L, and performance analytics.</div>
+                                <div class="mt-4 space-x-2">
+                                    <button onclick="switchTab('trading')" class="px-4 py-2 bg-blue-600 text-white rounded text-sm hover:bg-blue-700">
+                                        Start Trading
+                                    </button>
+                                    <button onclick="switchTab('ai-trading')" class="px-4 py-2 bg-purple-600 text-white rounded text-sm hover:bg-purple-700">
+                                        Try AI Trading
+                                    </button>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                 `;
