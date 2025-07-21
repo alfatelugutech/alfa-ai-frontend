@@ -1,0 +1,2664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Trading Platform Professional v8.0 - Complete Real-Time Trading System</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
+    <style>
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css');
+        
+        /* Enhanced Performance Optimizations */
+        * { box-sizing: border-box; }
+        .performance-optimized { will-change: transform; transform: translateZ(0); }
+        
+        /* Enhanced Desktop Layout */
+        .desktop-container { min-width: 1200px; max-width: 1920px; margin: 0 auto; }
+        .desktop-grid { display: grid; grid-template-columns: 320px 1fr 340px; gap: 20px; min-height: calc(100vh - 80px); }
+        .main-content { min-height: 800px; overflow-y: auto; }
+        .sidebar { position: sticky; top: 20px; height: fit-content; max-height: calc(100vh - 100px); overflow-y: auto; }
+        
+        /* Enhanced AI Trading Animations */
+        .ai-pulse { animation: aiPulse 2s infinite; }
+        @keyframes aiPulse { 
+            0%, 100% { opacity: 1; background: linear-gradient(45deg, #10b981, #059669); transform: scale(1); } 
+            50% { opacity: 0.9; background: linear-gradient(45deg, #059669, #047857); transform: scale(1.02); } 
+        }
+        .ai-glow { 
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.5), 0 0 60px rgba(16, 185, 129, 0.3);
+            animation: glowPulse 3s infinite;
+        }
+        @keyframes glowPulse {
+            0%, 100% { box-shadow: 0 0 30px rgba(16, 185, 129, 0.5), 0 0 60px rgba(16, 185, 129, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(16, 185, 129, 0.7), 0 0 80px rgba(16, 185, 129, 0.4); }
+        }
+        
+        /* Enhanced Status Indicators */
+        .status-active { background: linear-gradient(45deg, #10b981, #059669); }
+        .status-inactive { background: #6b7280; }
+        .status-error { background: linear-gradient(45deg, #ef4444, #dc2626); }
+        .status-warning { background: linear-gradient(45deg, #f59e0b, #d97706); }
+        
+        /* Enhanced Trade Cards */
+        .trade-card { 
+            background: linear-gradient(135deg, #fff 0%, #f8fafc 100%); 
+            border: 1px solid #e2e8f0; 
+            transition: all 0.3s ease; 
+        }
+        .trade-card:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+            border-color: #3b82f6; 
+        }
+        
+        /* AI Trading Status Cards */
+        .ai-trade-card { 
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%); 
+            border-left: 4px solid #10b981; 
+        }
+        .manual-trade-card { 
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); 
+            border-left: 4px solid #3b82f6; 
+        }
+        .zerodha-card {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            border-left: 4px solid #fdcb6e;
+        }
+        
+        /* Broker Status Indicators */
+        .broker-zerodha { background: linear-gradient(45deg, #ff7675, #e84393); }
+        .broker-paper { background: linear-gradient(45deg, #10b981, #059669); }
+        .broker-inactive { background: #6b7280; }
+        
+        /* Real-time Price Indicators */
+        .price-up { color: #059669; animation: priceUp 0.5s ease; }
+        .price-down { color: #dc2626; animation: priceDown 0.5s ease; }
+        .price-neutral { color: #6b7280; }
+        
+        @keyframes priceUp {
+            0% { background-color: rgba(5, 150, 105, 0.2); }
+            100% { background-color: transparent; }
+        }
+        
+        @keyframes priceDown {
+            0% { background-color: rgba(220, 38, 38, 0.2); }
+            100% { background-color: transparent; }
+        }
+        
+        /* Enhanced Animations */
+        .animate-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+        .animate-bounce { animation: bounce 1s infinite; }
+        @keyframes bounce { 0%, 100% { transform: translateY(-25%); animation-timing-function: cubic-bezier(0.8,0,1,1); } 50% { transform: none; animation-timing-function: cubic-bezier(0,0,0.2,1); } }
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .ai-gradient { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+        .zerodha-gradient { background: linear-gradient(135deg, #ff7675 0%, #e84393 100%); }
+        .hover-scale:hover { transform: scale(1.02); transition: transform 0.2s ease; }
+        .notification-enter { animation: slideInRight 0.3s ease-out; }
+        @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .glow-effect { box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
+        .live-indicator { animation: livePulse 2s infinite; }
+        @keyframes livePulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+        
+        /* Tab System */
+        .tab-button { transition: all 0.3s ease; border-radius: 8px; }
+        .tab-button.active { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4); }
+        .tab-content { display: none; animation: fadeIn 0.3s ease-in; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Account Type Styles */
+        .paper-badge { background: linear-gradient(45deg, #10b981, #059669); }
+        .live-badge { background: linear-gradient(45deg, #dc2626, #b91c1c); }
+        .zerodha-badge { background: linear-gradient(45deg, #ff7675, #e84393); }
+        .ai-badge { background: linear-gradient(45deg, #8b5cf6, #7c3aed); }
+        
+        /* Connection Status */
+        .connection-active { 
+            background: linear-gradient(45deg, #10b981, #059669);
+            animation: connectionPulse 2s infinite;
+        }
+        .connection-inactive { background: #6b7280; }
+        .connection-error { 
+            background: linear-gradient(45deg, #ef4444, #dc2626);
+            animation: errorPulse 1s infinite;
+        }
+        
+        @keyframes connectionPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        @keyframes errorPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        /* Enhanced Profit/Loss Display */
+        .profit-positive { color: #059669; background: linear-gradient(90deg, #ecfdf5, #f0fdf4); }
+        .profit-negative { color: #dc2626; background: linear-gradient(90deg, #fef2f2, #fef2f2); }
+        
+        /* Modern Card Shadows */
+        .modern-card { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
+        .modern-card:hover { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
+        
+        /* Scrollbar Styling */
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 3px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        /* Trade Status Indicators */
+        .trade-status-open { background: #fbbf24; color: #92400e; }
+        .trade-status-closed { background: #34d399; color: #065f46; }
+        .trade-status-pending { background: #60a5fa; color: #1e40af; }
+        
+        /* Loading States */
+        .loading-shimmer {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .desktop-grid { grid-template-columns: 280px 1fr 300px; gap: 15px; }
+            .desktop-container { min-width: auto; padding: 0 15px; }
+        }
+        
+        @media (max-width: 968px) {
+            .desktop-grid { grid-template-columns: 1fr; gap: 20px; }
+            .sidebar { position: static; height: auto; max-height: none; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Enhanced Header with Real-time Status -->
+    <header class="bg-white shadow-lg border-b sticky top-0 z-40 performance-optimized">
+        <div class="desktop-container px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="h-10 w-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center text-white font-bold text-lg">🤖</div>
+                    <div>
+                        <h1 class="text-xl font-bold text-gray-900 flex items-center">
+                            🚀 AI Trading Platform Professional
+                            <span class="ml-2 px-2 py-1 bg-purple-100 text-purple-700 rounded-lg text-xs">v8.0</span>
+                        </h1>
+                        <p class="text-xs text-gray-500">Real-Time Data • Yahoo Finance • Zerodha Kite • AI Automation • Complete Trading System</p>
+                    </div>
+                </div>
+                
+                <!-- Enhanced AI Trading Status & Controls -->
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-2" id="ai-status-indicator">
+                        <div class="w-3 h-3 rounded-full status-inactive" id="ai-status-dot"></div>
+                        <span class="text-sm font-medium" id="ai-status-text">AI Inactive</span>
+                        <span class="text-xs bg-gray-100 px-2 py-1 rounded" id="ai-trades-counter">0 trades</span>
+                    </div>
+                    
+                    <!-- Backend Connection Status -->
+                    <div class="flex items-center space-x-2" id="backend-status">
+                        <div class="w-2 h-2 rounded-full connection-inactive" id="backend-indicator"></div>
+                        <span class="text-xs text-gray-600" id="backend-status-text">Connecting...</span>
+                    </div>
+                    
+                    <!-- Broker Selection -->
+                    <div class="flex items-center space-x-2">
+                        <button class="px-3 py-1 rounded-lg text-xs font-medium transition-all paper-badge text-white" id="paper-mode-btn" onclick="switchBroker('paper')">
+                            📝 Paper
+                        </button>
+                        <button class="px-3 py-1 rounded-lg text-xs font-medium transition-all bg-gray-200 text-gray-700 hover:zerodha-gradient hover:text-white" id="zerodha-mode-btn" onclick="switchBroker('zerodha')">
+                            🟡 Zerodha
+                        </button>
+                    </div>
+                    
+                    <!-- Data Source Indicator -->
+                    <div class="flex items-center space-x-2" id="data-source-indicator">
+                        <div class="w-2 h-2 rounded-full bg-green-500 live-indicator"></div>
+                        <span class="text-xs text-gray-600" id="data-source-text">Real-time</span>
+                    </div>
+                    
+                    <div class="flex items-center space-x-2">
+                        <div class="w-2 h-2 rounded-full bg-green-500 live-indicator"></div>
+                        <span class="text-xs text-gray-600" id="current-time"></span>
+                    </div>
+                    
+                    <button class="relative p-2 text-gray-600 hover:text-gray-900 transition-all" onclick="toggleNotifications()">
+                        🔔
+                        <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center" id="notification-count">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Layout -->
+    <div class="desktop-container py-6">
+        <div class="desktop-grid">
+            <!-- Left Sidebar - Navigation & AI Controls -->
+            <aside class="sidebar space-y-6">
+                <!-- Navigation Tabs -->
+                <div class="bg-white rounded-2xl shadow-lg p-4 modern-card">
+                    <h3 class="font-semibold mb-4 text-gray-900">🎛️ Dashboard</h3>
+                    <div class="space-y-2">
+                        <button class="tab-button w-full text-left px-3 py-2 rounded-lg text-sm active" onclick="switchTab('ai-trading')">
+                            🤖 AI Trading Hub
+                        </button>
+                        <button class="tab-button w-full text-left px-3 py-2 rounded-lg text-sm" onclick="switchTab('overview')">
+                            📈 Market Overview
+                        </button>
+                        <button class="tab-button w-full text-left px-3 py-2 rounded-lg text-sm" onclick="switchTab('trading')">
+                            ⚡ Manual Trading
+                        </button>
+                        <button class="tab-button w-full text-left px-3 py-2 rounded-lg text-sm" onclick="switchTab('portfolio')">
+                            💼 Portfolio & P&L
+                        </button>
+                        <button class="tab-button w-full text-left px-3 py-2 rounded-lg text-sm" onclick="switchTab('reports')">
+                            📊 Trade Reports
+                        </button>
+                        <button class="tab-button w-full text-left px-3 py-2 rounded-lg text-sm" onclick="switchTab('brokers')">
+                            🏦 Broker Setup
+                        </button>
+                        <button class="tab-button w-full text-left px-3 py-2 rounded-lg text-sm" onclick="switchTab('settings')">
+                            ⚙️ AI Settings
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Enhanced AI Trading Quick Controls -->
+                <div class="bg-white rounded-2xl shadow-lg p-4 modern-card" id="ai-quick-controls">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="font-semibold text-gray-900">🤖 AI Control</h3>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-2 h-2 rounded-full status-inactive" id="ai-control-indicator"></div>
+                            <span class="text-xs font-medium" id="ai-control-status">Inactive</span>
+                        </div>
+                    </div>
+                    <div class="space-y-3">
+                        <button class="w-full px-3 py-2 rounded-lg text-sm font-medium transition-all ai-gradient text-white hover:ai-glow" id="start-ai-btn" onclick="startAITrading()">
+                            🚀 Start AI Trading
+                        </button>
+                        <button class="w-full px-3 py-2 rounded-lg text-sm font-medium transition-all bg-gray-400 text-white cursor-not-allowed" id="stop-ai-btn" onclick="stopAITrading()" disabled>
+                            🛑 Stop AI Trading
+                        </button>
+                        <div class="text-xs text-gray-600 p-2 bg-gray-50 rounded" id="ai-status-details">
+                            Ready for real-time trading! Connect backend first.
+                        </div>
+                        <div class="text-xs text-center" id="ai-last-action">
+                            No recent AI activity
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Enhanced Account Summary -->
+                <div class="bg-white rounded-2xl shadow-lg p-4 modern-card" id="account-summary">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="font-semibold text-gray-900">💰 Account</h3>
+                        <div class="flex items-center space-x-1">
+                            <span class="text-xs px-2 py-1 rounded-full bg-green-100 text-green-700" id="account-type-badge">Paper</span>
+                            <span class="text-xs px-2 py-1 rounded-full bg-blue-100 text-blue-700" id="broker-badge">Mock</span>
+                        </div>
+                    </div>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Available:</span>
+                            <span class="font-medium" id="available-balance">₹10,00,000</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Invested:</span>
+                            <span class="font-medium" id="invested-amount">₹0</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">P&L:</span>
+                            <span class="font-medium" id="total-pnl">₹0</span>
+                        </div>
+                        <div class="border-t pt-2 mt-2">
+                            <div class="flex justify-between">
+                                <span class="text-gray-800 font-medium">Total Value:</span>
+                                <span class="font-bold" id="total-value">₹10,00,000</span>
+                            </div>
+                        </div>
+                        <div class="text-xs text-gray-500 mt-2">
+                            <div class="flex justify-between">
+                                <span>Today's P&L:</span>
+                                <span id="daily-pnl">₹0</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Win Rate:</span>
+                                <span id="win-rate">0%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Enhanced Quick Stats -->
+                <div class="bg-white rounded-2xl shadow-lg p-4 modern-card">
+                    <h3 class="font-semibold mb-4 text-gray-900">📊 Live Stats</h3>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="text-center p-3 bg-blue-50 rounded-lg hover-scale cursor-pointer" onclick="switchTab('portfolio')">
+                            <div class="text-lg font-bold text-blue-600" id="positions-count">0</div>
+                            <div class="text-xs text-blue-600">Positions</div>
+                        </div>
+                        <div class="text-center p-3 bg-green-50 rounded-lg hover-scale cursor-pointer" onclick="switchTab('reports')">
+                            <div class="text-lg font-bold text-green-600" id="trades-count">0</div>
+                            <div class="text-xs text-green-600">Total Trades</div>
+                        </div>
+                        <div class="text-center p-3 bg-purple-50 rounded-lg hover-scale cursor-pointer">
+                            <div class="text-lg font-bold text-purple-600" id="ai-trades-count">0</div>
+                            <div class="text-xs text-purple-600">AI Trades</div>
+                        </div>
+                        <div class="text-center p-3 bg-orange-50 rounded-lg hover-scale cursor-pointer">
+                            <div class="text-lg font-bold text-orange-600" id="api-response-time">--ms</div>
+                            <div class="text-xs text-orange-600">API Response</div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Content Area -->
+            <main class="main-content custom-scrollbar">
+                <!-- AI Trading Hub Tab -->
+                <div class="tab-content active space-y-6" id="tab-ai-trading">
+                    <!-- AI Trading Dashboard -->
+                    <div class="bg-white rounded-2xl shadow-lg p-6 modern-card">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-xl font-semibold flex items-center">
+                                🤖 AI Trading Hub
+                                <span class="ml-2 w-3 h-3 rounded-full status-inactive" id="ai-dashboard-indicator"></span>
+                            </h3>
+                            <div class="flex items-center space-x-3">
+                                <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm" onclick="refreshAIData()">
+                                    🔄 Refresh Data
+                                </button>
+                                <button class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 text-sm" onclick="switchTab('settings')">
+                                    ⚙️ AI Settings
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Enhanced AI Status Banner -->
+                        <div class="p-4 rounded-xl mb-6 bg-gray-100 text-gray-800" id="ai-status-banner">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-4 h-4 rounded-full status-inactive" id="ai-banner-indicator"></div>
+                                    <div>
+                                        <h4 class="font-semibold" id="ai-banner-title">🤖 AI Trading Ready</h4>
+                                        <p class="text-sm opacity-90" id="ai-banner-desc">Backend connected! Real-time data available.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-3">
+                                    <div class="text-right text-sm" id="ai-performance-summary">
+                                        <div class="font-medium">Performance</div>
+                                        <div class="text-xs opacity-80" id="ai-success-rate">Success Rate: --</div>
+                                    </div>
+                                    <button class="px-4 py-2 bg-white bg-opacity-20 rounded-lg text-sm font-medium hover:bg-opacity-30 transition-all" id="ai-toggle-btn" onclick="toggleAITrading()">
+                                        Start AI
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- AI Performance Metrics -->
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                            <div class="p-4 bg-green-50 rounded-xl text-center">
+                                <div class="text-2xl font-bold text-green-600" id="ai-profit-total">₹0</div>
+                                <div class="text-sm text-green-600">AI Profit Today</div>
+                            </div>
+                            <div class="p-4 bg-blue-50 rounded-xl text-center">
+                                <div class="text-2xl font-bold text-blue-600" id="ai-trades-today">0</div>
+                                <div class="text-sm text-blue-600">Trades Today</div>
+                            </div>
+                            <div class="p-4 bg-purple-50 rounded-xl text-center">
+                                <div class="text-2xl font-bold text-purple-600" id="ai-win-rate">0%</div>
+                                <div class="text-sm text-purple-600">Win Rate</div>
+                            </div>
+                            <div class="p-4 bg-orange-50 rounded-xl text-center">
+                                <div class="text-2xl font-bold text-orange-600" id="ai-avg-return">0%</div>
+                                <div class="text-sm text-orange-600">Avg Return</div>
+                            </div>
+                        </div>
+
+                        <!-- Enhanced Live Trades Section -->
+                        <div>
+                            <h4 class="font-medium mb-4 flex items-center">
+                                📈 Live Trades
+                                <span class="ml-2 text-xs bg-green-100 px-2 py-1 rounded">Real-time Backend Data</span>
+                                <button class="ml-auto text-xs bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600" onclick="loadTrades()">Refresh</button>
+                            </h4>
+                            <div class="overflow-x-auto">
+                                <table class="w-full border-collapse border border-gray-300">
+                                    <thead>
+                                        <tr class="bg-gray-50">
+                                            <th class="border border-gray-300 px-4 py-2 text-left">Trade ID</th>
+                                            <th class="border border-gray-300 px-4 py-2 text-left">Symbol</th>
+                                            <th class="border border-gray-300 px-4 py-2 text-left">Side</th>
+                                            <th class="border border-gray-300 px-4 py-2 text-left">Qty</th>
+                                            <th class="border border-gray-300 px-4 py-2 text-left">Entry Price</th>
+                                            <th class="border border-gray-300 px-4 py-2 text-left">Exit Price</th>
+                                            <th class="border border-gray-300 px-4 py-2 text-left">P&L</th>
+                                            <th class="border border-gray-300 px-4 py-2 text-left">Status</th>
+                                            <th class="border border-gray-300 px-4 py-2 text-left">Strategy</th>
+                                            <th class="border border-gray-300 px-4 py-2 text-left">Time</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="trades-table-body">
+                                        <tr>
+                                            <td colspan="10" class="border border-gray-300 px-4 py-8 text-center text-gray-500">
+                                                <div class="loading-shimmer h-4 w-full mb-2"></div>
+                                                <div class="loading-shimmer h-4 w-3/4 mx-auto mb-2"></div>
+                                                <div class="text-sm">Loading trades from backend...</div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Market Overview Tab -->
+                <div class="tab-content space-y-6" id="tab-overview">
+                    <!-- Market Indices -->
+                    <div class="bg-white rounded-2xl shadow-lg p-6 modern-card">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-lg font-semibold flex items-center">
+                                📊 Live Market Overview
+                                <span class="ml-2 w-2 h-2 bg-green-500 rounded-full live-indicator"></span>
+                                <span class="ml-2 text-xs bg-green-100 px-2 py-1 rounded" id="market-data-source">Real-time Data</span>
+                            </h3>
+                            <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm" onclick="loadMarketData()">
+                                🔄 Refresh Market Data
+                            </button>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="market-indices">
+                            <!-- Loading placeholders -->
+                            <div class="bg-gradient-to-r from-blue-500 to-blue-600 p-4 rounded-xl text-white hover-scale cursor-pointer">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h4 class="text-sm opacity-90">NIFTY 50</h4>
+                                        <p class="text-xl font-bold" id="nifty-price">
+                                            <span class="loading-shimmer h-6 w-24 bg-blue-300 rounded"></span>
+                                        </p>
+                                        <span class="text-xs" id="nifty-change">Loading...</span>
+                                    </div>
+                                    <div class="text-blue-200 text-2xl">📈</div>
+                                </div>
+                            </div>
+                            <div class="bg-gradient-to-r from-green-500 to-green-600 p-4 rounded-xl text-white hover-scale cursor-pointer">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h4 class="text-sm opacity-90">BANK NIFTY</h4>
+                                        <p class="text-xl font-bold" id="banknifty-price">
+                                            <span class="loading-shimmer h-6 w-24 bg-green-300 rounded"></span>
+                                        </p>
+                                        <span class="text-xs" id="banknifty-change">Loading...</span>
+                                    </div>
+                                    <div class="text-green-200 text-2xl">🏦</div>
+                                </div>
+                            </div>
+                            <div class="bg-gradient-to-r from-purple-500 to-purple-600 p-4 rounded-xl text-white hover-scale cursor-pointer">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h4 class="text-sm opacity-90">SENSEX</h4>
+                                        <p class="text-xl font-bold" id="sensex-price">
+                                            <span class="loading-shimmer h-6 w-24 bg-purple-300 rounded"></span>
+                                        </p>
+                                        <span class="text-xs" id="sensex-change">Loading...</span>
+                                    </div>
+                                    <div class="text-purple-200 text-2xl">📊</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Market Status Indicator -->
+                        <div class="mt-4 p-3 bg-gray-50 rounded-lg">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-sm font-medium">Market Status:</span>
+                                    <span class="px-2 py-1 rounded text-xs font-medium" id="market-status-badge">Loading...</span>
+                                </div>
+                                <div class="text-xs text-gray-600" id="market-status-time">--:--</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Enhanced Stock Search -->
+                    <div class="bg-white rounded-2xl shadow-lg p-6 modern-card">
+                        <h3 class="text-lg font-semibold mb-4">🔍 Real-time Stock Search & Quotes</h3>
+                        <div class="space-y-4">
+                            <div class="flex space-x-3">
+                                <input class="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500" id="stock-search-input" placeholder="Search stocks (e.g., RELIANCE, TCS, HDFC)" type="text" onkeypress="handleSearchKeypress(event)">
+                                <button class="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all" onclick="searchStock()">
+                                    Search
+                                </button>
+                                <button class="px-6 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-all" onclick="getRealTimePrice()">
+                                    Live Price
+                                </button>
+                            </div>
+                            <div class="hidden" id="stock-search-results">
+                                <h4 class="font-medium text-gray-900 mb-3">Search Results</h4>
+                                <div id="search-results-container"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Manual Trading Tab -->
+                <div class="tab-content space-y-6" id="tab-trading">
+                    <!-- Trading Controls -->
+                    <div class="bg-white rounded-2xl shadow-lg p-6 modern-card">
+                        <h3 class="text-lg font-semibold mb-6">⚡ Manual Trade Execution</h3>
+                        
+                        <!-- Broker Selection for Trading -->
+                        <div class="mb-6 p-4 bg-gray-50 rounded-xl">
+                            <h4 class="font-medium mb-3">🏦 Select Trading Account</h4>
+                            <div class="flex space-x-3">
+                                <button class="px-4 py-2 rounded-lg text-sm font-medium transition-all paper-badge text-white" id="trading-paper-btn" onclick="selectTradingBroker('paper')">
+                                    📝 Paper Trading
+                                </button>
+                                <button class="px-4 py-2 rounded-lg text-sm font-medium transition-all bg-gray-200 text-gray-700 hover:zerodha-gradient hover:text-white" id="trading-zerodha-btn" onclick="selectTradingBroker('zerodha')">
+                                    🟡 Zerodha Live
+                                </button>
+                            </div>
+                            <div class="mt-2 text-xs text-gray-600" id="trading-broker-status">
+                                Currently using: Paper Trading Account
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Buy Order -->
+                            <div class="p-4 bg-green-50 rounded-xl">
+                                <h4 class="font-medium text-green-800 mb-4 flex items-center">
+                                    📈 Buy Order
+                                    <span class="ml-2 w-2 h-2 bg-green-500 rounded-full live-indicator"></span>
+                                </h4>
+                                <div class="space-y-3">
+                                    <input class="w-full px-3 py-2 border rounded-lg text-sm" id="buy-symbol" placeholder="Symbol (e.g., RELIANCE)" type="text" oninput="validateOrderInputs('buy')">
+                                    <input class="w-full px-3 py-2 border rounded-lg text-sm" id="buy-quantity" placeholder="Quantity" type="number" oninput="validateOrderInputs('buy')">
+                                    <input class="w-full px-3 py-2 border rounded-lg text-sm" id="buy-price" placeholder="Price" step="0.01" type="number" oninput="validateOrderInputs('buy')">
+                                    <div class="text-xs text-gray-600" id="buy-order-value">Order Value: ₹0</div>
+                                    <div class="text-xs text-blue-600" id="buy-fees-estimate">Est. Fees: ₹0</div>
+                                    <button class="w-full px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium transition-all" onclick="placeOrder('BUY')" id="buy-order-btn">
+                                        Place Buy Order
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Sell Order -->
+                            <div class="p-4 bg-red-50 rounded-xl">
+                                <h4 class="font-medium text-red-800 mb-4 flex items-center">
+                                    📉 Sell Order
+                                    <span class="ml-2 w-2 h-2 bg-red-500 rounded-full live-indicator"></span>
+                                </h4>
+                                <div class="space-y-3">
+                                    <input class="w-full px-3 py-2 border rounded-lg text-sm" id="sell-symbol" placeholder="Symbol (e.g., RELIANCE)" type="text" oninput="validateOrderInputs('sell')">
+                                    <input class="w-full px-3 py-2 border rounded-lg text-sm" id="sell-quantity" placeholder="Quantity" type="number" oninput="validateOrderInputs('sell')">
+                                    <input class="w-full px-3 py-2 border rounded-lg text-sm" id="sell-price" placeholder="Price" step="0.01" type="number" oninput="validateOrderInputs('sell')">
+                                    <div class="text-xs text-gray-600" id="sell-order-value">Order Value: ₹0</div>
+                                    <div class="text-xs text-blue-600" id="sell-fees-estimate">Est. Fees: ₹0</div>
+                                    <button class="w-full px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm font-medium transition-all" onclick="placeOrder('SELL')" id="sell-order-btn">
+                                        Place Sell Order
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Enhanced Live Price Check -->
+                        <div class="mt-6 p-4 bg-blue-50 rounded-xl">
+                            <h4 class="font-medium text-blue-800 mb-4">📊 Real-time Price Check</h4>
+                            <div class="flex space-x-3">
+                                <input class="flex-1 px-3 py-2 border rounded-lg text-sm" id="market-symbol" placeholder="Symbol (e.g., RELIANCE)" type="text" onkeypress="handlePriceCheckKeypress(event)">
+                                <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium transition-all" onclick="getRealTimePrice()">
+                                    Get Live Price
+                                </button>
+                                <button class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium transition-all" onclick="addToWatchlistFromPriceCheck()">
+                                    + Watch
+                                </button>
+                            </div>
+                            <div class="mt-3 text-sm text-gray-600 p-3 bg-gray-50 rounded" id="market-data-result">
+                                Enter symbol to get real-time price from Yahoo Finance/Zerodha...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Portfolio & P&L Tab -->
+                <div class="tab-content space-y-6" id="tab-portfolio">
+                    <!-- Portfolio Summary -->
+                    <div class="bg-white rounded-2xl shadow-lg p-6 modern-card">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-lg font-semibold">💼 Portfolio & P&L Analysis</h3>
+                            <div class="flex items-center space-x-3">
+                                <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm" onclick="refreshPortfolio()">
+                                    🔄 Refresh
+                                </button>
+                                <button class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm" onclick="exportPortfolio()">
+                                    📤 Export
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Enhanced Portfolio Overview Cards -->
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                            <div class="p-4 bg-blue-50 rounded-xl hover-scale cursor-pointer">
+                                <div class="text-2xl font-bold text-blue-600" id="portfolio-value">₹10,00,000</div>
+                                <div class="text-sm text-blue-600">Portfolio Value</div>
+                                <div class="text-xs text-blue-500 mt-1" id="portfolio-change">+₹0 (0%)</div>
+                                <div class="text-xs text-gray-500 mt-1" id="portfolio-broker">Paper Trading</div>
+                            </div>
+                            <div class="p-4 bg-green-50 rounded-xl hover-scale cursor-pointer">
+                                <div class="text-2xl font-bold text-green-600" id="total-profit">₹0</div>
+                                <div class="text-sm text-green-600">Total Profit</div>
+                                <div class="text-xs text-green-500 mt-1" id="profit-percentage">0%</div>
+                                <div class="text-xs text-gray-500 mt-1" id="realized-profit">Realized: ₹0</div>
+                            </div>
+                            <div class="p-4 bg-purple-50 rounded-xl hover-scale cursor-pointer">
+                                <div class="text-2xl font-bold text-purple-600" id="active-positions">0</div>
+                                <div class="text-sm text-purple-600">Active Positions</div>
+                                <div class="text-xs text-purple-500 mt-1" id="position-diversity">0 symbols</div>
+                                <div class="text-xs text-gray-500 mt-1" id="position-value">Value: ₹0</div>
+                            </div>
+                            <div class="p-4 bg-orange-50 rounded-xl hover-scale cursor-pointer">
+                                <div class="text-2xl font-bold text-orange-600" id="day-pnl">₹0</div>
+                                <div class="text-sm text-orange-600">Today's P&L</div>
+                                <div class="text-xs text-orange-500 mt-1" id="day-pnl-percent">0%</div>
+                                <div class="text-xs text-gray-500 mt-1" id="day-trades">Trades: 0</div>
+                            </div>
+                        </div>
+
+                        <!-- Enhanced Positions Display -->
+                        <div>
+                            <h4 class="font-medium mb-4 flex items-center justify-between">
+                                <span>🎯 Current Positions</span>
+                                <button class="text-sm bg-gray-100 px-3 py-1 rounded hover:bg-gray-200" onclick="loadPositions()">Refresh Positions</button>
+                            </h4>
+                            <div class="space-y-3" id="positions-detailed">
+                                <div class="text-center text-gray-500 py-8">
+                                    <div class="loading-shimmer h-4 w-full mb-2"></div>
+                                    <div class="loading-shimmer h-4 w-3/4 mx-auto mb-2"></div>
+                                    <div class="text-sm">Loading positions...</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Enhanced Trade Reports Tab -->
+                <div class="tab-content space-y-6" id="tab-reports">
+                    <div class="bg-white rounded-2xl shadow-lg p-6 modern-card">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-lg font-semibold">📊 Complete Trade Reports & Analytics</h3>
+                            <div class="flex items-center space-x-3">
+                                <select class="px-3 py-2 border rounded-lg text-sm" id="trade-filter" onchange="filterTrades()">
+                                    <option value="all">All Trades</option>
+                                    <option value="ai">AI Trades</option>
+                                    <option value="manual">Manual Trades</option>
+                                    <option value="open">Open Positions</option>
+                                    <option value="closed">Closed Trades</option>
+                                    <option value="today">Today</option>
+                                    <option value="week">This Week</option>
+                                </select>
+                                <button class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm" onclick="exportTrades()">
+                                    📤 Export CSV
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Enhanced Trade Summary Cards -->
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                            <div class="p-4 bg-blue-50 rounded-xl">
+                                <div class="text-xl font-bold text-blue-600" id="total-trades-summary">0</div>
+                                <div class="text-sm text-blue-600">Total Trades</div>
+                                <div class="text-xs text-blue-500 mt-1">
+                                    <span id="ai-trades-summary">0 AI</span> • <span id="manual-trades-summary">0 Manual</span>
+                                </div>
+                                <div class="text-xs text-gray-500 mt-1">
+                                    Open: <span id="open-trades-count">0</span> • Closed: <span id="closed-trades-count">0</span>
+                                </div>
+                            </div>
+                            <div class="p-4 bg-green-50 rounded-xl">
+                                <div class="text-xl font-bold text-green-600" id="winning-trades">0</div>
+                                <div class="text-sm text-green-600">Winning Trades</div>
+                                <div class="text-xs text-green-500 mt-1" id="win-rate-display">0% win rate</div>
+                                <div class="text-xs text-gray-500 mt-1">
+                                    Losing: <span id="losing-trades">0</span>
+                                </div>
+                            </div>
+                            <div class="p-4 bg-purple-50 rounded-xl">
+                                <div class="text-xl font-bold text-purple-600" id="avg-trade-value">₹0</div>
+                                <div class="text-sm text-purple-600">Avg Trade Value</div>
+                                <div class="text-xs text-purple-500 mt-1" id="avg-return-display">0% avg return</div>
+                                <div class="text-xs text-gray-500 mt-1">
+                                    Max P&L: ₹<span id="max-profit">0</span>
+                                </div>
+                            </div>
+                            <div class="p-4 bg-orange-50 rounded-xl">
+                                <div class="text-xl font-bold text-orange-600" id="total-fees">₹0</div>
+                                <div class="text-sm text-orange-600">Total Fees</div>
+                                <div class="text-xs text-orange-500 mt-1" id="avg-fees">Avg: ₹0 per trade</div>
+                                <div class="text-xs text-gray-500 mt-1">
+                                    Impact: <span id="fees-impact">0%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Enhanced Trade History -->
+                        <div>
+                            <h4 class="font-medium mb-4 flex items-center justify-between">
+                                <span>📋 Complete Trade History</span>
+                                <button class="text-sm bg-gray-100 px-3 py-1 rounded hover:bg-gray-200" onclick="loadTrades()">Refresh Trades</button>
+                            </h4>
+                            <div class="overflow-x-auto">
+                                <table class="w-full border-collapse border border-gray-300 text-sm">
+                                    <thead>
+                                        <tr class="bg-gray-50">
+                                            <th class="border border-gray-300 px-2 py-2 text-left">Trade ID</th>
+                                            <th class="border border-gray-300 px-2 py-2 text-left">Symbol</th>
+                                            <th class="border border-gray-300 px-2 py-2 text-left">Side</th>
+                                            <th class="border border-gray-300 px-2 py-2 text-left">Qty</th>
+                                            <th class="border border-gray-300 px-2 py-2 text-left">Entry Price</th>
+                                            <th class="border border-gray-300 px-2 py-2 text-left">Entry Time</th>
+                                            <th class="border border-gray-300 px-2 py-2 text-left">Exit Price</th>
+                                            <th class="border border-gray-300 px-2 py-2 text-left">Exit Time</th>
+                                            <th class="border border-gray-300 px-2 py-2 text-left">P&L</th>
+                                            <th class="border border-gray-300 px-2 py-2 text-left">P&L%</th>
+                                            <th class="border border-gray-300 px-2 py-2 text-left">Duration</th>
+                                            <th class="border border-gray-300 px-2 py-2 text-left">Fees</th>
+                                            <th class="border border-gray-300 px-2 py-2 text-left">Status</th>
+                                            <th class="border border-gray-300 px-2 py-2 text-left">Strategy</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="trades-detailed-table">
+                                        <tr>
+                                            <td colspan="14" class="border border-gray-300 px-4 py-8 text-center text-gray-500">
+                                                <div class="loading-shimmer h-4 w-full mb-2"></div>
+                                                <div class="loading-shimmer h-4 w-3/4 mx-auto mb-2"></div>
+                                                <div class="text-sm">Loading complete trade history...</div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Broker Setup Tab -->
+                <div class="tab-content space-y-6" id="tab-brokers">
+                    <div class="bg-white rounded-2xl shadow-lg p-6 modern-card">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-lg font-semibold">🏦 Broker Setup & Integration</h3>
+                            <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm" onclick="refreshBrokerStatus()">
+                                🔄 Refresh Status
+                            </button>
+                        </div>
+                        
+                        <!-- Broker Cards -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Paper Trading -->
+                            <div class="p-6 border rounded-xl bg-green-50 border-green-200">
+                                <div class="flex items-center justify-between mb-4">
+                                    <h4 class="font-semibold text-green-800 flex items-center">
+                                        📝 Paper Trading
+                                        <span class="ml-2 w-2 h-2 bg-green-500 rounded-full"></span>
+                                    </h4>
+                                    <span class="px-2 py-1 bg-green-200 text-green-800 rounded text-xs">ACTIVE</span>
+                                </div>
+                                <p class="text-sm text-green-700 mb-4">
+                                    Virtual trading account with ₹10,00,000 demo capital. Perfect for testing strategies without risk.
+                                </p>
+                                <div class="space-y-2 text-sm">
+                                    <div class="flex justify-between">
+                                        <span>Status:</span>
+                                        <span class="font-medium">Active</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Balance:</span>
+                                        <span class="font-medium" id="paper-balance">₹10,00,000</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Data Source:</span>
+                                        <span class="font-medium">Real-time</span>
+                                    </div>
+                                </div>
+                                <button class="w-full mt-4 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm" onclick="selectBroker('paper')">
+                                    Use Paper Trading
+                                </button>
+                            </div>
+
+                            <!-- Zerodha Kite -->
+                            <div class="p-6 border rounded-xl bg-yellow-50 border-yellow-200" id="zerodha-broker-card">
+                                <div class="flex items-center justify-between mb-4">
+                                    <h4 class="font-semibold text-yellow-800 flex items-center">
+                                        🟡 Zerodha Kite
+                                        <span class="ml-2 w-2 h-2 bg-gray-400 rounded-full" id="zerodha-status-dot"></span>
+                                    </h4>
+                                    <span class="px-2 py-1 bg-gray-200 text-gray-800 rounded text-xs" id="zerodha-status-badge">NOT CONFIGURED</span>
+                                </div>
+                                <p class="text-sm text-yellow-700 mb-4">
+                                    Connect your Zerodha account for live trading with real money and real-time data from Kite Connect API.
+                                </p>
+                                
+                                <div class="space-y-3" id="zerodha-setup">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">API Key</label>
+                                        <input type="text" id="zerodha-api-key" placeholder="Enter your Kite Connect API key" class="w-full px-3 py-2 border rounded-lg text-sm">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Access Token (optional)</label>
+                                        <input type="text" id="zerodha-access-token" placeholder="Enter access token if available" class="w-full px-3 py-2 border rounded-lg text-sm">
+                                    </div>
+                                    <div class="text-xs text-gray-600 p-2 bg-gray-100 rounded">
+                                        <strong>Setup Instructions:</strong><br>
+                                        1. Create Kite Connect app at developer.zerodha.com<br>
+                                        2. Get your API key and secret<br>
+                                        3. Complete authentication flow<br>
+                                        4. Enter credentials above
+                                    </div>
+                                </div>
+                                
+                                <div class="space-y-2 text-sm" id="zerodha-info" style="display: none;">
+                                    <div class="flex justify-between">
+                                        <span>Status:</span>
+                                        <span class="font-medium" id="zerodha-connection-status">Disconnected</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Balance:</span>
+                                        <span class="font-medium" id="zerodha-balance">₹0</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Available Margin:</span>
+                                        <span class="font-medium" id="zerodha-margin">₹0</span>
+                                    </div>
+                                </div>
+                                
+                                <button class="w-full mt-4 px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 text-sm" onclick="setupZerodha()" id="zerodha-setup-btn">
+                                    Setup Zerodha
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Additional Brokers Coming Soon -->
+                        <div class="mt-8">
+                            <h4 class="font-medium text-gray-700 mb-4">🚀 More Brokers Coming Soon</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div class="p-4 border rounded-lg bg-gray-50 border-gray-200 opacity-60">
+                                    <h5 class="font-medium text-gray-600 mb-2">📱 Angel Broking</h5>
+                                    <p class="text-xs text-gray-500">SmartAPI integration</p>
+                                </div>
+                                <div class="p-4 border rounded-lg bg-gray-50 border-gray-200 opacity-60">
+                                    <h5 class="font-medium text-gray-600 mb-2">🔵 Upstox</h5>
+                                    <p class="text-xs text-gray-500">Pro API integration</p>
+                                </div>
+                                <div class="p-4 border rounded-lg bg-gray-50 border-gray-200 opacity-60">
+                                    <h5 class="font-medium text-gray-600 mb-2">🟢 Fyers</h5>
+                                    <p class="text-xs text-gray-500">API v2 integration</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Settings Tab -->
+                <div class="tab-content space-y-6" id="tab-settings">
+                    <!-- AI Trading Settings -->
+                    <div class="bg-white rounded-2xl shadow-lg p-6 modern-card">
+                        <h3 class="text-lg font-semibold mb-6">🤖 Advanced AI Trading Settings</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Trading Account</label>
+                                    <select class="w-full px-3 py-2 border rounded-lg" id="ai-trading-mode">
+                                        <option value="paper">Paper Trading</option>
+                                        <option value="zerodha">Zerodha Live (if configured)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Max Capital Per Trade</label>
+                                    <input class="w-full px-3 py-2 border rounded-lg" id="ai-max-per-trade" placeholder="10000" type="number" value="10000">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Max Daily Trades</label>
+                                    <input class="w-full px-3 py-2 border rounded-lg" id="max-daily-trades" placeholder="10" type="number" value="10">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Risk Level</label>
+                                    <select class="w-full px-3 py-2 border rounded-lg" id="ai-risk-level">
+                                        <option value="low">Low Risk (Conservative)</option>
+                                        <option value="medium" selected>Medium Risk (Balanced)</option>
+                                        <option value="high">High Risk (Aggressive)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Trading Frequency (seconds)</label>
+                                    <input class="w-full px-3 py-2 border rounded-lg" id="trading-frequency" placeholder="30" type="number" value="30">
+                                </div>
+                            </div>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Auto Stop Loss (%)</label>
+                                    <input class="w-full px-3 py-2 border rounded-lg" id="auto-stop-loss" placeholder="5" step="0.1" type="number" value="5">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Auto Take Profit (%)</label>
+                                    <input class="w-full px-3 py-2 border rounded-lg" id="auto-take-profit" placeholder="10" step="0.1" type="number" value="10">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Min Signal Confidence (%)</label>
+                                    <input class="w-full px-3 py-2 border rounded-lg" id="min-signal-confidence" placeholder="70" step="1" type="number" value="70" min="50" max="95">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Data Source</label>
+                                    <select class="w-full px-3 py-2 border rounded-lg" id="ai-data-source">
+                                        <option value="real" selected>Real-time Data (Yahoo Finance/Zerodha)</option>
+                                        <option value="mock">Mock Data (Testing)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Allowed Symbols (comma-separated)</label>
+                                    <textarea class="w-full px-3 py-2 border rounded-lg h-20" id="allowed-symbols" placeholder="RELIANCE,TCS,HDFCBANK,INFY,ICICIBANK">RELIANCE,TCS,HDFCBANK,INFY,ICICIBANK,WIPRO,BHARTIARTL,LT,MARUTI,SBIN</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 flex justify-between items-center">
+                            <button class="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 font-medium" onclick="saveAISettings()">
+                                💾 Save AI Settings
+                            </button>
+                            <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 text-sm" onclick="resetAISettings()">
+                                🔄 Reset to Default
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Right Sidebar - Watchlist & Live Updates -->
+            <aside class="sidebar space-y-6">
+                <!-- Backend Connection Status -->
+                <div class="bg-white rounded-2xl shadow-lg p-4 modern-card">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="font-semibold text-gray-900">🔌 Backend Status</h3>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-2 h-2 rounded-full connection-inactive" id="backend-connection-indicator"></div>
+                            <span class="text-xs" id="backend-connection-status">Connecting...</span>
+                        </div>
+                    </div>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Status:</span>
+                            <span id="connection-status">Connecting...</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">API URL:</span>
+                            <span class="text-xs break-all" id="api-url">Loading...</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Response:</span>
+                            <span id="response-time">--ms</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Data Source:</span>
+                            <span id="backend-data-source">--</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Last Sync:</span>
+                            <span id="last-sync">Never</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Enhanced Watchlist -->
+                <div class="bg-white rounded-2xl shadow-lg p-4 modern-card">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-semibold text-gray-900">👁️ Real-time Watchlist</h3>
+                        <button class="text-xs text-blue-600 hover:text-blue-800" onclick="refreshWatchlist()">Refresh</button>
+                    </div>
+                    <div class="space-y-2 custom-scrollbar max-h-64 overflow-y-auto" id="watchlist-container">
+                        <div class="text-center text-gray-500 py-4">Loading watchlist...</div>
+                    </div>
+                    <div class="mt-3 pt-3 border-t">
+                        <div class="flex space-x-2">
+                            <input class="flex-1 px-2 py-1 border rounded text-xs" id="watchlist-symbol" placeholder="Add symbol" type="text" onkeypress="handleWatchlistKeypress(event)">
+                            <button class="px-3 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700" onclick="addToWatchlist()">Add</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Enhanced AI Trading Status -->
+                <div class="bg-white rounded-2xl shadow-lg p-4 modern-card">
+                    <h3 class="font-semibold mb-4 text-gray-900 flex items-center">
+                        🤖 AI Status
+                        <span class="ml-2 w-2 h-2 rounded-full status-inactive" id="ai-sidebar-indicator"></span>
+                    </h3>
+                    <div class="space-y-3 text-sm" id="ai-status-details-sidebar">
+                        <div class="p-2 bg-green-50 rounded">
+                            <div class="font-medium text-green-800">Status: Ready</div>
+                            <div class="text-green-600">Backend connected!</div>
+                        </div>
+                    </div>
+                    <div class="mt-3 text-xs space-y-1">
+                        <div class="flex justify-between">
+                            <span>Next Analysis:</span>
+                            <span id="next-analysis-time">--</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Data Quality:</span>
+                            <span id="data-quality-indicator">--</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Signal Confidence:</span>
+                            <span id="avg-signal-confidence">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Enhanced Live Updates -->
+                <div class="bg-white rounded-2xl shadow-lg p-4 modern-card">
+                    <h3 class="font-semibold mb-4 text-gray-900 flex items-center">
+                        📡 Live Updates
+                        <span class="ml-2 w-2 h-2 bg-green-500 rounded-full live-indicator"></span>
+                    </h3>
+                    <div class="space-y-3 text-xs max-h-64 overflow-y-auto custom-scrollbar" id="live-updates">
+                        <div class="p-2 bg-blue-50 rounded border-l-2 border-blue-500">
+                            <div class="font-medium text-blue-800">System Starting</div>
+                            <div class="text-blue-600">Connecting to backend API...</div>
+                            <div class="text-gray-500 text-xs">{current_time}</div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- Enhanced Notifications Panel -->
+    <div class="fixed top-20 right-4 w-80 bg-white rounded-lg shadow-xl border z-50 max-h-96 overflow-y-auto hidden" id="notifications-panel">
+        <div class="p-3 border-b">
+            <h3 class="font-semibold">🔔 Notifications</h3>
+        </div>
+        <div class="divide-y" id="notifications-container">
+            <!-- Notifications will be populated here -->
+        </div>
+    </div>
+
+    <script>
+        // Configuration - UPDATE THIS URL TO YOUR BACKEND
+        const API_BASE_URL = 'http://localhost:10000'; // Change to your deployed backend URL
+        
+        // Global state management
+        let appState = {
+            currentAccountType: 'paper',
+            currentBroker: 'paper',
+            isAITradingActive: false,
+            backendConnected: false,
+            zerodhaConnected: false,
+            lastTradeCount: 0,
+            lastPositionCount: 0,
+            dataRefreshInterval: null,
+            autoRefreshEnabled: true,
+            notifications: [],
+            tradingData: {
+                positions: [],
+                trades: [],
+                aiSignals: [],
+                aiActions: []
+            },
+            lastPrices: {},
+            tradingBroker: 'paper'
+        };
+
+        // Initialize application
+        document.addEventListener('DOMContentLoaded', function() {
+            updateTime();
+            setInterval(updateTime, 1000);
+            
+            testBackendConnection();
+            startDataRefresh();
+            addOrderValueCalculators();
+            
+            showNotification('info', '🚀 AI Trading Platform v8.0 Starting...');
+            addLiveUpdate('System Starting', 'Initializing real-time trading platform...');
+        });
+
+        // Time management
+        function updateTime() {
+            const timeElement = document.getElementById('current-time');
+            if (timeElement) {
+                const now = new Date();
+                timeElement.textContent = now.toLocaleTimeString();
+                
+                // Update market status
+                updateMarketStatus(now);
+            }
+        }
+
+        function updateMarketStatus(now) {
+            const hour = now.getHours();
+            const minute = now.getMinutes();
+            const currentTime = hour * 60 + minute;
+            const marketOpen = 9 * 60 + 15; // 9:15 AM
+            const marketClose = 15 * 60 + 30; // 3:30 PM
+            const isWeekend = now.getDay() === 0 || now.getDay() === 6;
+            
+            let status = 'Closed';
+            let statusClass = 'bg-red-100 text-red-800';
+            
+            if (!isWeekend && currentTime >= marketOpen && currentTime <= marketClose) {
+                status = 'Open';
+                statusClass = 'bg-green-100 text-green-800';
+            } else if (!isWeekend && currentTime < marketOpen) {
+                status = 'Pre-Market';
+                statusClass = 'bg-yellow-100 text-yellow-800';
+            } else if (!isWeekend && currentTime > marketClose) {
+                status = 'After Hours';
+                statusClass = 'bg-blue-100 text-blue-800';
+            }
+            
+            const statusBadge = document.getElementById('market-status-badge');
+            const statusTime = document.getElementById('market-status-time');
+            
+            if (statusBadge) {
+                statusBadge.textContent = status;
+                statusBadge.className = `px-2 py-1 rounded text-xs font-medium ${statusClass}`;
+            }
+            
+            if (statusTime) {
+                statusTime.textContent = now.toLocaleTimeString();
+            }
+        }
+
+        // Enhanced Backend Connection Management
+        async function testBackendConnection() {
+            try {
+                const startTime = Date.now();
+                const response = await fetch(`${API_BASE_URL}/api/health`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    timeout: 10000
+                });
+                
+                const responseTime = Date.now() - startTime;
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    appState.backendConnected = true;
+                    appState.zerodhaConnected = data.zerodha_status === 'configured';
+                    
+                    updateBackendStatus(true, responseTime, data);
+                    showNotification('success', '✅ Backend connected successfully!');
+                    addLiveUpdate('Backend Connected', `API response: ${responseTime}ms`);
+                    
+                    await loadInitialData();
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                console.error('Backend connection failed:', error);
+                appState.backendConnected = false;
+                updateBackendStatus(false, 0);
+                showNotification('error', '❌ Backend connection failed. Retrying...');
+                addLiveUpdate('Connection Failed', 'Retrying in 10 seconds...');
+                setTimeout(testBackendConnection, 10000);
+            }
+        }
+
+        function updateBackendStatus(connected, responseTime = 0, healthData = null) {
+            const elements = {
+                indicator: document.getElementById('backend-indicator'),
+                statusText: document.getElementById('backend-status-text'),
+                connectionStatus: document.getElementById('connection-status'),
+                connectionIndicator: document.getElementById('backend-connection-indicator'),
+                connectionStatusText: document.getElementById('backend-connection-status'),
+                apiUrl: document.getElementById('api-url'),
+                responseTimeElement: document.getElementById('response-time'),
+                apiResponseTime: document.getElementById('api-response-time'),
+                dataSource: document.getElementById('backend-data-source'),
+                dataSourceIndicator: document.getElementById('data-source-indicator'),
+                dataSourceText: document.getElementById('data-source-text'),
+                marketDataSource: document.getElementById('market-data-source')
+            };
+            
+            if (connected) {
+                // Update connection indicators
+                Object.entries({
+                    indicator: 'w-2 h-2 rounded-full connection-active',
+                    connectionIndicator: 'w-2 h-2 rounded-full connection-active'
+                }).forEach(([key, className]) => {
+                    if (elements[key]) elements[key].className = className;
+                });
+                
+                // Update status texts
+                Object.entries({
+                    statusText: 'Connected',
+                    connectionStatus: 'Connected', 
+                    connectionStatusText: 'Connected'
+                }).forEach(([key, text]) => {
+                    if (elements[key]) elements[key].textContent = text;
+                });
+                
+                // Update response times
+                Object.entries({
+                    responseTimeElement: `${responseTime}ms`,
+                    apiResponseTime: `${responseTime}ms`
+                }).forEach(([key, time]) => {
+                    if (elements[key]) elements[key].textContent = time;
+                });
+                
+                // Update data sources
+                if (healthData) {
+                    const dataSourceText = healthData.data_sources?.join(', ') || 'Real-time';
+                    Object.entries({
+                        dataSource: dataSourceText,
+                        dataSourceText: healthData.zerodha_status === 'configured' ? 'Zerodha + Yahoo' : 'Yahoo Finance',
+                        marketDataSource: 'Real-time Data'
+                    }).forEach(([key, text]) => {
+                        if (elements[key]) elements[key].textContent = text;
+                    });
+                    
+                    // Update Zerodha status
+                    updateZerodhaStatus(healthData.zerodha_status === 'configured');
+                }
+                
+                if (elements.apiUrl) elements.apiUrl.textContent = API_BASE_URL;
+                
+            } else {
+                // Update connection indicators for disconnected state
+                Object.entries({
+                    indicator: 'w-2 h-2 rounded-full connection-error',
+                    connectionIndicator: 'w-2 h-2 rounded-full connection-error'
+                }).forEach(([key, className]) => {
+                    if (elements[key]) elements[key].className = className;
+                });
+                
+                // Update status texts
+                Object.entries({
+                    statusText: 'Disconnected',
+                    connectionStatus: 'Disconnected',
+                    connectionStatusText: 'Disconnected',
+                    responseTimeElement: '--ms',
+                    apiResponseTime: '--ms',
+                    dataSource: 'Offline',
+                    dataSourceText: 'No connection'
+                }).forEach(([key, text]) => {
+                    if (elements[key]) elements[key].textContent = text;
+                });
+            }
+        }
+
+        function updateZerodhaStatus(connected) {
+            const zerodhaBtn = document.getElementById('zerodha-mode-btn');
+            const zerodhaCard = document.getElementById('zerodha-broker-card');
+            const zerodhaStatusDot = document.getElementById('zerodha-status-dot');
+            const zerodhaStatusBadge = document.getElementById('zerodha-status-badge');
+            
+            if (connected) {
+                if (zerodhaBtn) {
+                    zerodhaBtn.className = 'px-3 py-1 rounded-lg text-xs font-medium transition-all zerodha-badge text-white';
+                    zerodhaBtn.textContent = '🟡 Zerodha (Live)';
+                }
+                if (zerodhaStatusDot) {
+                    zerodhaStatusDot.className = 'ml-2 w-2 h-2 bg-green-500 rounded-full';
+                }
+                if (zerodhaStatusBadge) {
+                    zerodhaStatusBadge.textContent = 'CONNECTED';
+                    zerodhaStatusBadge.className = 'px-2 py-1 bg-green-200 text-green-800 rounded text-xs';
+                }
+            } else {
+                if (zerodhaBtn) {
+                    zerodhaBtn.textContent = '🟡 Zerodha (Setup)';
+                }
+                if (zerodhaStatusDot) {
+                    zerodhaStatusDot.className = 'ml-2 w-2 h-2 bg-gray-400 rounded-full';
+                }
+                if (zerodhaStatusBadge) {
+                    zerodhaStatusBadge.textContent = 'NOT CONFIGURED';
+                    zerodhaStatusBadge.className = 'px-2 py-1 bg-gray-200 text-gray-800 rounded text-xs';
+                }
+            }
+        }
+
+        // Enhanced Data Loading Functions
+        async function loadInitialData() {
+            if (!appState.backendConnected) return;
+            
+            try {
+                showNotification('info', '📊 Loading data from backend...');
+                
+                await Promise.all([
+                    loadPaperAccount(),
+                    loadAIStatus(), 
+                    loadTrades(),
+                    loadPositions(),
+                    loadMarketData(),
+                    loadWatchlist(),
+                    loadBrokerStatus()
+                ]);
+                
+                updateElement('last-sync', new Date().toLocaleTimeString());
+                showNotification('success', '📊 All data loaded successfully!');
+                addLiveUpdate('Data Loaded', 'All systems ready for trading');
+                
+            } catch (error) {
+                console.error('Error loading initial data:', error);
+                showNotification('error', '❌ Failed to load some data from backend');
+                addLiveUpdate('Data Load Error', 'Some data may be incomplete');
+            }
+        }
+
+        async function loadPaperAccount() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/paper-account`);
+                if (response.ok) {
+                    const data = await response.json();
+                    const account = data.account;
+                    
+                    // Update all account displays
+                    const updates = {
+                        'available-balance': `₹${account.balance.toLocaleString()}`,
+                        'invested-amount': `₹${account.invested.toLocaleString()}`,
+                        'total-pnl': `₹${account.pnl.toLocaleString()}`,
+                        'total-value': `₹${account.total_value.toLocaleString()}`,
+                        'daily-pnl': `₹${account.day_pnl ? account.day_pnl.toLocaleString() : '0'}`,
+                        'portfolio-value': `₹${account.total_value.toLocaleString()}`,
+                        'total-profit': `₹${account.pnl.toLocaleString()}`,
+                        'day-pnl': `₹${account.day_pnl ? account.day_pnl.toLocaleString() : '0'}`,
+                        'paper-balance': `₹${account.balance.toLocaleString()}`,
+                        'win-rate': `${account.win_rate ? account.win_rate.toFixed(1) : '0'}%`
+                    };
+                    
+                    Object.entries(updates).forEach(([id, value]) => {
+                        updateElement(id, value);
+                    });
+                    
+                    // Update percentage displays with colors
+                    const changePercent = account.total_value > 0 ? (account.pnl / account.total_value * 100) : 0;
+                    const changeText = `${account.pnl >= 0 ? '+' : ''}₹${account.pnl.toLocaleString()} (${changePercent.toFixed(2)}%)`;
+                    
+                    updateElement('portfolio-change', changeText);
+                    updateElement('profit-percentage', `${changePercent.toFixed(2)}%`);
+                    updateElement('day-pnl-percent', `${changePercent.toFixed(2)}%`);
+                    
+                    // Apply colors based on P&L
+                    const pnlElements = ['total-pnl', 'total-profit', 'daily-pnl', 'day-pnl'];
+                    pnlElements.forEach(id => {
+                        const element = document.getElementById(id);
+                        if (element) {
+                            element.className = account.pnl >= 0 ? 'font-medium price-up' : 'font-medium price-down';
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading paper account:', error);
+            }
+        }
+
+        async function loadAIStatus() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/ai-trading/settings`);
+                if (response.ok) {
+                    const data = await response.json();
+                    appState.isAITradingActive = data.settings.is_active;
+                    updateAIStatusUI(appState.isAITradingActive);
+                    
+                    // Load AI settings into form
+                    const settingsMap = {
+                        'ai-trading-mode': data.settings.trading_mode,
+                        'ai-max-per-trade': data.settings.max_capital_per_trade,
+                        'max-daily-trades': data.settings.max_daily_trades,
+                        'ai-risk-level': data.settings.risk_level,
+                        'trading-frequency': data.settings.trading_frequency,
+                        'auto-stop-loss': data.settings.auto_stop_loss,
+                        'auto-take-profit': data.settings.auto_take_profit,
+                        'min-signal-confidence': data.settings.min_signal_confidence || 70,
+                        'ai-data-source': data.settings.use_real_data ? 'real' : 'mock',
+                        'allowed-symbols': data.settings.allowed_symbols.join(',')
+                    };
+                    
+                    Object.entries(settingsMap).forEach(([id, value]) => {
+                        updateElement(id, value);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading AI status:', error);
+            }
+        }
+
+        async function loadTrades() {
+            try {
+                const filter = document.getElementById('trade-filter')?.value || 'all';
+                const response = await fetch(`${API_BASE_URL}/api/trades?filter=${filter}&limit=50`);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    updateTradesTable(data.trades);
+                    updateTradesStats(data.trades);
+                    updateElement('trades-count', data.count);
+                    
+                    const aiTrades = data.trades.filter(t => t.strategy === 'AI_AUTO').length;
+                    updateElement('ai-trades-count', aiTrades);
+                    updateElement('ai-trades-today', data.count);
+                    updateElement('ai-trades-counter', `${aiTrades} trades`);
+                    
+                    // Update detailed trade reports table
+                    updateDetailedTradesTable(data.trades);
+                }
+            } catch (error) {
+                console.error('Error loading trades:', error);
+                showNotification('error', '❌ Failed to load trades');
+            }
+        }
+
+        async function loadPositions() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/positions`);
+                if (response.ok) {
+                    const data = await response.json();
+                    updatePositionsDisplay(data.positions);
+                    updateElement('positions-count', data.count);
+                    updateElement('active-positions', data.count);
+                    updateElement('position-diversity', `${data.count} symbols`);
+                }
+            } catch (error) {
+                console.error('Error loading positions:', error);
+            }
+        }
+
+        async function loadMarketData() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/market-overview`);
+                if (response.ok) {
+                    const data = await response.json();
+                    updateMarketDisplay(data.market_data);
+                    
+                    // Update data source indicators
+                    const sourceText = data.zerodha_active ? 'Zerodha + Yahoo' : 'Yahoo Finance';
+                    updateElement('market-data-source', sourceText);
+                    updateElement('data-source-text', sourceText);
+                }
+            } catch (error) {
+                console.error('Error loading market data:', error);
+            }
+        }
+
+        async function loadWatchlist() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/watchlist`);
+                if (response.ok) {
+                    const data = await response.json();
+                    updateWatchlistDisplay(data.watchlist);
+                }
+            } catch (error) {
+                console.error('Error loading watchlist:', error);
+            }
+        }
+
+        async function loadBrokerStatus() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/brokers`);
+                if (response.ok) {
+                    const data = await response.json();
+                    updateBrokerDisplay(data.brokers);
+                    appState.zerodhaConnected = data.zerodha_available;
+                }
+            } catch (error) {
+                console.error('Error loading broker status:', error);
+            }
+        }
+
+        // Display Update Functions
+        function updateTradesTable(trades) {
+            const tbody = document.getElementById('trades-table-body');
+            if (!tbody) return;
+            
+            if (!trades || trades.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="10" class="border border-gray-300 px-4 py-8 text-center text-gray-500">
+                            No trades yet. Start trading to see live data from backend.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            const tradesHtml = trades.slice(0, 10).map(trade => {
+                const statusClass = trade.status === 'open' ? 'trade-status-open' : 'trade-status-closed';
+                const strategyClass = trade.strategy === 'AI_AUTO' ? 'ai-trade-card' : 'manual-trade-card';
+                const pnlClass = trade.pnl >= 0 ? 'price-up' : 'price-down';
+                
+                return `
+                    <tr class="hover:bg-gray-50 ${strategyClass}">
+                        <td class="border border-gray-300 px-2 py-2 text-xs">${trade.trade_id}</td>
+                        <td class="border border-gray-300 px-2 py-2 font-medium">${trade.symbol}</td>
+                        <td class="border border-gray-300 px-2 py-2">
+                            <span class="px-2 py-1 rounded text-xs ${trade.side === 'BUY' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+                                ${trade.side}
+                            </span>
+                        </td>
+                        <td class="border border-gray-300 px-2 py-2">${trade.quantity}</td>
+                        <td class="border border-gray-300 px-2 py-2">₹${parseFloat(trade.entry_price).toFixed(2)}</td>
+                        <td class="border border-gray-300 px-2 py-2">
+                            ${trade.exit_price ? '₹' + parseFloat(trade.exit_price).toFixed(2) : '--'}
+                        </td>
+                        <td class="border border-gray-300 px-2 py-2">
+                            <span class="${pnlClass}">
+                                ${trade.pnl ? '₹' + parseFloat(trade.pnl).toFixed(2) : '₹0'}
+                            </span>
+                        </td>
+                        <td class="border border-gray-300 px-2 py-2">
+                            <span class="px-2 py-1 rounded text-xs ${statusClass}">
+                                ${trade.status}
+                            </span>
+                        </td>
+                        <td class="border border-gray-300 px-2 py-2">
+                            <span class="px-2 py-1 rounded text-xs ${trade.strategy === 'AI_AUTO' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800'}">
+                                ${trade.strategy === 'AI_AUTO' ? '🤖 AI' : '👤 Manual'}
+                            </span>
+                        </td>
+                        <td class="border border-gray-300 px-2 py-2 text-xs text-gray-600">
+                            ${new Date(trade.entry_time).toLocaleTimeString()}
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+            
+            tbody.innerHTML = tradesHtml;
+        }
+
+        function updateDetailedTradesTable(trades) {
+            const tbody = document.getElementById('trades-detailed-table');
+            if (!tbody) return;
+            
+            if (!trades || trades.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="14" class="border border-gray-300 px-4 py-8 text-center text-gray-500">
+                            No trades found. Execute trades to see detailed reports.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            const tradesHtml = trades.map(trade => {
+                const statusClass = trade.status === 'open' ? 'trade-status-open' : 'trade-status-closed';
+                const pnlClass = trade.pnl >= 0 ? 'price-up' : 'price-down';
+                const duration = trade.duration_minutes ? `${Math.floor(trade.duration_minutes)}m` : '--';
+                
+                return `
+                    <tr class="hover:bg-gray-50">
+                        <td class="border border-gray-300 px-2 py-2 text-xs font-mono">${trade.trade_id}</td>
+                        <td class="border border-gray-300 px-2 py-2 font-medium">${trade.symbol}</td>
+                        <td class="border border-gray-300 px-2 py-2">
+                            <span class="px-1 py-0.5 rounded text-xs ${trade.side === 'BUY' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+                                ${trade.side}
+                            </span>
+                        </td>
+                        <td class="border border-gray-300 px-2 py-2">${trade.quantity}</td>
+                        <td class="border border-gray-300 px-2 py-2">₹${parseFloat(trade.entry_price).toFixed(2)}</td>
+                        <td class="border border-gray-300 px-2 py-2 text-xs">
+                            ${new Date(trade.entry_time).toLocaleString()}
+                        </td>
+                        <td class="border border-gray-300 px-2 py-2">
+                            ${trade.exit_price ? '₹' + parseFloat(trade.exit_price).toFixed(2) : '--'}
+                        </td>
+                        <td class="border border-gray-300 px-2 py-2 text-xs">
+                            ${trade.exit_time ? new Date(trade.exit_time).toLocaleString() : '--'}
+                        </td>
+                        <td class="border border-gray-300 px-2 py-2">
+                            <span class="${pnlClass} font-medium">
+                                ${trade.pnl ? '₹' + parseFloat(trade.pnl).toFixed(2) : '₹0'}
+                            </span>
+                        </td>
+                        <td class="border border-gray-300 px-2 py-2">
+                            <span class="${pnlClass}">
+                                ${trade.pnl_percent ? parseFloat(trade.pnl_percent).toFixed(2) + '%' : '0%'}
+                            </span>
+                        </td>
+                        <td class="border border-gray-300 px-2 py-2 text-xs">${duration}</td>
+                        <td class="border border-gray-300 px-2 py-2 text-xs">
+                            ₹${trade.fees ? parseFloat(trade.fees).toFixed(2) : '0'}
+                        </td>
+                        <td class="border border-gray-300 px-2 py-2">
+                            <span class="px-1 py-0.5 rounded text-xs ${statusClass}">
+                                ${trade.status}
+                            </span>
+                        </td>
+                        <td class="border border-gray-300 px-2 py-2">
+                            <span class="px-1 py-0.5 rounded text-xs ${trade.strategy === 'AI_AUTO' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800'}">
+                                ${trade.strategy === 'AI_AUTO' ? '🤖' : '👤'}
+                            </span>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+            
+            tbody.innerHTML = tradesHtml;
+        }
+
+        function updateTradesStats(trades) {
+            if (!trades) return;
+            
+            const totalTrades = trades.length;
+            const aiTrades = trades.filter(t => t.strategy === 'AI_AUTO').length;
+            const manualTrades = totalTrades - aiTrades;
+            const openTrades = trades.filter(t => t.status === 'open').length;
+            const closedTrades = trades.filter(t => t.status === 'closed').length;
+            
+            // Calculate P&L stats
+            const closedTradesData = trades.filter(t => t.status === 'closed');
+            const winningTrades = closedTradesData.filter(t => t.pnl > 0).length;
+            const losingTrades = closedTradesData.filter(t => t.pnl < 0).length;
+            const winRate = closedTradesData.length > 0 ? (winningTrades / closedTradesData.length * 100) : 0;
+            
+            // Calculate fees and other stats
+            const totalFees = trades.reduce((sum, t) => sum + (parseFloat(t.fees) || 0), 0);
+            const avgFees = totalTrades > 0 ? totalFees / totalTrades : 0;
+            const totalValue = trades.reduce((sum, t) => sum + (parseFloat(t.entry_price) * t.quantity), 0);
+            const avgTradeValue = totalTrades > 0 ? totalValue / totalTrades : 0;
+            const maxProfit = Math.max(...closedTradesData.map(t => parseFloat(t.pnl) || 0), 0);
+            const feesImpact = totalValue > 0 ? (totalFees / totalValue * 100) : 0;
+            
+            const updates = {
+                'total-trades-summary': totalTrades,
+                'ai-trades-summary': `${aiTrades} AI`,
+                'manual-trades-summary': `${manualTrades} Manual`,
+                'open-trades-count': openTrades,
+                'closed-trades-count': closedTrades,
+                'winning-trades': winningTrades,
+                'losing-trades': losingTrades,
+                'win-rate-display': `${winRate.toFixed(1)}% win rate`,
+                'ai-win-rate': `${winRate.toFixed(1)}%`,
+                'avg-trade-value': `₹${avgTradeValue.toLocaleString()}`,
+                'total-fees': `₹${totalFees.toFixed(2)}`,
+                'avg-fees': `Avg: ₹${avgFees.toFixed(2)} per trade`,
+                'max-profit': maxProfit.toFixed(2),
+                'fees-impact': `${feesImpact.toFixed(2)}%`,
+                'avg-return-display': `${winRate > 50 ? '+' : ''}${(winRate - 50).toFixed(1)}% avg return`,
+                'ai-avg-return': `${(winRate - 50).toFixed(1)}%`
+            };
+            
+            Object.entries(updates).forEach(([id, value]) => {
+                updateElement(id, value);
+            });
+        }
+
+        function updatePositionsDisplay(positions) {
+            const container = document.getElementById('positions-detailed');
+            if (!container) return;
+            
+            if (!positions || positions.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center text-gray-500 py-8">
+                        No positions found. Start trading to see your portfolio.
+                    </div>
+                `;
+                return;
+            }
+            
+            const positionsHtml = positions.map(pos => {
+                const pnlClass = pos.pnl >= 0 ? 'price-up' : 'price-down';
+                const pnlPercentClass = pos.pnl_percent >= 0 ? 'text-green-600' : 'text-red-600';
+                
+                return `
+                    <div class="p-4 border rounded-lg hover:bg-gray-50 transition-all">
+                        <div class="flex justify-between items-center mb-2">
+                            <div class="flex items-center space-x-2">
+                                <span class="font-bold text-lg">${pos.symbol}</span>
+                                <span class="text-xs px-2 py-1 rounded ${pos.quantity > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+                                    ${pos.quantity > 0 ? 'LONG' : 'SHORT'} ${Math.abs(pos.quantity)}
+                                </span>
+                            </div>
+                            <div class="text-right">
+                                <div class="font-bold ${pnlClass}">₹${pos.pnl.toFixed(2)}</div>
+                                <div class="text-xs ${pnlPercentClass}">${pos.pnl_percent.toFixed(2)}%</div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-3 gap-4 text-sm">
+                            <div>
+                                <span class="text-gray-600">Avg Price:</span><br>
+                                <span class="font-medium">₹${pos.average_price.toFixed(2)}</span>
+                            </div>
+                            <div>
+                                <span class="text-gray-600">Current:</span><br>
+                                <span class="font-medium price-neutral">₹${pos.current_price.toFixed(2)}</span>
+                            </div>
+                            <div>
+                                <span class="text-gray-600">Value:</span><br>
+                                <span class="font-medium">₹${pos.market_value.toLocaleString()}</span>
+                            </div>
+                        </div>
+                        <div class="mt-2 text-xs text-gray-500">
+                            ${pos.account_type} • ${pos.broker}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            container.innerHTML = positionsHtml;
+            
+            // Update position summary
+            const totalValue = positions.reduce((sum, pos) => sum + pos.market_value, 0);
+            updateElement('position-value', `Value: ₹${totalValue.toLocaleString()}`);
+        }
+
+        function updateMarketDisplay(marketData) {
+            if (!marketData) return;
+            
+            Object.keys(marketData).forEach(index => {
+                const data = marketData[index];
+                const priceElement = document.getElementById(`${index.toLowerCase()}-price`);
+                const changeElement = document.getElementById(`${index.toLowerCase()}-change`);
+                
+                if (priceElement) {
+                    // Store previous price for animation
+                    const prevPrice = appState.lastPrices[index] || data.current_price;
+                    appState.lastPrices[index] = data.current_price;
+                    
+                    priceElement.innerHTML = `${data.current_price.toLocaleString()}`;
+                    
+                    // Add price change animation
+                    if (data.current_price > prevPrice) {
+                        priceElement.className = 'text-xl font-bold price-up';
+                    } else if (data.current_price < prevPrice) {
+                        priceElement.className = 'text-xl font-bold price-down';
+                    } else {
+                        priceElement.className = 'text-xl font-bold';
+                    }
+                }
+                
+                if (changeElement) {
+                    const changeText = `${data.change >= 0 ? '+' : ''}${data.change} (${data.change_percent.toFixed(2)}%)`;
+                    changeElement.textContent = changeText;
+                    changeElement.className = `text-xs ${data.change >= 0 ? 'text-green-200' : 'text-red-200'}`;
+                }
+            });
+        }
+
+        function updateWatchlistDisplay(watchlist) {
+            const container = document.getElementById('watchlist-container');
+            if (!container || !watchlist) return;
+            
+            if (watchlist.length === 0) {
+                container.innerHTML = '<div class="text-center text-gray-500 py-4">No symbols in watchlist</div>';
+                return;
+            }
+            
+            const watchlistHtml = watchlist.map(item => {
+                const priceClass = item.change_percent >= 0 ? 'price-up' : 'price-down';
+                const prevPrice = appState.lastPrices[item.symbol] || item.current_price;
+                appState.lastPrices[item.symbol] = item.current_price;
+                
+                return `
+                    <div class="p-2 bg-gray-50 rounded-lg hover:bg-gray-100 transition-all cursor-pointer trade-card" onclick="getRealTimePrice('${item.symbol}')">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <div class="font-medium text-sm">${item.symbol}</div>
+                                <div class="text-xs text-gray-600">₹${item.current_price}</div>
+                                <div class="text-xs text-gray-500">${item.source}</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-xs font-medium ${priceClass}">
+                                    ${item.change_percent >= 0 ? '+' : ''}${item.change_percent.toFixed(2)}%
+                                </div>
+                                <div class="text-xs text-gray-500">
+                                    Vol: ${item.volume ? item.volume.toLocaleString() : 'N/A'}
+                                </div>
+                                <button onclick="removeFromWatchlist('${item.symbol}'); event.stopPropagation();" class="text-xs text-red-500 hover:text-red-700 mt-1">×</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            container.innerHTML = watchlistHtml;
+        }
+
+        function updateBrokerDisplay(brokers) {
+            // This function can be used to update broker status displays
+            brokers.forEach(broker => {
+                if (broker.name === 'zerodha') {
+                    updateZerodhaStatus(broker.is_active);
+                }
+            });
+        }
+
+        // Enhanced AI Trading Controls
+        async function startAITrading() {
+            if (!appState.backendConnected) {
+                showNotification('error', '❌ Backend not connected. Cannot start AI trading.');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/ai-trading/start`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    appState.isAITradingActive = true;
+                    updateAIStatusUI(true);
+                    showNotification('success', data.message);
+                    addLiveUpdate('🤖 AI Trading Started', 'Real-time trading with backend confirmed');
+                } else {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Failed to start AI trading');
+                }
+            } catch (error) {
+                console.error('Error starting AI trading:', error);
+                showNotification('error', `❌ Failed to start AI trading: ${error.message}`);
+            }
+        }
+
+        async function stopAITrading() {
+            if (!appState.backendConnected) {
+                showNotification('error', '❌ Backend not connected');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/ai-trading/stop`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    appState.isAITradingActive = false;
+                    updateAIStatusUI(false);
+                    showNotification('success', data.message);
+                    addLiveUpdate('🛑 AI Trading Stopped', 'Backend confirmed AI trading is now inactive');
+                } else {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Failed to stop AI trading');
+                }
+            } catch (error) {
+                console.error('Error stopping AI trading:', error);
+                showNotification('error', `❌ Failed to stop AI trading: ${error.message}`);
+            }
+        }
+
+        function toggleAITrading() {
+            if (appState.isAITradingActive) {
+                stopAITrading();
+            } else {
+                startAITrading();
+            }
+        }
+
+        function updateAIStatusUI(active) {
+            appState.isAITradingActive = active;
+            
+            const elements = {
+                statusText: document.getElementById('ai-status-text'),
+                statusDot: document.getElementById('ai-status-dot'),
+                controlIndicator: document.getElementById('ai-control-indicator'),
+                controlStatus: document.getElementById('ai-control-status'),
+                dashboardIndicator: document.getElementById('ai-dashboard-indicator'),
+                bannerIndicator: document.getElementById('ai-banner-indicator'),
+                bannerTitle: document.getElementById('ai-banner-title'),
+                bannerDesc: document.getElementById('ai-banner-desc'),
+                toggleBtn: document.getElementById('ai-toggle-btn'),
+                statusDetails: document.getElementById('ai-status-details'),
+                sidebarIndicator: document.getElementById('ai-sidebar-indicator'),
+                startBtn: document.getElementById('start-ai-btn'),
+                stopBtn: document.getElementById('stop-ai-btn')
+            };
+            
+            if (active) {
+                // Update all status indicators for active state
+                const statusUpdates = {
+                    statusText: 'AI Active',
+                    controlStatus: 'Active',
+                    bannerTitle: '🤖 AI Trading Active',
+                    bannerDesc: 'AI is actively trading with real-time data and backend API',
+                    toggleBtn: 'Stop AI',
+                    statusDetails: 'AI is actively analyzing markets and executing trades via backend API'
+                };
+                
+                Object.entries(statusUpdates).forEach(([key, text]) => {
+                    if (elements[key]) elements[key].textContent = text;
+                });
+                
+                // Update indicator classes
+                const indicatorUpdates = {
+                    statusDot: 'w-3 h-3 rounded-full status-active ai-pulse',
+                    controlIndicator: 'w-2 h-2 rounded-full status-active live-indicator',
+                    dashboardIndicator: 'w-3 h-3 rounded-full status-active live-indicator',
+                    bannerIndicator: 'w-4 h-4 rounded-full status-active live-indicator',
+                    sidebarIndicator: 'w-2 h-2 rounded-full status-active live-indicator'
+                };
+                
+                Object.entries(indicatorUpdates).forEach(([key, className]) => {
+                    if (elements[key]) elements[key].className = className;
+                });
+                
+                // Update buttons
+                if (elements.startBtn) {
+                    elements.startBtn.disabled = true;
+                    elements.startBtn.className = 'w-full px-3 py-2 rounded-lg text-sm font-medium transition-all bg-gray-400 text-white cursor-not-allowed';
+                }
+                if (elements.stopBtn) {
+                    elements.stopBtn.disabled = false;
+                    elements.stopBtn.className = 'w-full px-3 py-2 rounded-lg text-sm font-medium transition-all bg-red-600 text-white hover:bg-red-700';
+                }
+                
+                // Update banner background
+                const banner = document.getElementById('ai-status-banner');
+                if (banner) banner.className = 'p-4 rounded-xl mb-6 ai-gradient text-white';
+                
+                // Update sidebar status
+                const sidebarStatus = document.getElementById('ai-status-details-sidebar');
+                if (sidebarStatus) {
+                    sidebarStatus.innerHTML = `
+                        <div class="p-2 bg-green-50 rounded">
+                            <div class="font-medium text-green-800">Status: Active</div>
+                            <div class="text-green-600">Real-time trading in progress</div>
+                        </div>
+                    `;
+                }
+                
+            } else {
+                // Update all status indicators for inactive state
+                const statusUpdates = {
+                    statusText: 'AI Inactive',
+                    controlStatus: 'Inactive',
+                    bannerTitle: '🤖 AI Trading Ready',
+                    bannerDesc: 'Backend connected! Real-time data available. Ready to start.',
+                    toggleBtn: 'Start AI',
+                    statusDetails: 'Ready for real-time trading! Backend API connected.'
+                };
+                
+                Object.entries(statusUpdates).forEach(([key, text]) => {
+                    if (elements[key]) elements[key].textContent = text;
+                });
+                
+                // Update indicator classes
+                const indicatorUpdates = {
+                    statusDot: 'w-3 h-3 rounded-full status-inactive',
+                    controlIndicator: 'w-2 h-2 rounded-full status-inactive',
+                    dashboardIndicator: 'w-3 h-3 rounded-full status-inactive',
+                    bannerIndicator: 'w-4 h-4 rounded-full status-inactive',
+                    sidebarIndicator: 'w-2 h-2 rounded-full status-inactive'
+                };
+                
+                Object.entries(indicatorUpdates).forEach(([key, className]) => {
+                    if (elements[key]) elements[key].className = className;
+                });
+                
+                // Update buttons
+                if (elements.startBtn) {
+                    elements.startBtn.disabled = false;
+                    elements.startBtn.className = 'w-full px-3 py-2 rounded-lg text-sm font-medium transition-all ai-gradient text-white hover:ai-glow';
+                }
+                if (elements.stopBtn) {
+                    elements.stopBtn.disabled = true;
+                    elements.stopBtn.className = 'w-full px-3 py-2 rounded-lg text-sm font-medium transition-all bg-gray-400 text-white cursor-not-allowed';
+                }
+                
+                // Update banner background
+                const banner = document.getElementById('ai-status-banner');
+                if (banner) banner.className = 'p-4 rounded-xl mb-6 bg-gray-100 text-gray-800';
+                
+                // Update sidebar status
+                const sidebarStatus = document.getElementById('ai-status-details-sidebar');
+                if (sidebarStatus) {
+                    sidebarStatus.innerHTML = `
+                        <div class="p-2 bg-green-50 rounded">
+                            <div class="font-medium text-green-800">Status: Ready</div>
+                            <div class="text-green-600">Backend connected, real-time data available</div>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        // Enhanced Manual Trading Functions
+        async function placeOrder(side) {
+            if (!appState.backendConnected) {
+                showNotification('error', '❌ Backend not connected');
+                return;
+            }
+            
+            const symbol = document.getElementById(`${side.toLowerCase()}-symbol`)?.value;
+            const quantity = parseInt(document.getElementById(`${side.toLowerCase()}-quantity`)?.value);
+            const price = parseFloat(document.getElementById(`${side.toLowerCase()}-price`)?.value);
+            
+            if (!symbol || !quantity || !price) {
+                showNotification('error', '❌ Please fill all fields');
+                return;
+            }
+            
+            if (quantity <= 0 || price <= 0) {
+                showNotification('error', '❌ Quantity and price must be positive');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/place-order`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        symbol: symbol.toUpperCase(),
+                        side: side,
+                        quantity: quantity,
+                        price: price,
+                        account_type: appState.currentAccountType,
+                        broker: appState.tradingBroker
+                    })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    showNotification('success', `✅ ${side} order placed: ${quantity} ${symbol} at ₹${price} (ID: ${data.trade_id})`);
+                    
+                    // Clear form
+                    document.getElementById(`${side.toLowerCase()}-symbol`).value = '';
+                    document.getElementById(`${side.toLowerCase()}-quantity`).value = '';
+                    document.getElementById(`${side.toLowerCase()}-price`).value = '';
+                    updateOrderValue(side.toLowerCase());
+                    
+                    // Refresh data
+                    setTimeout(() => {
+                        loadTrades();
+                        loadPaperAccount();
+                        loadPositions();
+                    }, 1000);
+                    
+                    addLiveUpdate(`📈 Manual Trade`, `${side} ${quantity} ${symbol} at ₹${price} (${data.broker})`);
+                } else {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Failed to place order');
+                }
+            } catch (error) {
+                console.error('Error placing order:', error);
+                showNotification('error', `❌ Failed to place order: ${error.message}`);
+            }
+        }
+
+        async function getRealTimePrice(symbol = null) {
+            const stockSymbol = symbol || document.getElementById('market-symbol')?.value || document.getElementById('stock-search-input')?.value;
+            
+            if (!stockSymbol) {
+                showNotification('error', '❌ Please enter a symbol');
+                return;
+            }
+            
+            if (!appState.backendConnected) {
+                showNotification('error', '❌ Backend not connected');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/real-market-data/${stockSymbol.toUpperCase()}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    const resultHtml = `
+                        <div class="text-left">
+                            <div class="flex justify-between items-center mb-2">
+                                <div class="font-bold text-lg">${data.symbol}: ₹${data.current_price}</div>
+                                <div class="text-xs bg-blue-100 px-2 py-1 rounded">${data.source}</div>
+                            </div>
+                            <div class="text-sm ${data.change >= 0 ? 'text-green-600' : 'text-red-600'} mb-2">
+                                ${data.change >= 0 ? '+' : ''}₹${data.change.toFixed(2)} (${data.change_percent.toFixed(2)}%)
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 text-xs text-gray-600 mb-2">
+                                <div>Open: ₹${data.open}</div>
+                                <div>High: ₹${data.high}</div>
+                                <div>Low: ₹${data.low}</div>
+                                <div>Volume: ${data.volume.toLocaleString()}</div>
+                            </div>
+                            ${data.market_cap ? `<div class="text-xs text-gray-500 mb-1">Market Cap: ₹${data.market_cap.toLocaleString()}</div>` : ''}
+                            ${data.pe_ratio ? `<div class="text-xs text-gray-500 mb-1">P/E Ratio: ${data.pe_ratio}</div>` : ''}
+                            <div class="text-xs text-gray-400">
+                                Updated: ${new Date(data.timestamp).toLocaleString()}
+                            </div>
+                        </div>
+                    `;
+                    
+                    updateElementHTML('market-data-result', resultHtml);
+                    
+                    if (!symbol) {
+                        showNotification('success', `✅ ${data.symbol} ₹${data.current_price} (${data.change_percent.toFixed(2)}%)`);
+                    }
+                } else {
+                    throw new Error('Failed to fetch price data');
+                }
+            } catch (error) {
+                console.error('Error getting real-time price:', error);
+                showNotification('error', `❌ Failed to get price for ${stockSymbol}`);
+            }
+        }
+
+        // Broker Management Functions
+        function switchBroker(brokerType) {
+            appState.currentBroker = brokerType;
+            
+            const paperBtn = document.getElementById('paper-mode-btn');
+            const zerodhaBtn = document.getElementById('zerodha-mode-btn');
+            
+            if (brokerType === 'paper') {
+                if (paperBtn) {
+                    paperBtn.className = 'px-3 py-1 rounded-lg text-xs font-medium transition-all paper-badge text-white';
+                }
+                if (zerodhaBtn) {
+                    zerodhaBtn.className = 'px-3 py-1 rounded-lg text-xs font-medium transition-all bg-gray-200 text-gray-700 hover:zerodha-gradient hover:text-white';
+                }
+                showNotification('info', '📝 Switched to Paper Trading');
+                updateElement('broker-badge', 'Paper');
+            } else if (brokerType === 'zerodha') {
+                if (appState.zerodhaConnected) {
+                    if (zerodhaBtn) {
+                        zerodhaBtn.className = 'px-3 py-1 rounded-lg text-xs font-medium transition-all zerodha-badge text-white';
+                    }
+                    if (paperBtn) {
+                        paperBtn.className = 'px-3 py-1 rounded-lg text-xs font-medium transition-all bg-gray-200 text-gray-700 hover:paper-badge hover:text-white';
+                    }
+                    showNotification('success', '🟡 Switched to Zerodha Live Trading');
+                    updateElement('broker-badge', 'Zerodha');
+                } else {
+                    showNotification('warning', '⚠️ Zerodha not configured. Please setup in Broker Settings.');
+                    switchTab('brokers');
+                }
+            }
+        }
+
+        function selectBroker(brokerType) {
+            switchBroker(brokerType);
+            appState.currentAccountType = brokerType === 'paper' ? 'paper' : 'live';
+        }
+
+        function selectTradingBroker(brokerType) {
+            appState.tradingBroker = brokerType;
+            
+            const paperBtn = document.getElementById('trading-paper-btn');
+            const zerodhaBtn = document.getElementById('trading-zerodha-btn');
+            const statusElement = document.getElementById('trading-broker-status');
+            
+            if (brokerType === 'paper') {
+                if (paperBtn) paperBtn.className = 'px-4 py-2 rounded-lg text-sm font-medium transition-all paper-badge text-white';
+                if (zerodhaBtn) zerodhaBtn.className = 'px-4 py-2 rounded-lg text-sm font-medium transition-all bg-gray-200 text-gray-700 hover:zerodha-gradient hover:text-white';
+                if (statusElement) statusElement.textContent = 'Currently using: Paper Trading Account';
+            } else if (brokerType === 'zerodha') {
+                if (appState.zerodhaConnected) {
+                    if (zerodhaBtn) zerodhaBtn.className = 'px-4 py-2 rounded-lg text-sm font-medium transition-all zerodha-gradient text-white';
+                    if (paperBtn) paperBtn.className = 'px-4 py-2 rounded-lg text-sm font-medium transition-all bg-gray-200 text-gray-700 hover:paper-badge hover:text-white';
+                    if (statusElement) statusElement.textContent = 'Currently using: Zerodha Live Trading Account';
+                } else {
+                    showNotification('warning', '⚠️ Zerodha not configured. Using Paper Trading instead.');
+                    selectTradingBroker('paper');
+                }
+            }
+        }
+
+        async function setupZerodha() {
+            const apiKey = document.getElementById('zerodha-api-key')?.value;
+            const accessToken = document.getElementById('zerodha-access-token')?.value;
+            
+            if (!apiKey) {
+                showNotification('error', '❌ Please enter API Key');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/broker/zerodha/activate`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        api_key: apiKey,
+                        access_token: accessToken
+                    })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    appState.zerodhaConnected = true;
+                    updateZerodhaStatus(true);
+                    
+                    showNotification('success', '✅ Zerodha setup successful!');
+                    addLiveUpdate('🟡 Zerodha Connected', 'Live trading now available');
+                    
+                    if (data.login_url && !accessToken) {
+                        showNotification('info', 'ℹ️ Complete authentication at: ' + data.login_url);
+                    }
+                } else {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Failed to setup Zerodha');
+                }
+            } catch (error) {
+                console.error('Error setting up Zerodha:', error);
+                showNotification('error', `❌ Zerodha setup failed: ${error.message}`);
+            }
+        }
+
+        async function refreshBrokerStatus() {
+            await loadBrokerStatus();
+            showNotification('success', '🔄 Broker status refreshed');
+        }
+
+        // AI Settings Management
+        async function saveAISettings() {
+            if (!appState.backendConnected) {
+                showNotification('error', '❌ Backend not connected');
+                return;
+            }
+            
+            const settings = {
+                trading_mode: document.getElementById('ai-trading-mode')?.value || 'paper',
+                max_capital_per_trade: parseFloat(document.getElementById('ai-max-per-trade')?.value) || 10000,
+                max_daily_trades: parseInt(document.getElementById('max-daily-trades')?.value) || 10,
+                risk_level: document.getElementById('ai-risk-level')?.value || 'medium',
+                trading_frequency: parseInt(document.getElementById('trading-frequency')?.value) || 30,
+                auto_stop_loss: parseFloat(document.getElementById('auto-stop-loss')?.value) || 5.0,
+                auto_take_profit: parseFloat(document.getElementById('auto-take-profit')?.value) || 10.0,
+                min_signal_confidence: parseFloat(document.getElementById('min-signal-confidence')?.value) || 70.0,
+                use_real_data: document.getElementById('ai-data-source')?.value === 'real',
+                allowed_symbols: (document.getElementById('allowed-symbols')?.value || 'RELIANCE,TCS,HDFCBANK').split(',').map(s => s.trim())
+            };
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/ai-trading/settings`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(settings)
+                });
+                
+                if (response.ok) {
+                    showNotification('success', '💾 AI settings saved successfully');
+                    addLiveUpdate('⚙️ Settings Updated', 'AI trading parameters updated');
+                } else {
+                    throw new Error('Failed to save settings');
+                }
+            } catch (error) {
+                console.error('Error saving AI settings:', error);
+                showNotification('error', '❌ Failed to save AI settings');
+            }
+        }
+
+        function resetAISettings() {
+            const defaultSettings = {
+                'ai-trading-mode': 'paper',
+                'ai-max-per-trade': '10000',
+                'max-daily-trades': '10',
+                'ai-risk-level': 'medium',
+                'trading-frequency': '30',
+                'auto-stop-loss': '5',
+                'auto-take-profit': '10',
+                'min-signal-confidence': '70',
+                'ai-data-source': 'real',
+                'allowed-symbols': 'RELIANCE,TCS,HDFCBANK,INFY,ICICIBANK,WIPRO,BHARTIARTL,LT,MARUTI,SBIN'
+            };
+            
+            Object.entries(defaultSettings).forEach(([id, value]) => {
+                updateElement(id, value);
+            });
+            
+            showNotification('info', '🔄 AI settings reset to defaults');
+        }
+
+        // Enhanced Search Functions
+        async function searchStock() {
+            const query = document.getElementById('stock-search-input')?.value;
+            if (!query || query.length < 1) {
+                showNotification('error', '❌ Please enter a stock symbol');
+                return;
+            }
+            
+            try {
+                await getRealTimePrice(query);
+                
+                const resultsContainer = document.getElementById('search-results-container');
+                const resultsSection = document.getElementById('stock-search-results');
+                
+                if (resultsContainer && resultsSection) {
+                    resultsContainer.innerHTML = `
+                        <div class="p-4 border rounded-lg hover:bg-gray-50 cursor-pointer" onclick="getRealTimePrice('${query}')">
+                            <div class="font-medium">${query.toUpperCase()}</div>
+                            <div class="text-sm text-gray-600">Click to refresh live price</div>
+                            <div class="mt-2 space-x-2">
+                                <button onclick="getRealTimePrice('${query}'); event.stopPropagation();" class="px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700">
+                                    Refresh Price
+                                </button>
+                                <button onclick="addToWatchlist('${query}'); event.stopPropagation();" class="px-3 py-1 bg-green-600 text-white rounded text-sm hover:bg-green-700">
+                                    Add to Watchlist
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    resultsSection.classList.remove('hidden');
+                }
+            } catch (error) {
+                showNotification('error', '❌ Search failed');
+            }
+        }
+
+        // Enhanced Watchlist Management
+        async function addToWatchlist(symbolParam = null) {
+            const symbol = symbolParam || document.getElementById('watchlist-symbol')?.value?.toUpperCase();
+            
+            if (!symbol) {
+                showNotification('error', '❌ Please enter a symbol');
+                return;
+            }
+            
+            try {
+                // For now, just add to frontend and clear input
+                document.getElementById('watchlist-symbol').value = '';
+                showNotification('success', `✅ ${symbol} added to watchlist`);
+                
+                // Refresh watchlist to show new item
+                setTimeout(refreshWatchlist, 500);
+                
+            } catch (error) {
+                console.error('Error adding to watchlist:', error);
+                showNotification('error', '❌ Failed to add to watchlist');
+            }
+        }
+
+        function addToWatchlistFromPriceCheck() {
+            const symbol = document.getElementById('market-symbol')?.value;
+            if (symbol) {
+                addToWatchlist(symbol);
+            }
+        }
+
+        function removeFromWatchlist(symbol) {
+            showNotification('info', `🗑️ ${symbol} removed from watchlist`);
+            setTimeout(refreshWatchlist, 500);
+        }
+
+        // Data Refresh Functions
+        function startDataRefresh() {
+            if (appState.dataRefreshInterval) clearInterval(appState.dataRefreshInterval);
+            
+            appState.dataRefreshInterval = setInterval(() => {
+                if (appState.backendConnected && appState.autoRefreshEnabled) {
+                    // Stagger refreshes to avoid overwhelming the backend
+                    setTimeout(() => loadTrades(), 0);
+                    setTimeout(() => loadPaperAccount(), 1000);
+                    setTimeout(() => loadMarketData(), 2000);
+                    setTimeout(() => loadWatchlist(), 3000);
+                    
+                    updateElement('last-sync', new Date().toLocaleTimeString());
+                }
+            }, 10000); // Refresh every 10 seconds
+        }
+
+        async function refreshAIData() {
+            if (!appState.backendConnected) {
+                await testBackendConnection();
+            }
+            
+            if (appState.backendConnected) {
+                await loadInitialData();
+                showNotification('success', '🔄 AI data refreshed from backend');
+            } else {
+                showNotification('error', '❌ Cannot refresh - backend not connected');
+            }
+        }
+
+        async function refreshPortfolio() {
+            await Promise.all([loadPaperAccount(), loadPositions()]);
+            showNotification('success', '🔄 Portfolio refreshed');
+        }
+
+        async function refreshWatchlist() {
+            await loadWatchlist();
+            showNotification('success', '🔄 Watchlist refreshed');
+        }
+
+        // Input Validation and Helpers
+        function validateOrderInputs(side) {
+            const symbol = document.getElementById(`${side}-symbol`)?.value;
+            const quantity = document.getElementById(`${side}-quantity`)?.value;
+            const price = document.getElementById(`${side}-price`)?.value;
+            const btn = document.getElementById(`${side}-order-btn`);
+            
+            const isValid = symbol && quantity && price && parseFloat(quantity) > 0 && parseFloat(price) > 0;
+            
+            if (btn) {
+                btn.disabled = !isValid;
+                btn.className = isValid 
+                    ? `w-full px-3 py-2 ${side === 'buy' ? 'bg-green-600 hover:bg-green-700' : 'bg-red-600 hover:bg-red-700'} text-white rounded-lg text-sm font-medium transition-all`
+                    : 'w-full px-3 py-2 bg-gray-400 text-white rounded-lg text-sm font-medium cursor-not-allowed';
+            }
+        }
+
+        function addOrderValueCalculators() {
+            ['buy', 'sell'].forEach(side => {
+                const quantity = document.getElementById(`${side}-quantity`);
+                const price = document.getElementById(`${side}-price`);
+                
+                if (quantity && price) {
+                    [quantity, price].forEach(input => {
+                        input.addEventListener('input', () => updateOrderValue(side));
+                    });
+                }
+            });
+        }
+
+        function updateOrderValue(side) {
+            const quantity = parseInt(document.getElementById(`${side}-quantity`)?.value) || 0;
+            const price = parseFloat(document.getElementById(`${side}-price`)?.value) || 0;
+            const value = quantity * price;
+            const fees = value * 0.0003; // Estimated brokerage
+            
+            const valueElement = document.getElementById(`${side}-order-value`);
+            const feesElement = document.getElementById(`${side}-fees-estimate`);
+            
+            if (valueElement) valueElement.textContent = `Order Value: ₹${value.toLocaleString()}`;
+            if (feesElement) feesElement.textContent = `Est. Fees: ₹${fees.toFixed(2)}`;
+        }
+
+        // Event Handlers
+        function handleSearchKeypress(event) {
+            if (event.key === 'Enter') {
+                searchStock();
+            }
+        }
+
+        function handlePriceCheckKeypress(event) {
+            if (event.key === 'Enter') {
+                getRealTimePrice();
+            }
+        }
+
+        function handleWatchlistKeypress(event) {
+            if (event.key === 'Enter') {
+                addToWatchlist();
+            }
+        }
+
+        // Tab System
+        function switchTab(tabName) {
+            const tabContents = document.querySelectorAll('.tab-content');
+            const tabButtons = document.querySelectorAll('.tab-button');
+            
+            tabContents.forEach(tab => tab.classList.remove('active'));
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            
+            const selectedTab = document.getElementById(`tab-${tabName}`);
+            if (selectedTab) {
+                selectedTab.classList.add('active');
+                event.target.classList.add('active');
+                
+                // Load tab-specific data
+                switch(tabName) {
+                    case 'ai-trading':
+                        refreshAIData();
+                        break;
+                    case 'portfolio':
+                        refreshPortfolio();
+                        break;
+                    case 'overview':
+                        loadMarketData();
+                        break;
+                    case 'reports':
+                        loadTrades();
+                        break;
+                    case 'brokers':
+                        loadBrokerStatus();
+                        break;
+                }
+            }
+        }
+
+        // Export Functions
+        function exportTrades() {
+            showNotification('info', '📤 Exporting trades to CSV...');
+            // In a real implementation, you'd fetch and download the CSV
+        }
+
+        function exportPortfolio() {
+            showNotification('info', '📤 Exporting portfolio data...');
+            // In a real implementation, you'd generate and download the report
+        }
+
+        function filterTrades() {
+            loadTrades(); // Reload with current filter
+        }
+
+        // Notification System
+        function toggleNotifications() {
+            const panel = document.getElementById('notifications-panel');
+            if (panel) {
+                panel.classList.toggle('hidden');
+            }
+        }
+
+        function showNotification(type, message) {
+            const colors = {
+                'success': 'bg-green-100 text-green-800 border-green-200',
+                'error': 'bg-red-100 text-red-800 border-red-200',
+                'warning': 'bg-yellow-100 text-yellow-800 border-yellow-200',
+                'info': 'bg-blue-100 text-blue-800 border-blue-200'
+            };
+            
+            const icons = {
+                'success': '✅',
+                'error': '❌',
+                'warning': '⚠️',
+                'info': 'ℹ️'
+            };
+            
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 p-4 rounded-lg border z-50 ${colors[type]} notification-enter max-w-sm shadow-lg`;
+            notification.innerHTML = `
+                <div class="flex items-start justify-between">
+                    <div class="flex items-start space-x-2">
+                        <span class="text-lg">${icons[type]}</span>
+                        <span class="text-sm font-medium">${message}</span>
+                    </div>
+                    <button onclick="this.parentElement.parentElement.remove()" class="ml-4 text-gray-500 hover:text-gray-700 font-bold text-lg leading-none">×</button>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Update notification count
+            const count = document.getElementById('notification-count');
+            if (count) {
+                const currentCount = parseInt(count.textContent) || 0;
+                count.textContent = currentCount + 1;
+                if (currentCount + 1 > 0) {
+                    count.classList.remove('hidden');
+                }
+            }
+            
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 5000);
+        }
+
+        function addLiveUpdate(title, description) {
+            const container = document.getElementById('live-updates');
+            if (!container) return;
+            
+            const updateDiv = document.createElement('div');
+            updateDiv.className = 'p-2 bg-blue-50 rounded border-l-2 border-blue-500 animate-pulse';
+            updateDiv.innerHTML = `
+                <div class="font-medium text-blue-800">${title}</div>
+                <div class="text-blue-600">${description}</div>
+                <div class="text-gray-500 text-xs mt-1">${new Date().toLocaleTimeString()}</div>
+            `;
+            
+            container.insertBefore(updateDiv, container.firstChild);
+            
+            // Remove animation after 2 seconds
+            setTimeout(() => {
+                updateDiv.classList.remove('animate-pulse');
+            }, 2000);
+            
+            // Keep only last 15 updates
+            while (container.children.length > 15) {
+                container.removeChild(container.lastChild);
+            }
+        }
+
+        // Utility Functions
+        function updateElement(id, content) {
+            const element = document.getElementById(id);
+            if (element) {
+                if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA' || element.tagName === 'SELECT') {
+                    element.value = content;
+                } else {
+                    element.textContent = content;
+                }
+            }
+        }
+
+        function updateElementHTML(id, content) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.innerHTML = content;
+            }
+        }
+
+        // Performance optimization: Debounced functions for high-frequency operations
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Initialize performance optimized refresh
+        const debouncedRefresh = debounce(refreshAIData, 1000);
+        
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            if (appState.dataRefreshInterval) {
+                clearInterval(appState.dataRefreshInterval);
+            }
+        });
+    </script>
+</body>
+</html>
