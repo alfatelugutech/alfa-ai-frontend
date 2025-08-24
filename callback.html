@@ -1,0 +1,7 @@
+<!doctype html><html><body><h2>Zerodha Callback</h2><pre id=log></pre>
+<script>
+(async()=>{const u=new URLSearchParams(location.search);const t=u.get('request_token');const el=document.getElementById('log');
+if(!t){el.textContent='No request_token in URL';return;}
+const r=await fetch('/api/zerodha/callback?request_token='+encodeURIComponent(t));el.textContent=JSON.stringify(await r.json(),null,2);
+})();
+</script></body></html>
